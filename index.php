@@ -4,9 +4,6 @@
 	 */
 	function getURL() {
 		$url = __DIR__."/views/home.php";			// default
-		if(isset($_POST["action"])) {
-			
-		}
 
 		if(isset($_GET["url"])) {					// ak bola zadana nejaka cesta
 			if(isset($_SERVER["HTTP_REFERER"])
