@@ -17,7 +17,5 @@
 		return $url;
 	}
 
-	// var_dump($_SERVER);
-
 	require_once getUrl();
 ?>

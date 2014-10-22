@@ -17,8 +17,8 @@
 
 	<div id="map"></div>
 
-	<form id="add-form" action="upload-billboard" method="post">
-		<input name="photo" type="file" value="Vložiť fotku billboardu"><br>
+	<form id="add-form" action="upload-billboard" method="post" enctype="multipart/form-data">
+		<input name="photo" type="file" value="Vložiť fotku billboardu" required="true" accept="image/*"><br>
 		<textarea name="text" placeholder="Môžte nám k nej niečo napísať."></textarea><br>
 		<input type="submit">
 	</form>

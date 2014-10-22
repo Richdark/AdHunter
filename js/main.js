@@ -32,11 +32,6 @@ function handleAdd(map, img) {
 		}
 		return false;
 	});
-
-	$("#add-form").submit(function () {		// ajax request
-		
-		return false;
-	});
 }
 
 function initMap() {
