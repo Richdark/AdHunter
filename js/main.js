@@ -11,7 +11,7 @@ function handleAdd(map, img) {
 	$("#add").click(function() {
 		alert("Kliknite na mapu re vyznačenie pozície nájdeného billboardu.");
 		adding = true;
-		map.setOptions({draggableCursor:'crosshair'});
+		map.setOptions({ draggableCursor: "crosshair" });
 		return false;
 	});
 
@@ -33,43 +33,10 @@ function handleAdd(map, img) {
 		return false;
 	});
 
-	/*var marker = null;
-			// map.setOptions({draggableCursor:''});
-			map.setOptions({draggableCursor:'crosshair'});
-
-	$("#map").on('dragenter', function (e) {
-		// $("#map").css("cursor", "crosshair");
-		// map.setOptions({draggableCursor:''});
-		e.stopPropagation();
-		e.preventDefault();
-	}).on('dragover', function (e) {
-		e.stopPropagation();
-		e.preventDefault();
-	}).on('drop', function (e) {
-		e.preventDefault();
-		console.log("drop");
-		console.log(e);
-		var w = $(this).width();
-		var h = $(this).height();
-		map.panBy(e.offsetX-(w/2), e.offsetY-(h/2));
-		// e.originalEvent.offsetX;
-		// var files = e.originalEvent.dataTransfer.files;
-		// handleFileUpload(files,obj);
+	$("#add-form").submit(function () {		// ajax request
+		
+		return false;
 	});
-	$("#map").on("mousedown", function (e) {
-		console.log("click");
-		map.setOptions({draggableCursor:''});
-
-		marker.setMap(null);
-		marker = null;
-
-		console.log(e);
-		var w = $(this).width();
-		var h = $(this).height();
-		map.panBy(e.offsetX-(w/2), e.offsetY-(h/2));		// offset je vzdialenost od laveho horneho rohu objektu $("#map")
-		var p = map.getCenter();
-		// new google.maps.Marker({ position: p, map: map, title: "Nový billboard" });
-	});*/
 }
 
 function initMap() {

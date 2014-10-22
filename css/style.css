@@ -38,9 +38,10 @@ html, body, #map {
 	position: absolute;
 	z-index: 1;
 	left: 50%;
-	top: 100px;
+	top: 50%;
 	border: 2px solid #444;
 	margin-left: -200px;
+	margin-top: 30px;
 	width: 400px;
 }
 
