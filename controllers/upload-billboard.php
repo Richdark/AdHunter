@@ -28,20 +28,40 @@
 		return $name;
 	}
 
-	// var_dump($_POST);
-	// var_dump($_FILES);
-	if(!empty($_FILES["photo"]) && isset($_POST["text"])) {		// called by ajax
+	//if(!empty($_FILES["photo"]) && isset($_POST["text"])) {		// called by ajax
+	if(!empty($_FILES["photo"])) {		// called by ajax
 		$folder = __DIR__."/../img/billboards";
 		$name = getFileName($folder, $_FILES["photo"]["name"]);
 
 		if(!file_exists($folder)) {
-			mkdir($folder, 0775, true);						// vytvor rekurzivne dany folder ak neexistuje
+			mkdir($folder, 0777);						// vytvor rekurzivne dany folder ak neexistuje
 		}
+		if(!is_writable($folder)) {
+			echo "Priecinok nieje zapisovatelny<br>";
+		}
+
 		if(move_uploaded_file($_FILES["photo"]["tmp_name"], "$folder/$name")) {		// move z tmp foldra
 			echo "Billboard bol nahraný na server, jeho cesta je $folder/$name<br>";
+		} else {
+			echo "Nepodarilo sa uploadovať billboard na server<br>";
 		}
+
+		/*if(chgrp("$folder/$name", "root")) {
+			echo "Skupina vlastníkov pre uploadovaný billboard boli úspešne aktualizované<br>";
+		} else {
+			echo "Nepodarilo sa aktualizovať skupinu vlastníkov pre uploadovaný billboard<br>";
+		}*/
+
+		if(chmod("$folder/$name", 0664)) {
+			echo "Práva pre uploadovaný billboard boli úspešne aktualizované<br>";
+		} else {
+			echo "Nepodarilo sa aktualizovať práva pre uploadovaný billboard<br>";
+		}
+
 		$text = &$_POST["text"];
 		
 		echo "<a href='.'>späť</a>";
+	} else {
+		echo "boli prijaté neplatné dáta";
 	}
 ?>
