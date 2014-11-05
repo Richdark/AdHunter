@@ -14,9 +14,16 @@ class Billboards extends CI_Controller
 
 	public function get_ulovky()
 	{
-		$this->load->view('show_billboard');
-		$this->load->model('Ulovok_model');
-		$this->Ulovok_model->get_zulovky(1, 1, $suradnice, $name, '');
+		$this->load->model('Ulovok_model', 'model');
+		$result = $this->model->get_ulovky();
+
+		$json = array();
+		foreach ($result as $row)
+		{
+			$json[] = $row;
+		}
+
+		echo json_encode($json);
 	}
 
 	public function add()
@@ -39,13 +46,17 @@ class Billboards extends CI_Controller
 				die;
 			}
 
-			// move z tmp foldra
-			if (move_uploaded_file($_FILES["photo"]["tmp_name"], "$folder/$name"))
-			{		
-				echo "Billboard bol nahraný na server, jeho cesta je $folder/$name<br>";
+			$lat = &$_POST["lat"];
+			$lng = &$_POST["lng"];
+			if(empty($lat) || empty($lng)) {
+				echo "Chyba: Neboli zadané GPS suradnice<br>";
+				die;
 			}
-			else
-			{
+			$suradnice = "POINT($lat, $lng)";
+			
+			// move z tmp foldra
+			if (!move_uploaded_file($_FILES["photo"]["tmp_name"], "$folder/$name"))
+			{		
 				echo "Chyba: Nepodarilo sa uploadovať billboard na server<br>";
 				die;
 			}
@@ -59,21 +70,12 @@ class Billboards extends CI_Controller
 				echo "Nepodarilo sa aktualizovať práva pre uploadovaný billboard<br>";
 			}*/
 
-			// $text = &$_POST["text"];
-
-			$lat = &$_POST["lat"];
-			$lng = &$_POST["lng"];
-			if(empty($lat) || empty($lng)) {
-				echo "Chyba: Neboli zadané GPS suradnice<br>";
-				die;
-			}
-			$suradnice = "POINT($lat, $lng)";
 
 			// vlozenie do databazy prostrednictvom modelu
-			$this->load->model('Ulovok_model');
-			$this->Ulovok_model->save_ulovok(1, 1, $suradnice, $name, '');
+			$this->load->model('Ulovok_model', 'model');
+			$this->model->save_ulovok(1, 1, $suradnice, $name, '');
 			
-			echo "<a href='.'>späť</a>";
+			$this->load->view('uploaded_billboard');
 		}
 		else
 		{
@@ -108,7 +110,7 @@ class Billboards extends CI_Controller
 
 		for ($i = 1; file_exists("$folder/$name"); $i++)
 		{
-			$name = $base. (($i < 2)? "" : "_$i"). ".$ext";
+			$name = $base.($i < 2 ? "" : "_$i").".$ext";
 		}
 
 		return $name;

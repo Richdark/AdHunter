@@ -23,7 +23,7 @@ $assets_url = $base_url. 'assets/';
 
 	<div id="map"></div>
 
-	<form id="add-form" action="billboards/add" method="post" enctype="multipart/form-data">
+	<form id="add-form" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="lat">
 		<input type="hidden" name="lng">
 
