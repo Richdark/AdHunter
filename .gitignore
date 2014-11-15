@@ -1,2 +1,8 @@
-.htaccess
-/application/config/database.php
+web/.htaccess
+web/application/config/database.php
+mobile/.gradle
+mobile/local.properties
+mobile/.idea/workspace.xml
+mobile/.idea/libraries
+mobile/.DS_Store
+mobile/build
