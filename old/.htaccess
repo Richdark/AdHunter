@@ -1,0 +1,12 @@
+AddDefaultCharset UTF-8
+
+RewriteEngine On
+
+# RewriteCond %{HTTP_HOST} ^http://team14-14.ucebne.fiit.stuba.sk$
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# RewriteRule ^add-billboard$ /adhunter/views/add-billboard.php [L]
+# RewriteRule ^(.*)$ /adhunter/Smog-webapp/views/$1.php [L]
+RewriteRule ^(.*)$ /adhunter/?url=$1 [L]
