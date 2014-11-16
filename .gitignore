@@ -1,5 +1,6 @@
 web/.htaccess
 web/application/config/database.php
+web/assets/pics
 mobile/.gradle
 mobile/local.properties
 mobile/.idea/workspace.xml
