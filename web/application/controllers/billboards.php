@@ -4,12 +4,12 @@ class Billboards extends CI_Controller
 {
 	public function index()
 	{
-		$this->load->view('index_billboard');
+		$this->load->template('index_billboard');
 	}
 
 	public function show()
 	{
-		$this->load->view('show_billboard');
+		$this->load->template('show_billboard');
 	}
 
 	public function get_ulovky()
@@ -79,7 +79,7 @@ class Billboards extends CI_Controller
 		}
 		else
 		{
-			$this->load->view('add_billboard');
+			$this->load->template('add_billboard');
 		}
 	}
 

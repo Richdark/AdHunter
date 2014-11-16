@@ -1,23 +1,7 @@
-<?php
-
-$base_url   = base_url();
-$assets_url = $base_url. 'assets/';
-
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Pridanie nového billboardu</title>
-	<link rel="stylesheet" href="<?php echo $assets_url; ?>css/reset.css">
-	<link rel="stylesheet" href="<?php echo $assets_url; ?>css/style.css">
-	<script src="<?php echo $assets_url; ?>js/jquery-2.1.1.min.js"></script>
-</head>
 <body class="add-billboard">
 	<div id="panel">
 		<!-- <h1>Pretiahnite fotku billboardu na konkrétne miesto na mape</h1> -->
-		<a href="<?php echo $base_url; ?>billboards/">Späť</a>
+		<a href="<?php echo base_url(); ?>billboards/">Späť</a>
 		<a id="add" href="#">Pridať</a>
 	</div>
 
@@ -32,6 +16,5 @@ $assets_url = $base_url. 'assets/';
 		<input type="submit">
 	</form>
 
-	<script src="<?php echo $assets_url; ?>js/main.js"></script>
+	<script src="<?php echo assets_url(); ?>js/main.js"></script>
 </body>
-</html>
