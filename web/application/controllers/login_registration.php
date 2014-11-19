@@ -19,10 +19,15 @@ public function hash_password($rawPassword,$salt){
 
 }
 
-public function generate_salt(){
-	$salt = openssl_random_pseudo_bytes(32);
-
-	return $salt;
+public function generate_salt($max){
+	   $characterList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*?";
+        $i = 0;
+        $salt = "";
+        while ($i < $max) {
+            $salt .= $characterList{mt_rand(0, (strlen($characterList) - 1))};
+            $i++;
+        }
+        return $salt;
 }
 
 public function add_user(){
@@ -31,12 +36,14 @@ $email=$_POST['email'];
 $password=$_POST['password'] ;
 $name =$_POST['name'];
 $surname=$_POST['surrname'];
-$salt = $this->generate_salt();
+$salt = $this->generate_salt(32);
 
-$hashedPassword=$this->hash_password($password,$salt);
+$hashed_password=$this->hash_password($password,$salt);
 
 $this->load->model('Registration_model','model');
-$this->model->save_user('DEFAULT',$name,$surname,$email,$password,$salt);
+$this->model->save_user('DEFAULT',$name,$surname,$email,$hashed_password,$salt);
+
+$this->load->view('registration_successful');
 
 }
 
