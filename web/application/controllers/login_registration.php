@@ -30,13 +30,13 @@ public function add_user(){
 $email=$_POST['email'];
 $password=$_POST['password'] ;
 $name =$_POST['name'];
-$surname=$_POST['surname'];
-$salt = generate_salt();
+$surname=$_POST['surrname'];
+$salt = $this->generate_salt();
 
-$hashedPassword=hash_password($password,$salt);
+$hashedPassword=$this->hash_password($password,$salt);
 
-this->load->model('login_registration_model','model');
-this->model
+$this->load->model('Registration_model','model');
+$this->model->save_user('DEFAULT',$name,$surname,$email,$password,$salt);
 
 }
 
