@@ -12,6 +12,14 @@
 		<input type="hidden" name="lng">
 
 		<input name="photo" type="file" value="Vložiť fotku billboardu" required="true" accept="image/*"><br>
+		<select>
+			<?php
+				foreach($owners as $owner)
+				{
+					echo "<option>$owner->nazov</option>";
+				}
+			?>
+		</select><br>
 		<textarea name="text" placeholder="Môžete nám k nej niečo napísať."></textarea><br>
 		<input type="submit">
 	</form>
