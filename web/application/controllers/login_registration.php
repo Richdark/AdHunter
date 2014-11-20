@@ -58,7 +58,7 @@ $salt = $this->generate_salt(32);
 
 $hashed_password=$this->hash_password($password,$salt);
 
-$this->load->model('Registration_model','model');
+$this->load->model('login_registration_model','model');
 $this->model->save_user('DEFAULT',$name,$surname,$email,$hashed_password,$salt);
 
 $this->load->view('registration_successful');
@@ -72,7 +72,7 @@ public function authentificate_user(){
 	$email=$_POST['email'];
 	$typed_password=$_POST['password'] ;
 
-	$this->load->model('Registration_model','model');
+	$this->load->model('login_registration_model','model');
 	$result=$this->model->get_password_for_login($email);
 		
 	$row_cnt = sizeof($result);

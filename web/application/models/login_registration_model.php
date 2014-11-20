@@ -1,6 +1,6 @@
 <?php
 
-class Ulovok_model extends CI_Model
+class Login_registration_model extends CI_Model
 {
 	// toto je povinna "sablona" konstruktora modelu
 	function __construct()
@@ -14,11 +14,9 @@ class Ulovok_model extends CI_Model
 */
 	function get_password_for_login($email){
 
-		$this->db->where('email', $email);
-
-		// samotny select z tabulky ulovky
-		$query = $this->db->get('pouzivatelia');
-
+	$query = $this->db->query("SELECT heslo,salt FROM pouzivatelia WHERE pouzivatelia.email='$email'");
+		// spustenie query a vratenie hodnoty funkciou
+		return $query->result();
 		// spustenie query a vratenie hodnoty funkciou
 		return $query->result();
 	}
