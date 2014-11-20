@@ -1,1 +1,1 @@
-sample readme chenged
+!! This is a devel branch readme !! Do not deploy this on live server 
