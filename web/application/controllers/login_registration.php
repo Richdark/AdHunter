@@ -47,7 +47,44 @@ $this->load->view('registration_successful');
 
 }
 
+public function authentificate_user(){
+	$email=$_POST['email'];
+	$typed_password=$_POST['password'] ;
+
+	$this->load->model('Registration_model','model');
+	$result=$this->model->get_password_for_login($email);
+		
+	$row_cnt = sizeof($result);
+	if($row_cnt==0){
+		$this->load->view('login_failed');
+	}
+	else{
+	$db_password;
+	$salt;
+	foreach($result as $row) {
+	$db_password=$row->heslo;
+	$salt=$row->salt;
+	}
+
+	$hashed_password=$this->hash_password($typed_password,$salt);
+
+	if($db_password==$hashed_password){
+		$this->load->view('login_successful');
+	}
+	
+	else{
+		$this->load->view('login_failed');
+	}
+	
+}
+		
+		
+		
+	
+	
+}
 
 
 }
+
 ?>

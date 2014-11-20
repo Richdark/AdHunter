@@ -12,7 +12,7 @@ $assets_url = $base_url. 'assets/';
 	<script src="<?php echo $assets_url; ?>js/jquery-2.1.1.min.js"></script>
 </head>
 <body>
-<form id="login_form" method="post" enctype="multipart/form-data">
+<form id="login_form" method="post" action="../authentificate_user">
 	E-mail: <input type="text" name="email"><br>
 	Heslo: <input type="text" name="password"><br>
 	<input type="submit">

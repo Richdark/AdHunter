@@ -10,11 +10,9 @@ class Registration_model extends CI_Model
 
 	function get_password_for_login($email){
 
-		$this->db->where('email', $email);
-
-		// samotny select z tabulky ulovky
-		$query = $this->db->get('pouzivatelia');
-
+		
+		// samotny select z tabulky
+		$query = $this->db->query("SELECT heslo,salt FROM pouzivatelia WHERE pouzivatelia.email='$email'");
 		// spustenie query a vratenie hodnoty funkciou
 		return $query->result();
 	}
