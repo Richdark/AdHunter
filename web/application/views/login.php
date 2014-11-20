@@ -14,7 +14,7 @@ $assets_url = $base_url. 'assets/';
 <body>
 <form id="login_form" method="post" action="../authentificate_user">
 	E-mail: <input type="text" name="email"><br>
-	Heslo: <input type="text" name="password"><br>
+	Heslo: <input type="password" name="password"><br>
 	<input type="submit">
 </form>
 
