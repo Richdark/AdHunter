@@ -9,7 +9,14 @@
 		<div class="info">
 			<!-- <h2 class="title"></h2> -->
 			<img class="billboard" src="">
-			<div class="provider"></div>
+			<table>
+				<tr>
+					<td>Vlastník: </td><td class="provider"></td>
+				</tr>
+				<tr>
+					<td>Nahrané: </td><td class="uploaded"></td>
+				</tr>
+			</table>
 		</div>
 	</div>
 
