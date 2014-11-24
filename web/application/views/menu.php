@@ -4,7 +4,7 @@
 			<nav class="top-bar">
 			  <ul class="title-area">
 			   <li class="name logo">
-			      <a href="#"><img src="<?php echo assets_url(); ?>/img/dfs.png"  alt=""></a>
+			      <a href="#"><img src="<?php echo assets_url(); ?>/img/*adhunter.png"  alt=""></a>
 			    </li>
 			    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
 			  </ul>
