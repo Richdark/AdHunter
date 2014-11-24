@@ -1,4 +1,6 @@
 <body class="add-billboard">
+<!-- Include menu -->
+<?php include 'menu.php';?>
 	<div id="panel">
 		<!-- <h1>Pretiahnite fotku billboardu na konkrétne miesto na mape</h1> -->
 		<a href="<?php echo base_url(); ?>billboards/">Späť</a>
