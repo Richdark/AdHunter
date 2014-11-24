@@ -11,9 +11,11 @@
 			
 			  <section class="top-bar-section">
 			    <ul class="right" id="menu">
+			      <li data-magellan-arrival="home"><a href="<?php echo base_url(); ?>billboards/">Domov</a></li>
 			      <li data-magellan-arrival="view"><a href="<?php echo base_url(); ?>billboards/show/">Mapa Billboardov</a></li>
 			      <li data-magellan-arrival="add"><a href="<?php echo base_url();; ?>billboards/add/">Pridaj Billboard</a></li>
-			      <li data-magellan-arrival="login"><a href="<?php echo base_url();; ?>login_registration/register/">Prihlásenie & Registrácia</a></li>
+			      <li data-magellan-arrival="login"><a href="<?php echo base_url();; ?>login_registration/login/">Prihlásenie</a></li>
+			       <li data-magellan-arrival="login"><a href="<?php echo base_url();; ?>login_registration/register/">Registrácia</a></li>
 			      
 			    </ul>
 			  </section>
