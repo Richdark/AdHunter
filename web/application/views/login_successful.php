@@ -1,4 +1,4 @@
 <?php
-echo "Login OK"
+echo "User section under construction :)"
 
 ?>

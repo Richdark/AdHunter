@@ -94,6 +94,7 @@ public function authentificate_user(){
 	}
 	
 	else{
+		
 		$this->load->view('login_failed');
 	}
 	
