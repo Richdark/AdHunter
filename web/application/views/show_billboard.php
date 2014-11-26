@@ -2,7 +2,6 @@
 <!-- Include menu -->
 <?php include 'menu.php';?>
 	<div id="panel">
-		<a class="back" href="<?php echo base_url(); ?>billboards/">Späť</a>
 		<input id="search" type="text" placeholder="Zadajte objekt alebo adresu">
 	</div>
 

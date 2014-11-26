@@ -13,15 +13,15 @@ html, body, #map {
 }
 
 #panel > * {
-	background-color: #88f;
 	display: inline-block;
-	margin-right: 10px;
+	height: 35px;
+	margin: 80px 10px 0 0;
 	padding: 5px 15px;
-	border: 2px solid #eee;
-	text-decoration: none;
-	font-size: 26px;
+	border: 1px #aaa solid;
+	background-color: #fed265;
 	color: #fff;
-	margin-top:70px;
+	font-size: 20px;
+	text-decoration: none;
 }
 
 #panel > a {
@@ -31,13 +31,20 @@ html, body, #map {
 
 #panel > a:hover {
 	background-color: #fff;
-	color: #88f;
+	color: #fed265;
 }
 
 #panel > input[type="text"] {
-	background-color: #fff;
 	width: 600px;
-	color: #88f;
+	height: 36px;
+	background-color: #fff;
+	color: #fed265;
+	opacity: 0.75;
+}
+
+#panel > input[type="text"]:hover,
+#panel > input[type="text"]:focus {
+	opacity: 1.0;
 }
 
 #add-form {
