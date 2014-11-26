@@ -1,4 +1,1 @@
-<?php
-echo "User section under construction :)"
-
-?>
+User section under construction :)

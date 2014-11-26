@@ -6,14 +6,14 @@ class Login_Registration extends CI_controller
 */
 public function login()
 {
-$this->load->view('login');
+$this->load->template('login');
 }
 /**
 * Funckcia zobrazi view register s registracnym formularom
 */
 public function register()
 {
-$this->load->view('register');
+$this->load->template('register');
 }
 /**
 * Funkcia vyuziva standardnu hashovaciu funkciu md5 na hashovanie pouzivatelskeho hesla

@@ -132,12 +132,12 @@ function initMap()
 
 function main(view)
 {
-	if ($("body").is(".add-billboard, .show-billboards"))
+	//if ($("body").is(".add-billboard, .show-billboards"))
+	if (('#map').length > 0)
 	{
-		$.getJSON("../get_ulovky", function (json) {
-
+		$.getJSON("../get_ulovky", function(json)
+		{
 			$("#map").data("billboards", json);
-
 			$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&callback=initMap");
 		})
 
