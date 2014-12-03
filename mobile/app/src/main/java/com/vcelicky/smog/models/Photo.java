@@ -1,22 +1,15 @@
 package com.vcelicky.smog.models;
 
-import com.google.gson.annotations.Expose;
+import java.io.Serializable;
 
 /**
  * Created by jerry on 24. 11. 2014.
  */
-public class Photo {
+public class Photo implements Serializable {
 
-    @Expose
     private String path;
-
-    @Expose(serialize = false, deserialize = false)
     private byte[] imageByteArray;
-
-    @Expose
     private double latitude;
-
-    @Expose
     private double longitude;
 
     public String getPath() {

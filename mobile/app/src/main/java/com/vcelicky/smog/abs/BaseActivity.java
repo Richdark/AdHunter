@@ -11,10 +11,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.vcelicky.smog.R;
+import com.vcelicky.smog.models.Photo;
+import com.vcelicky.smog.utils.SerializationUtils;
+import com.vcelicky.smog.utils.Strings;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jerry on 10. 10. 2014.
@@ -94,6 +104,33 @@ public class BaseActivity extends Activity implements LocationListener {
         return isWiFiOrMobile;
     }
 
+    public void serializeList(List<?> list) {
+        SerializationUtils.serialize((ArrayList) list, Strings.SERIALIZED_LIST, this);
+        log(TAG, "list has been serialized");
+    }
+
+    public List<?> deserializeList() {
+        List<?> deserializedList = new ArrayList<Photo>();
+        Log.d(TAG, "pred inicializovanim fis");
+        FileInputStream fis = null;
+        try {
+            fis = this.openFileInput(Strings.SERIALIZED_LIST);
+            deserializedList = (ArrayList)SerializationUtils.deserialize(fis);
+            fis.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "po inicializovani fis");
+        return deserializedList;
+    }
+
+    public boolean deserializedFileExists(String nameOfFile) {
+        if(getApplicationContext().getDir(nameOfFile, Context.MODE_PRIVATE).exists()) return true;
+        else return false;
+    }
+
     /**
      * Requests location update. Initializes LocationManager and current location.
      * If current location is not yet available, last known location is used.
@@ -107,8 +144,10 @@ public class BaseActivity extends Activity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG, "Location changed, longitude = " + location.getLongitude());
-        mCurrentLocation.set(location);
+//        Log.d(TAG, "Location changed, longitude = " + location.getLongitude());
+        if(location != null) {
+            mCurrentLocation.set(location);
+        }
     }
 
     @Override
@@ -125,5 +164,17 @@ public class BaseActivity extends Activity implements LocationListener {
     @Override
     public void onProviderDisabled(String s) {
 
+    }
+
+    public void toastShort(String toast) {
+        Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
+    }
+
+    public void toastLong(String toast) {
+        Toast.makeText(this, toast, Toast.LENGTH_LONG).show();
+    }
+
+    public void log(String tag, String log) {
+        Log.d(tag, log);
     }
 }

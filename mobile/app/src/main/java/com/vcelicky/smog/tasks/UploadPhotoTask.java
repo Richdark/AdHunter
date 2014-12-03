@@ -1,5 +1,6 @@
 package com.vcelicky.smog.tasks;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -27,10 +28,11 @@ public class UploadPhotoTask extends AsyncTask<Photo, Integer, String> {
 
     private Context mContext;
     private Photo mPhoto;
-    private AsyncTaskCompleteListener<Photo> mListener;
+    private AsyncTaskCompleteListener mListener;
     private String response = "NO RESPONSE";
+    private ProgressDialog progressDialog;
 
-    public UploadPhotoTask(Context context, AsyncTaskCompleteListener<Photo> listener) {
+    public UploadPhotoTask(Context context, AsyncTaskCompleteListener listener) {
         mContext = context;
         mListener = listener;
     }
@@ -38,6 +40,11 @@ public class UploadPhotoTask extends AsyncTask<Photo, Integer, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        progressDialog = new ProgressDialog(mContext);
+        progressDialog.setTitle("Upload fotiek");
+        progressDialog.setMessage("Vaše fotky sa uploadujú...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
     }
 
     @Override
@@ -72,10 +79,10 @@ public class UploadPhotoTask extends AsyncTask<Photo, Integer, String> {
                         + "\";filename=\"" + attachmentFileName + "\"" + crlf);
                 request.writeBytes(crlf);
 
-                if(photos[0].getImageByteArray() == null) {
+                if(photos[i].getImageByteArray() == null) {
                     Log.d(TAG, "imageByteArray == null");
                 } else {
-                    request.write(photos[0].getImageByteArray());
+                    request.write(photos[i].getImageByteArray());
                 }
 
                 request.writeBytes(crlf);
@@ -84,14 +91,14 @@ public class UploadPhotoTask extends AsyncTask<Photo, Integer, String> {
                 request.writeBytes(twoHyphens + boundary + crlf);
                 request.writeBytes("Content-Disposition: form-data; name=\"lat\"" + crlf);
                 request.writeBytes(crlf);
-                request.writeBytes(String.valueOf(photos[0].getLatitude()));
+                request.writeBytes(String.valueOf(photos[i].getLatitude()));
 //                request.writeBytes(String.valueOf(latitudeTest+=0.1));
                 request.writeBytes(crlf);
 
                 request.writeBytes(twoHyphens + boundary + crlf);
                 request.writeBytes("Content-Disposition: form-data; name=\"lng\"" + crlf);
                 request.writeBytes(crlf);
-                request.writeBytes(String.valueOf(photos[0].getLongitude()));
+                request.writeBytes(String.valueOf(photos[i].getLongitude()));
 //                request.writeBytes(String.valueOf(longitudeTest+=0.1));
                 request.writeBytes(crlf);
                 request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
@@ -124,7 +131,8 @@ public class UploadPhotoTask extends AsyncTask<Photo, Integer, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+        progressDialog.dismiss();
         Toast.makeText(mContext, response, Toast.LENGTH_SHORT).show();
-        mListener.onTaskComplete(mPhoto);
+        mListener.onTaskComplete();
     }
 }

@@ -249,6 +249,7 @@ public class SerializationUtils {
             e.printStackTrace();
         } finally {
             try {
+                assert fos != null;
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();

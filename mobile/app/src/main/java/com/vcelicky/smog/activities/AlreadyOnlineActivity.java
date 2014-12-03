@@ -1,22 +1,23 @@
 package com.vcelicky.smog.activities;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.vcelicky.smog.AsyncTaskCompleteListener;
 import com.vcelicky.smog.R;
 import com.vcelicky.smog.abs.BaseActivity;
 import com.vcelicky.smog.models.Photo;
+import com.vcelicky.smog.tasks.UploadPhotoTask;
 import com.vcelicky.smog.utils.FileUtils;
+import com.vcelicky.smog.utils.SerializationUtils;
+import com.vcelicky.smog.utils.Strings;
 
-import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,26 +43,34 @@ public class AlreadyOnlineActivity extends BaseActivity {
                 // User clicked OK button
                 Log.d(TAG, "YES");
                 dialog.dismiss();
-                Gson gson = new Gson();
-                try {
-                    FileUtils.writeToJson(FileUtils.getUploadDirectory(), "]", true);
-                    BufferedReader br = new BufferedReader(
-                            new FileReader(FileUtils.getUploadDirectory() + File.separator + FileUtils.JSON_FILE_NAME));
-                    List<Photo> photoList;
-                    Type type = new TypeToken<List<Photo>>(){}.getType();
-                    photoList = gson.fromJson(br, type);
-                    Log.d(TAG, "photoList.get(0).getLatitude()" + photoList.get(0).getLatitude());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                List<Photo> photoList;
+                photoList = (ArrayList)deserializeList();
+                Log.d(TAG, "Pocet fotiek: " + photoList.size());
 
-                finish();
+                //move all the photos taken in offline mode to the main directory
+                if(!FileUtils.isUploadDirectoryEmpty()) {
+                    File files[] = FileUtils.getUploadDirectory().listFiles();
+                    for(File f : files) {
+                        String fileName = f.getName();
+                        log(TAG, "fileName = " + fileName);
+                        f.renameTo(new File(FileUtils.getMainDirectory() + File.separator + fileName));
+                    }
+                    log(TAG, "all the files have been successfully moved to the main directory");
+                }
+                //photos upload
+                new UploadPhotoTask(AlreadyOnlineActivity.this,
+                        new UploadPhotoCompleteListener())
+                        .execute(photoList.toArray(new Photo[photoList.size()]));
             }
         });
         builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
                 Log.d(TAG, "NO");
+                if(deserializedFileExists(Strings.SERIALIZED_LIST)) {
+                    getApplicationContext().deleteFile(Strings.SERIALIZED_LIST);
+                    Log.d(TAG, "file Strings.SERIALIZED_LIST was removed");
+                }
                 finish();
             }
         });
@@ -70,4 +79,13 @@ public class AlreadyOnlineActivity extends BaseActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    private class UploadPhotoCompleteListener implements AsyncTaskCompleteListener {
+        @Override
+        public void onTaskComplete() {
+            Log.d(TAG, "OFFLINE photos successfully uploaded! :)");
+            finish();
+        }
+    }
+
 }

@@ -20,7 +20,6 @@ public class FileUtils {
     public static final String JSON_FILE_NAME = "photos-to-upload.json";
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_COMPRESSED = 2; //BASE64
-    public static final String END_OF_JSON = "]";
 
     /**
      * Creates a File for saving an image or video.
@@ -33,10 +32,7 @@ public class FileUtils {
             return null;
         }
 
-//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-//                Environment.DIRECTORY_PICTURES), DIRECTORY_MAIN);
         File mediaStorageDir = getMainDirectory();
-
         if(!mediaStorageDir.exists()) {
             if(!mediaStorageDir.mkdirs()) {
                 Log.d(TAG, "failed to create " + DIRECTORY_MAIN + "directory");
@@ -46,8 +42,6 @@ public class FileUtils {
 
         //ak WiFi nie je zapnuta, vytvori sa priecinok to_upload, kde sa budu ukladat fotky odfotene v offline rezime
         if(!isWifiOrMobileOn) {
-//            mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-//                    Environment.DIRECTORY_PICTURES + File.separator + DIRECTORY_MAIN), DIRECTORY_UPLOAD);
             mediaStorageDir = getUploadDirectory();
             if(!mediaStorageDir.exists()) {
                 if(!mediaStorageDir.mkdirs()) {
@@ -84,6 +78,12 @@ public class FileUtils {
                 Environment.DIRECTORY_PICTURES + File.separator + DIRECTORY_MAIN), DIRECTORY_UPLOAD);
     }
 
+    public static boolean isUploadDirectoryEmpty() {
+        File file = new File(getUploadDirectory().getAbsolutePath());
+        return file.isDirectory() && file.list().length == 0;
+    }
+
+    // * * * * * JSON IS NOT USED IN THE APP ANYMORE, BUT THE CODE MIGHT BE USEFUL IN THE FUTURE * *
     public static File writeToJson(File path, String jsonObjectString) {
         File file = new File(path + File.separator + JSON_FILE_NAME);
         Log.d(TAG, "file = " + file.getAbsolutePath());
@@ -103,7 +103,7 @@ public class FileUtils {
                 e.printStackTrace();
             }
         } else {
-            Log.d(TAG, "file already exists, gonna apend");
+            Log.d(TAG, "file already exists, gonna append");
             try {
                 // creates a FileWriter Object
                 FileWriter writer = new FileWriter(file, true);
@@ -137,4 +137,5 @@ public class FileUtils {
         }
         return file;
     }
+    //* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 }
