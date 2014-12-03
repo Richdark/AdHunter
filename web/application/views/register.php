@@ -1,25 +1,14 @@
-<?php
-$base_url   = base_url();
-$assets_url = $base_url. 'assets/';
-
-?>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>registracia</title>
-	<link rel="stylesheet" href="<?php echo $assets_url; ?>css/reset.css">
-	<link rel="stylesheet" href="<?php echo $assets_url; ?>css/style.css">
-	<script src="<?php echo $assets_url; ?>js/jquery-2.1.1.min.js"></script>
-</head>
-<body>
-<form id="login_form" method="post" action="../add_user">
-	E-mail: <input type="text" name="email"><br>
-	Heslo: <input type="text" name="password"><br>
-	Meno: <input type="text" name="name"><br>
-	Priezvisko: <input type="text" name="surrname"><br>
-	<input type="submit">
-</form>
-
-</body>
-
-</html>
+<header id="header" style="height:77%">
+	<div class="row" >
+		<div class="login-form">
+		<h1 style="text-align: center">Registrácia</h1>
+			<form  method="post" action="../add_user" class="login-form">
+				<input type="text" name="email" value="E-mail" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'E-mail';}"><br>
+				<input type="password" name="password" value="Heslo" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Heslo';}"><br><br>
+				<input type="text" name="name" value="Meno" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Meno';}"><br><br>
+				<input type="text" name="surrname" value="Priezvisko" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Priezvisko';}"><br><br>
+				<input type="submit" value="Registrovať">
+			</form>
+		</div>
+	</div>
+</header>

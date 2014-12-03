@@ -1,11 +1,22 @@
 function addBillboards(map, img)
 {
 	var billboards = $("#map").data("billboards");
-	
+	var info = new google.maps.InfoWindow();
+
+		console.log(billboards);
+
 	for (var i = 0; i < billboards.length; i++)
 	{
 		var p = new google.maps.LatLng(billboards[i].x, billboards[i].y);
-		new google.maps.Marker({ position: p, map: map, title: billboards[i].nazov_suboru, icon: img });
+		var marker = new google.maps.Marker({ position: p, map: map, title: billboards[i].nazov_suboru, icon: img, billboard: billboards[i].nazov_suboru });
+
+		google.maps.event.addListener(marker, "click", function()
+		{
+			info.setContent(null);
+			$("#info-content").find(".billboard").attr("src", "../../assets/pics/" + this.billboard);
+			info.setContent($("#info-content").html());
+			info.open(map, this);
+		});
 	}
 }
 
@@ -51,10 +62,35 @@ function handleAdd(map, img)
 	});
 }
 
+function handleSearch(map, searchBox, markers) {
+	var places = searchBox.getPlaces();
+
+	if (places.length == 0)
+	{
+		return;
+	}
+	for (var i = 0, marker; marker = markers[i]; i++)
+	{
+		marker.setMap(null);
+	}
+
+	markers = [];
+	var bounds = new google.maps.LatLngBounds();
+	for (var i = 0, place; place = places[i]; i++)
+	{
+		var marker = new google.maps.Marker({ map: map, title: place.name, position: place.geometry.location });
+		markers.push(marker);
+		bounds.extend(place.geometry.location);
+	}
+
+	map.fitBounds(bounds);
+	return markers;
+}
+
 function initMap()
 {
 	var point = new google.maps.LatLng(48.1475259,17.1073104);
-	var map   = new google.maps.Map($("#map").get(0),
+	var map	 = new google.maps.Map($("#map").get(0),
 	{
 		center: point,
 		zoom: 16,
@@ -75,6 +111,13 @@ function initMap()
 		mapTypeControl: false
 	});
 
+	var markers = [];
+	var searchBox = new google.maps.places.SearchBox($("#search").get(0));
+	google.maps.event.addListener(searchBox, "places_changed", function()
+	{
+		markers = handleSearch(map, searchBox, markers);
+	});
+
 	var img = "../../assets/img/billboard_32.png";
 	google.maps.event.addListenerOnce(map, "idle", function()
 	{
@@ -89,13 +132,13 @@ function initMap()
 
 function main(view)
 {
-	if ($("body").is(".add-billboard, .show-billboards"))
+	//if ($("body").is(".add-billboard, .show-billboards"))
+	if (('#map').length > 0)
 	{
-		$.getJSON("../get_ulovky", function (json) {
-
+		$.getJSON("../get_ulovky", function(json)
+		{
 			$("#map").data("billboards", json);
-
-			$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initMap");
+			$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&callback=initMap");
 		})
 
 		/*$("#map").data("billboards",
