@@ -56,8 +56,14 @@ html, body, #map {
 	top: 50%;
 	border: 2px solid #444;
 	margin-left: -200px;
-	margin-top: 30px;
+	margin-top: 20px;
 	width: 400px;
+}
+
+#add-form img,
+#add-form [name="type"] {
+	display: inline-block;
+	width: 64px;
 }
 
 #add-form [name="text"] {
@@ -67,8 +73,7 @@ html, body, #map {
 #info-content {
 	display: none;
 }
-.info {
-}
+
 .info table {
 	margin-top: 10px;
 }
@@ -299,7 +304,7 @@ h2 {
 						0 16px 0 1px #222,
 						0 22px 0 1px #222;
 	box-shadow: 0 10px 0 1px #222,
-				0 16px 0 1px #222,
+				0 16px 0 1px #222,
 				0 22px 0 1px #222;
 }
 .top-bar.expanded .toggle-topbar.menu-icon a,
@@ -311,7 +316,7 @@ h2 {
 						0 16px 0 1px #888,
 						0 22px 0 1px #888;
 	box-shadow: 0 10px 0 1px #888,
-				0 16px 0 1px #888,
+				0 16px 0 1px #888,
 				0 22px 0 1px #888;
 }
 .top-bar .active a {
@@ -445,7 +450,7 @@ a:hover, a:focus {
 color: #f06060;
 }
 .button.white {
-	clear: both;
+	clear: both;
 	color: #4e97cc;
 	background-color: white;
 	border: 0 !important;

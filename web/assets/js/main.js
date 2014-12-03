@@ -124,7 +124,7 @@ function initMap()
 		addBillboards(map, img);
 	});
 
-	if ($("body").is(".add-billboard"))
+	if ($("#add").length)
 	{
 		handleAdd(map, img);
 	}
