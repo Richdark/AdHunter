@@ -8,12 +8,14 @@ function addBillboards(map, img)
 	for (var i = 0; i < billboards.length; i++)
 	{
 		var p = new google.maps.LatLng(billboards[i].x, billboards[i].y);
-		var marker = new google.maps.Marker({ position: p, map: map, title: billboards[i].nazov_suboru, icon: img, billboard: billboards[i].nazov_suboru });
+		var marker = new google.maps.Marker({ position: p, map: map, title: billboards[i].nazov_suboru, icon: img, billboard: billboards[i].nazov_suboru, comment: billboards[i].komentar });
 
 		google.maps.event.addListener(marker, "click", function()
 		{
 			info.setContent(null);
 			$("#info-content").find(".billboard").attr("src", "../../assets/pics/" + this.billboard);
+			$("#edit-form").find("textarea").text(this.comment);
+
 			info.setContent($("#info-content").html());
 			info.open(map, this);
 		});
@@ -148,6 +150,11 @@ function main(view)
 			{ x: 48.1463259, y: 17.1063104, title: "NAY Lenovo notebook" }
 		]);*/
 	}
+}
+
+function toggle_edit_form()
+{
+	$('.edit-form').toggle();
 }
 
 main();

@@ -16,6 +16,13 @@
 			</tr>
 		</table>
 	</div>
+
+	<a href="javascript:void()" onclick="toggle_edit_form()">upraviť</a>
+
+	<form id="edit-form" method="post" enctype="multipart/form-data">
+		<textarea name="text"></textarea><br>
+		<input type="submit">
+	</form>
 </div>
 
 <script src="<?php echo assets_url(); ?>js/main.js"></script>

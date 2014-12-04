@@ -47,6 +47,10 @@ html, body, #map {
 	opacity: 1.0;
 }
 
+#edit-form {
+	/*  */
+}
+
 #add-form {
 	background-color: #888;
 	display: none;
