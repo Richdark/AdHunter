@@ -126,11 +126,6 @@ public class BaseActivity extends Activity implements LocationListener {
         return deserializedList;
     }
 
-    public boolean deserializedFileExists(String nameOfFile) {
-        if(getApplicationContext().getDir(nameOfFile, Context.MODE_PRIVATE).exists()) return true;
-        else return false;
-    }
-
     /**
      * Requests location update. Initializes LocationManager and current location.
      * If current location is not yet available, last known location is used.

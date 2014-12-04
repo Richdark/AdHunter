@@ -1,6 +1,5 @@
 package com.vcelicky.smog.activities;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
@@ -87,7 +86,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         Log.d(TAG, "onResume()");
         log(TAG, "photoList size = " + photoList.size());
         if(!checkCameraHardware()) finish();
-        if(deserializedFileExists(Strings.SERIALIZED_LIST)) {
+        if(SerializationUtils.serializedFileExists(this, Strings.SERIALIZED_LIST)) {
             photoList = (ArrayList)deserializeList();
         }
         setContentView(R.layout.activity_camera);

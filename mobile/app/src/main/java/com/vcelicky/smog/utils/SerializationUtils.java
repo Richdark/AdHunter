@@ -8,6 +8,7 @@ import android.content.Context;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -255,6 +256,14 @@ public class SerializationUtils {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static boolean serializedFileExists(Context context, String nameOfFile) {
+//        if(context.getDir("jeskovy", Context.MODE_PRIVATE).exists()) return true;
+        File file = context.getFileStreamPath(nameOfFile);
+        if(file.exists()) {
+            return true;
+        } else return false;
     }
 
     /**

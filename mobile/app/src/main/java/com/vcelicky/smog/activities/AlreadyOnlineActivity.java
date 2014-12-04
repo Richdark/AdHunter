@@ -1,7 +1,6 @@
 package com.vcelicky.smog.activities;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,8 +15,6 @@ import com.vcelicky.smog.utils.SerializationUtils;
 import com.vcelicky.smog.utils.Strings;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +34,7 @@ public class AlreadyOnlineActivity extends BaseActivity {
         builder.setTitle("Odoslať fotky");
         builder.setMessage("Niekoľko Vami odfotených reklám zatiaľ nebolo odoslaných z dôvodu " +
                 "chýbajúceho pripojenia na internet. Chcete ich teraz odoslať?");
+        builder.setCancelable(false);
         // Add the buttons
         builder.setPositiveButton("Ano", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -67,8 +65,8 @@ public class AlreadyOnlineActivity extends BaseActivity {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
                 Log.d(TAG, "NO");
-                if(deserializedFileExists(Strings.SERIALIZED_LIST)) {
-                    getApplicationContext().deleteFile(Strings.SERIALIZED_LIST);
+                if(SerializationUtils.serializedFileExists(AlreadyOnlineActivity.this, Strings.SERIALIZED_LIST)) {
+                    deleteFile(Strings.SERIALIZED_LIST);
                     Log.d(TAG, "file Strings.SERIALIZED_LIST was removed");
                 }
                 finish();
@@ -84,8 +82,8 @@ public class AlreadyOnlineActivity extends BaseActivity {
         @Override
         public void onTaskComplete() {
             Log.d(TAG, "OFFLINE photos successfully uploaded! :)");
+            deleteFile(Strings.SERIALIZED_LIST);
             finish();
         }
     }
-
 }
