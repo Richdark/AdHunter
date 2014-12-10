@@ -92,11 +92,23 @@ class Billboards extends CI_Controller
 				echo "Nepodarilo sa aktualizovať práva pre uploadovaný billboard<br>";
 			}*/
 
-			$typ = isset($_POST["type"]) ? $_POST["type"] : 1;
+			if (!empty($_POST["model"]))
+			{
+				$model = $_POST["model"];
+				$typ = 'm';		// ulovok prisiel z mobilneho zariadenia
+			}
+			else
+			{
+				$model = null;
+				$typ = 'w';
+			}
+
+			$typ_nosica = !empty($_POST["typ_nosica"]) ? $_POST["typ_nosica"] : 1;	// TODO
+			$komentar = !empty($_POST["comment"]) ? $_POST["comment"] : null;
 
 			// vlozenie do databazy prostrednictvom modelu
 			$this->load->model('Ulovok_model', 'model');
-			$this->model->save_ulovok(1, 1, $suradnice, $name, $typ);
+			$this->model->save_ulovok(1, 1, $suradnice, $name, $model, $typ, $komentar);
 			
 			$this->load->view('uploaded_billboard');
 		}

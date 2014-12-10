@@ -1,5 +1,4 @@
 <div id="panel">
-	<!-- <h1>Pretiahnite fotku billboardu na konkrétne miesto na mape</h1> -->
 	<a id="add" href="#">Pridať</a>
 	<input id="search" type="text" placeholder="Zadajte objekt alebo adresu">
 </div>
@@ -15,6 +14,9 @@
 			</tr>
 			<tr>
 				<td>Nahrané: </td><td class="uploaded"></td>
+			</tr>
+			<tr>
+				<td>Komentár: </td><td class="comment"></td>
 			</tr>
 		</table>
 	</div>
@@ -33,21 +35,24 @@
 	<img src="<?php echo assets_url(); ?>img/types/megaboard.png">
 	<img src="<?php echo assets_url(); ?>img/types/hypercube.png">
 	<br>
-	<input type="radio" name="type" value="1">
-	<input type="radio" name="type" value="2">
-	<input type="radio" name="type" value="3">
-	<input type="radio" name="type" value="4">
-	<input type="radio" name="type" value="5">
+	<input type="radio" name="typ_nosica" value="1">
+	<input type="radio" name="typ_nosica" value="2">
+	<input type="radio" name="typ_nosica" value="3">
+	<input type="radio" name="typ_nosica" value="4">
+	<input type="radio" name="typ_nosica" value="5">
+	<br>
 
+	<!--
+	iba privilegovany user pri editovani billboardu
 	<select name="provider">
 		<?php
-			foreach($owners as $owner)
+			/*foreach($owners as $owner)
 			{
 				echo "<option>$owner->nazov</option>";
-			}
+			}*/
 		?>
-	</select><br>
-	<textarea name="text" placeholder="Môžete nám k nemu niečo napísať."></textarea><br>
+	</select><br> -->
+	<textarea name="comment" placeholder="Môžete nám k nemu niečo napísať."></textarea><br>
 	<input type="submit">
 </form>
 

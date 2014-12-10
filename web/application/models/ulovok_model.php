@@ -10,7 +10,7 @@ class Ulovok_model extends CI_Model
 
 	function get_ulovky() {
 		// $query = $this->db->get('ulovky');
-		$query = $this->db->query('SELECT nazov_suboru, X(suradnice) AS x, Y(suradnice) AS y, komentar FROM ulovky;');
+		$query = $this->db->query('SELECT nazov_suboru, nahrany, model_telefonu, typ, komentar, X(suradnice) AS x, Y(suradnice) AS y FROM ulovky;');
 		return $query->result();
 	}
 
@@ -26,18 +26,19 @@ class Ulovok_model extends CI_Model
 		return $query->result();
 	}
 
-	function save_ulovok($pouzivatel_id, $reklama_id, $suradnice, $nazov_suboru, $typ)
+	function save_ulovok($pouzivatel_id, $reklama_id, $suradnice, $nazov_suboru, $model_telefonu, $typ, $komentar)
 	{
 		$data = array(
 			'pouzivatel_id' => $pouzivatel_id,
 			'reklama_id'    => $reklama_id,
 			'nazov_suboru'  => $nazov_suboru,
-			'typ'           => $typ
+			'typ'           => $typ,
+			'komentar'      => $komentar
 		);
 
 		// ak by to bolo v $data, tak by to CI vyescapoval
+		$this->db->set('nahrany', 'NOW()', false);
 		$this->db->set('vytvoreny', 'NOW()', false);
-
 		$this->db->set('suradnice', $suradnice, false);
 
 		// insert into ...
