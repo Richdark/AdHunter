@@ -1,9 +1,28 @@
-<body class="show-billboards">
-	<div id="panel">
-		<a class="back" href="<?php echo base_url(); ?>billboards/">Späť</a>
+<div id="panel">
+	<input id="search" type="text" placeholder="Zadajte objekt alebo adresu">
+</div>
+
+<div id="map"></div>
+<div id="info-content">
+	<div class="info">
+		<!-- <h2 class="title"></h2> -->
+		<img class="billboard" src="">
+		<table>
+			<tr>
+				<td>Vlastník: </td><td class="provider"></td>
+			</tr>
+			<tr>
+				<td>Nahrané: </td><td class="uploaded"></td>
+			</tr>
+		</table>
 	</div>
 
-	<div id="map"></div>
+	<a href="javascript:void()" onclick="toggle_edit_form()">upraviť</a>
 
-	<script src="<?php echo assets_url(); ?>js/main.js"></script>
-</body>
+	<form id="edit-form" method="post" enctype="multipart/form-data">
+		<textarea name="text"></textarea><br>
+		<input type="submit">
+	</form>
+</div>
+
+<script src="<?php echo assets_url(); ?>js/main.js"></script>

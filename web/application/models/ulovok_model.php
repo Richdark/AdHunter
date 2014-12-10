@@ -10,7 +10,7 @@ class Ulovok_model extends CI_Model
 
 	function get_ulovky() {
 		// $query = $this->db->get('ulovky');
-		$query = $this->db->query('SELECT nazov_suboru, X(suradnice) AS x, Y(suradnice) AS y FROM ulovky;');
+		$query = $this->db->query('SELECT nazov_suboru, X(suradnice) AS x, Y(suradnice) AS y, komentar FROM ulovky;');
 		return $query->result();
 	}
 

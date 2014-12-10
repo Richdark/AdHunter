@@ -1,4 +1,1 @@
-<?php
-echo "Login OK"
-
-?>
+User section under construction :)

@@ -92,10 +92,11 @@ class Billboards extends CI_Controller
 				echo "Nepodarilo sa aktualizovať práva pre uploadovaný billboard<br>";
 			}*/
 
+			$typ = isset($_POST["type"]) ? $_POST["type"] : 1;
 
 			// vlozenie do databazy prostrednictvom modelu
 			$this->load->model('Ulovok_model', 'model');
-			$this->model->save_ulovok(1, 1, $suradnice, $name, '');
+			$this->model->save_ulovok(1, 1, $suradnice, $name, $typ);
 			
 			$this->load->view('uploaded_billboard');
 		}

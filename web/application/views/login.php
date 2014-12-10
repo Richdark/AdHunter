@@ -1,23 +1,12 @@
-<?php
-$base_url   = base_url();
-$assets_url = $base_url. 'assets/';
-
-?>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Prihlasenie</title>
-	<link rel="stylesheet" href="<?php echo $assets_url; ?>css/reset.css">
-	<link rel="stylesheet" href="<?php echo $assets_url; ?>css/style.css">
-	<script src="<?php echo $assets_url; ?>js/jquery-2.1.1.min.js"></script>
-</head>
-<body>
-<form id="login_form" method="post" action="../authentificate_user">
-	E-mail: <input type="text" name="email"><br>
-	Heslo: <input type="text" name="password"><br>
-	<input type="submit">
-</form>
-
-</body>
-
-</html>
+<header id="header" style="height:77%">
+	<div class="row" >
+		<div class="login-form">
+			<h1 style="text-align: center">Prihlásenie</h1>
+			<form  method="post" action="../authentificate_user" class="login-form">
+				<input type="text" name="email" value="E-mail" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'E-mail';}"><br>
+				<input type="password" name="password"  value="Heslo" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Heslo';}"><br>
+				<br><br><input type="submit">
+			</form>
+		</div>
+	</div>
+</header>
