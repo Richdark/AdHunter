@@ -83,15 +83,6 @@ class Billboards extends CI_Controller
 				die;
 			}
 
-			/*if (chmod("$folder/$name", 0664))
-			{
-				echo "Práva pre uploadovaný billboard boli úspešne aktualizované<br>";
-			}
-			else
-			{
-				echo "Nepodarilo sa aktualizovať práva pre uploadovaný billboard<br>";
-			}*/
-
 			if (!empty($_POST["model"]))
 			{
 				$model = $_POST["model"];
@@ -103,14 +94,24 @@ class Billboards extends CI_Controller
 				$typ = 'w';
 			}
 
-			$typ_nosica = !empty($_POST["typ_nosica"]) ? $_POST["typ_nosica"] : 1;	// TODO
+			/**
+			 * @todo typ nosica sa neuklada do db a ani nezobrazuje, treba mu vytvorit column
+			 */
+			$typ_nosica = !empty($_POST["typ_nosica"]) ? $_POST["typ_nosica"] : 1;
 			$komentar = !empty($_POST["comment"]) ? $_POST["comment"] : null;
 
 			// vlozenie do databazy prostrednictvom modelu
 			$this->load->model('Ulovok_model', 'model');
 			$this->model->save_ulovok(1, 1, $suradnice, $name, $model, $typ, $komentar);
 			
-			$this->load->view('uploaded_billboard');
+			if ($typ == 'm')
+			{
+				echo "OK";
+			}
+			else
+			{
+				$this->load->view('uploaded_billboard');
+			}
 		}
 		else
 		{

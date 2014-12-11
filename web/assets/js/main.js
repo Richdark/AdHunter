@@ -139,7 +139,8 @@ function initMap()
 	{
 		markers = handleSearch(map, searchBox, markers);
 	});
-
+	// map.controls[google.maps.ControlPosition.TOP_LEFT].push($("#search").get(0));
+	
 	var billboard_img = "../../assets/img/billboard_32.png";
 	google.maps.event.addListenerOnce(map, "idle", function()
 	{
