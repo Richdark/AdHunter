@@ -14,14 +14,6 @@ class Billboards extends CI_Controller
 	}
 
 	/**
-	 * funkcia zobrazi view s mapou vsetkych billboardov
-	*/
-	public function show()
-	{
-		$this->load->template('show_billboard');
-	}
-
-	/**
 	 * funkcia vracia zoznam vsetkych ulovkov
 	 *
 	 * @return object $json funkcia vracia zoznam vsetkych ulovkov aj s dodatocnymi informaciami
@@ -40,87 +32,94 @@ class Billboards extends CI_Controller
 		echo json_encode($json);
 	}
 
+	/*
+	 * TODO
+	 * pridanie billboardu
+	 */
+	public function add()
+	{
+		if (empty($_FILES["photo"]))
+		{
+			echo "Chyba: Nebola prijata ziadna fotografia<br>";
+			die;
+		}
+
+		$folder = __DIR__. "/../../assets/pics";	// musi to byt realna cesta k suboru nie cez assets_url
+		$name   = $this->_get_filename($folder, $_FILES["photo"]["name"]);
+
+		// vytvor rekurzivne dany folder ak neexistuje
+		if (!file_exists($folder))
+		{
+			mkdir($folder, 0777, true);
+		}
+
+		if (!is_writable($folder))
+		{
+			echo "Chyba: Priecinok nieje zapisovatelny<br>";
+			die;
+		}
+
+		$lat = &$_POST["lat"];
+		$lng = &$_POST["lng"];
+		if(empty($lat) || empty($lng)) {
+			echo "Chyba: Neboli zadané GPS suradnice<br>";
+			die;
+		}
+		$suradnice = "POINT($lat, $lng)";
+			
+		// move z tmp foldra
+		if (!move_uploaded_file($_FILES["photo"]["tmp_name"], "$folder/$name"))
+		{		
+			echo "Chyba: Nepodarilo sa uploadovať billboard na server<br>";
+			die;
+		}
+
+		if (!empty($_POST["model"]))
+		{
+			$model = $_POST["model"];
+			$typ = 'm';		// ulovok prisiel z mobilneho zariadenia
+		}
+		else
+		{
+			$model = null;
+			$typ = 'w';
+		}
+
+		/**
+		 * @todo typ nosica sa neuklada do db a ani nezobrazuje, treba mu vytvorit column
+		 */
+		$typ_nosica = !empty($_POST["typ_nosica"]) ? $_POST["typ_nosica"] : 1;
+		$komentar = !empty($_POST["comment"]) ? $_POST["comment"] : null;
+
+		// vlozenie do databazy prostrednictvom modelu
+		$this->load->model('Ulovok_model', 'model');
+		$this->model->save_ulovok(1, 1, $suradnice, $name, $model, $typ, $komentar);
+		
+		if ($typ == 'm')
+		{
+			echo "OK";
+		}
+		else
+		{
+			$this->load->view('uploaded_billboard');
+		}
+	}
+
 	/**
-	 * funkcia sluzi na pridanie billboardu
+	 * funkcia sluzi na zobrazenie billboardov
 	 * 
 	 * tato funkcia je volana z webovej i mobilnej aplikacie, pricom sa vzdy vratia data rovnakeho formatu
 	 * vo funkcii sa spracovavaju globalne premenne $_POST["lat"], $_POST["lng"] a $_FILES["photo"]
 	 * - v pripade, ze je funkcia volana bez potrebnych parametrov, zobrazi sa view pre pridanie billboardu
 	 * vo webovom prostredi
 	*/
-	public function add()
+	public function show()
 	{
-		// called by ajax
-		if (!empty($_FILES["photo"]))
-		{
-			$folder = __DIR__. "/../../assets/pics";
-			$name   = $this->_get_filename($folder, $_FILES["photo"]["name"]);
-
-			// vytvor rekurzivne dany folder ak neexistuje
-			if (!file_exists($folder))
-			{
-				mkdir($folder, 0777, true);
-			}
-
-			if (!is_writable($folder))
-			{
-				echo "Chyba: Priecinok nieje zapisovatelny<br>";
-				die;
-			}
-
-			$lat = &$_POST["lat"];
-			$lng = &$_POST["lng"];
-			if(empty($lat) || empty($lng)) {
-				echo "Chyba: Neboli zadané GPS suradnice<br>";
-				die;
-			}
-			$suradnice = "POINT($lat, $lng)";
-			
-			// move z tmp foldra
-			if (!move_uploaded_file($_FILES["photo"]["tmp_name"], "$folder/$name"))
-			{		
-				echo "Chyba: Nepodarilo sa uploadovať billboard na server<br>";
-				die;
-			}
-
-			if (!empty($_POST["model"]))
-			{
-				$model = $_POST["model"];
-				$typ = 'm';		// ulovok prisiel z mobilneho zariadenia
-			}
-			else
-			{
-				$model = null;
-				$typ = 'w';
-			}
-
-			/**
-			 * @todo typ nosica sa neuklada do db a ani nezobrazuje, treba mu vytvorit column
-			 */
-			$typ_nosica = !empty($_POST["typ_nosica"]) ? $_POST["typ_nosica"] : 1;
-			$komentar = !empty($_POST["comment"]) ? $_POST["comment"] : null;
-
-			// vlozenie do databazy prostrednictvom modelu
-			$this->load->model('Ulovok_model', 'model');
-			$this->model->save_ulovok(1, 1, $suradnice, $name, $model, $typ, $komentar);
-			
-			if ($typ == 'm')
-			{
-				echo "OK";
-			}
-			else
-			{
-				$this->load->view('uploaded_billboard');
-			}
-		}
-		else
-		{
 			$this->load->model('Owner_model', 'model');
 			$owners = $this->model->get_all();
 			$data   = array('owners' => $owners);
 
-			$this->load->template('add_billboard', $data);
-		}
+			$this->load->template('show_billboard', $data);
 	}
 
 	// ------------------

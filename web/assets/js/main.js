@@ -67,7 +67,7 @@ function handleAdd(map, billboard_img)
 			new google.maps.Marker({ position: p, map: map, icon: billboard_img });
 			map.setOptions({ draggableCursor: "" });
 			$("#add-form").find("[name='lat']").val(p.k);
-			$("#add-form").find("[name='lng']").val(p.B);
+			$("#add-form").find("[name='lng']").val(p.D);
 		}
 
 		return false;
@@ -147,7 +147,7 @@ function initMap()
 		addBillboards(map, billboard_img);
 	});
 
-	if ($("#add").length)
+	if ($("#add-form").length)
 	{
 		handleAdd(map, billboard_img);
 	}
