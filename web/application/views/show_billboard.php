@@ -22,7 +22,7 @@
 	</div>
 </div>
 
-<form action="<?php echo base_url(); ?>billboards/add" id="add-form" method="post" enctype="multipart/form-data">
+<form action="<?php echo base_url(); ?>billboards/add/" id="add-form" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="lat">
 	<input type="hidden" name="lng">
 
