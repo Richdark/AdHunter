@@ -89,7 +89,7 @@ class Billboards extends CI_Controller
 		 * @todo typ nosica sa neuklada do db a ani nezobrazuje, treba mu vytvorit column
 		 */
 		$typ_nosica = !empty($_POST["typ_nosica"]) ? $_POST["typ_nosica"] : 1;
-		$komentar = !empty($_POST["comment"]) ? $_POST["comment"] : null;
+		$komentar = !empty($_POST["comment"]) ? htmlspecialchars($_POST["comment"]) : null;
 
 		// vlozenie do databazy prostrednictvom modelu
 		$this->load->model('Ulovok_model', 'model');

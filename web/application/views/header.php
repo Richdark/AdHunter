@@ -44,7 +44,7 @@
 					<section class="top-bar-section">
 						<ul class="right" id="menu">
 							<li data-magellan-arrival="home">
-								<a href="<?php echo base_url(); ?>billboards/">Domov</a>
+								<a href="<?php echo base_url(); ?>">Domov</a>
 							</li>
 							<li data-magellan-arrival="view">
 								<a href="<?php echo base_url(); ?>billboards/show/">Mapa Billboardov</a>
