@@ -1,5 +1,6 @@
 package com.vcelicky.smog.activities;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
@@ -36,7 +37,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private static final String TAG = CameraActivity.class.getSimpleName();
     public static final int MEDIA_TYPE_COMPRESSED = 2; //BASE64
 
-    private static List<Photo> photoList = new ArrayList<Photo>();
+    public static List<Photo> photoList = new ArrayList<Photo>();
     private Camera mCamera;
     private CameraPreview mPreview;
     private FrameLayout mFramePreview;
@@ -49,7 +50,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private Button addButton;
     private Button testButton;
 
-    private Photo currentPhoto;
+    public static Photo currentPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,9 +160,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
             }
 
         } else if(view.getId() == R.id.button_add) {
-            toastLong("Na funkcii pridávania dodatočných informácií o fotografii sa pracuje.");
-        } else if(view.getId() == R.id.testButton) {
-            deserializeTest();
+//            toastLong("Na funkcii pridávania dodatočných informácií o fotografii sa pracuje.");
+            Intent intent = new Intent(CameraActivity.this, AdditionalnfoActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -176,8 +177,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         uploadButton.setOnClickListener(this);
         addButton = (Button) findViewById(R.id.button_add);
         addButton.setOnClickListener(this);
-        testButton = (Button) findViewById(R.id.testButton);
-        testButton.setOnClickListener(this);
     }
 
     private void deserializeTest() {
@@ -242,12 +241,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onPictureTaken(byte[] bytes, Camera camera) {
 
-            /*if(mCurrentLocation == null) {
-                toastLong("Zatiaľ sa nepodarilo získať Vaše GPS súradnice. Skúste to opäť o chvíľu, prípadne zapnite GPS vo Vašom telefóne.");
-                isPreviewStopped = true;
-                return;
-            }*/
-
             mCompressedFile = FileUtils.getOutputMediaFile(MEDIA_TYPE_COMPRESSED, isWifiOrMobileOn);
             Log.d(TAG, mCompressedFile.getAbsolutePath());
             if(mCompressedFile == null) {
@@ -267,7 +260,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 fos.close();
 
                 currentPhoto = new Photo();
-                currentPhoto.setPath(mCompressedFile.getAbsolutePath());
+//                currentPhoto.setPath(mCompressedFile.getAbsolutePath());
                 currentPhoto.setImageByteArray(imageByteArray);
 
                 Toast.makeText(CameraActivity.this,
@@ -277,14 +270,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                                 + String.valueOf(mCurrentLocation.getLongitude()), Toast.LENGTH_SHORT).show();
                 currentPhoto.setLatitude(mCurrentLocation.getLatitude());
                 currentPhoto.setLongitude(mCurrentLocation.getLongitude());
-//                photoList.add(currentPhoto);
-
-                //Start uploading a photo if WiFi is connected and active
-                if(isWifiOrMobileConnected(CameraActivity.this) && mCurrentLocation != null) {
-//                    new UploadPhotoTask(CameraActivity.this, new UploadPhotoCompleteListener()).execute(currentPhoto);
-                } else {
-                    //Wifi AND mobile web is OFFLINE
-                }
 
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());

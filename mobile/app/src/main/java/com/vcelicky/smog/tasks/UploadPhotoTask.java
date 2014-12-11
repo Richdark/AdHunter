@@ -92,14 +92,20 @@ public class UploadPhotoTask extends AsyncTask<Photo, Integer, String> {
                 request.writeBytes("Content-Disposition: form-data; name=\"lat\"" + crlf);
                 request.writeBytes(crlf);
                 request.writeBytes(String.valueOf(photos[i].getLatitude()));
-//                request.writeBytes(String.valueOf(latitudeTest+=0.1));
                 request.writeBytes(crlf);
 
                 request.writeBytes(twoHyphens + boundary + crlf);
                 request.writeBytes("Content-Disposition: form-data; name=\"lng\"" + crlf);
                 request.writeBytes(crlf);
                 request.writeBytes(String.valueOf(photos[i].getLongitude()));
-//                request.writeBytes(String.valueOf(longitudeTest+=0.1));
+                request.writeBytes(crlf);
+
+                // sending a comment
+                request.writeBytes(twoHyphens + boundary + crlf);
+                request.writeBytes("Content-Disposition: form-data; name=\"comment\"" + crlf);
+                request.writeBytes(crlf);
+                request.writeBytes(String.valueOf(photos[i].getComment()));
+                Log.d(TAG, "comment = " + photos[i].getComment());
                 request.writeBytes(crlf);
                 request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
 

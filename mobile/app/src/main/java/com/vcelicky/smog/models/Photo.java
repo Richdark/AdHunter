@@ -7,18 +7,11 @@ import java.io.Serializable;
  */
 public class Photo implements Serializable {
 
-    private String path;
     private byte[] imageByteArray;
     private double latitude;
     private double longitude;
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
+    private String comment;
+    private String model;
 
     public byte[] getImageByteArray() {
         return imageByteArray;
@@ -43,4 +36,21 @@ public class Photo implements Serializable {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
 }
