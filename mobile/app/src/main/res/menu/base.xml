@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".BaseActivity" >
     <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+        android:title="Deserialize"
         android:orderInCategory="100"
-        android:icon="@android:drawable/ic_menu_more"
-        android:showAsAction="always" />
+        app:showAsAction="always" />
 </menu>

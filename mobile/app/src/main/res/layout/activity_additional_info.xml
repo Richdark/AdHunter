@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Typ nosiča:" />
+
+        <Button
+            android:id="@+id/addinfo_select_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Vybrať"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Vlastník nosiča:" />
+
+        <EditText
+            android:id="@+id/addinfo_owner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:capitalize="sentences"
+            android:layout_margin="8dp"
+            android:hint="Zadajte vlastníka nosiča"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="Poznámka:"/>
+
+        <EditText
+            android:id="@+id/addinfo_comment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:capitalize="sentences"
+            android:gravity="top|left"
+            android:layout_margin="8dp"
+            android:background="#323232"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/addinfo_button_upload"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/upload_01"/>
+
+        <Button
+            android:id="@+id/addinfo_button_repeat"
+            android:background="@drawable/repeat_01"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_centerVertical="true" />
+
+        <Button
+            android:id="@+id/addinfo_button_minus"
+            android:background="@drawable/minus_01"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginBottom="24dp"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+
+</LinearLayout>
