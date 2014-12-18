@@ -31,6 +31,7 @@ public class UploadPhotoTask extends AsyncTask<Photo, Integer, String> {
     private AsyncTaskCompleteListener mListener;
     private String response = "NO RESPONSE";
     private ProgressDialog progressDialog;
+    private int sizeOfPhotoList;
 
     public UploadPhotoTask(Context context, AsyncTaskCompleteListener listener) {
         mContext = context;
@@ -126,6 +127,8 @@ public class UploadPhotoTask extends AsyncTask<Photo, Integer, String> {
                 conn.disconnect();
             }
 
+            sizeOfPhotoList = photos.length;
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -138,7 +141,7 @@ public class UploadPhotoTask extends AsyncTask<Photo, Integer, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         progressDialog.dismiss();
-        Toast.makeText(mContext, response, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "Number of photos sent = " + String.valueOf(sizeOfPhotoList) + "\n" + response, Toast.LENGTH_SHORT).show();
         mListener.onTaskComplete();
     }
 }

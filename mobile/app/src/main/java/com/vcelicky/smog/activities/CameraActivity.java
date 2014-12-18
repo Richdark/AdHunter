@@ -7,6 +7,8 @@ import android.hardware.Camera.PictureCallback;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -181,13 +183,14 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
     private void deserializeTest() {
         try {
-            List<Photo> testList = new ArrayList<Photo>();
+            List<Photo> testList;
             Log.d(TAG, "pred inicializovanim fis");
             FileInputStream fis = this.openFileInput(Strings.SERIALIZED_LIST);
             Log.d(TAG, "po inicizliaovani fis");
             testList = (ArrayList)SerializationUtils.deserialize(fis);
             photoList = testList;
-            Log.d(TAG, "Hura, deserializovanie. Size = " + testList.size() + " " + testList.get(0).getLatitude());
+            toastLong("Size = " + testList.size());
+//            Log.d(TAG, "Size = " + testList.size() + " " + testList.get(0).getLatitude());
             fis.close();
         } catch (FileNotFoundException e) {
             // if internal serialized file has already been removed before...
@@ -287,6 +290,22 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onTaskComplete() {
             Log.d(TAG, "onTaskComplete, mehehe");
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id) {
+            case R.id.action_settings:
+                deserializeTest();
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
