@@ -1,26 +1,49 @@
-function addBillboards(map, img)
+function addBillboards(map, billboard_img)
 {
 	var billboards = $("#map").data("billboards");
 	var info = new google.maps.InfoWindow();
 
-		console.log(billboards);
-
 	for (var i = 0; i < billboards.length; i++)
 	{
 		var p = new google.maps.LatLng(billboards[i].x, billboards[i].y);
-		var marker = new google.maps.Marker({ position: p, map: map, title: billboards[i].nazov_suboru, icon: img, billboard: billboards[i].nazov_suboru });
+		var marker = new google.maps.Marker(
+		{
+			position:  p,
+			map:       map,
+			title:     billboards[i].nazov_suboru,
+			icon:      billboard_img,
+			billboard: billboards[i].nazov_suboru,
+			uploaded:  billboards[i].nahrany,
+			comment:   billboards[i].komentar
+		});
 
 		google.maps.event.addListener(marker, "click", function()
 		{
+			var current = this;
+			var height  = $("#map").height() - 250;
+
 			info.setContent(null);
-			$("#info-content").find(".billboard").attr("src", "../../assets/pics/" + this.billboard);
-			info.setContent($("#info-content").html());
-			info.open(map, this);
+			$("#info-content").find(".uploaded").text(this.uploaded);
+			$("#info-content").find(".comment").text(this.comment ? this.comment : "");
+			$("#info-content").find(".billboard").remove();
+			$("#info-content").prepend($("<img>",
+			{
+				"class":     "billboard",
+				src:         "../../assets/pics/" + this.billboard
+			}).css(
+			{
+				margin:      "0 auto",			// center if necessary
+				width:       "auto",
+				"max-height": height
+			}).load(function() {
+				info.setContent($("#info-content").html());
+				info.open(map, current);
+			}));
 		});
 	}
 }
 
-function handleAdd(map, img)
+function handleAdd(map, billboard_img)
 {
 	var adding = false;
 	
@@ -41,11 +64,10 @@ function handleAdd(map, img)
 			var h = $(this).height();
 			map.panBy(e.offsetX - (w / 2), e.offsetY - (h / 2));
 			var p = map.getCenter();
-			new google.maps.Marker({ position: p, map: map, icon: img });
+			new google.maps.Marker({ position: p, map: map, icon: billboard_img });
 			map.setOptions({ draggableCursor: "" });
-			console.log(p);
 			$("#add-form").find("[name='lat']").val(p.k);
-			$("#add-form").find("[name='lng']").val(p.B);
+			$("#add-form").find("[name='lng']").val(p.D);
 		}
 
 		return false;
@@ -90,7 +112,7 @@ function handleSearch(map, searchBox, markers) {
 function initMap()
 {
 	var point = new google.maps.LatLng(48.1475259,17.1073104);
-	var map	 = new google.maps.Map($("#map").get(0),
+	var map	  = new google.maps.Map($("#map").get(0),
 	{
 		center: point,
 		zoom: 16,
@@ -117,22 +139,22 @@ function initMap()
 	{
 		markers = handleSearch(map, searchBox, markers);
 	});
-
-	var img = "../../assets/img/billboard_32.png";
+	// map.controls[google.maps.ControlPosition.TOP_LEFT].push($("#search").get(0));
+	
+	var billboard_img = "../../assets/img/billboard_32.png";
 	google.maps.event.addListenerOnce(map, "idle", function()
 	{
-		addBillboards(map, img);
+		addBillboards(map, billboard_img);
 	});
 
-	if ($("body").is(".add-billboard"))
+	if ($("#add-form").length)
 	{
-		handleAdd(map, img);
+		handleAdd(map, billboard_img);
 	}
 }
 
 function main(view)
 {
-	//if ($("body").is(".add-billboard, .show-billboards"))
 	if (('#map').length > 0)
 	{
 		$.getJSON("../get_ulovky", function(json)
@@ -140,13 +162,6 @@ function main(view)
 			$("#map").data("billboards", json);
 			$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&callback=initMap");
 		})
-
-		/*$("#map").data("billboards",
-		[
-			{ x: 48.1492457, y: 17.0960744, title: "IKEA stoličky" },
-			{ x: 48.1475259, y: 17.1073104, title: "FICO kandidatúra" },
-			{ x: 48.1463259, y: 17.1063104, title: "NAY Lenovo notebook" }
-		]);*/
 	}
 }
 
