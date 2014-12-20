@@ -85,4 +85,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mCamera.release();
         mCamera = null;
     }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
 }

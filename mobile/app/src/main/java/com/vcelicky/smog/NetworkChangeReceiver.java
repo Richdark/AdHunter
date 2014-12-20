@@ -38,7 +38,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                     //tu sa udeju zmeny po zapnuti WiFi, a v nasom pripade upload obrazka
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(context)
-                                    .setSmallIcon(R.drawable.logo)
+                                    .setSmallIcon(R.drawable.ic_launcher)
                                     .setContentTitle("Uploadnúť fotky!")
                                     .setContentText("Niektoré Vaše úlovky ešte neboli odoslané.")
                                     .setAutoCancel(true); //po kliknuti na notifikaciu sa odstrani zo zoznamu notifikacii
