@@ -30,19 +30,16 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         mComment = (TextView) findViewById(R.id.addinfo_comment);
         mOwner = (TextView) findViewById(R.id.addinfo_owner);
 
-        setOnClickListeners();
-    }
+        // preventing string null case
+        mComment.setText("");
+        mOwner.setText("");
+        mTypeOfBillboard = "";
 
-    private void setOnClickListeners() {
         findViewById(R.id.addinfo_button_upload).setOnClickListener(this);
         findViewById(R.id.addinfo_button_repeat).setOnClickListener(this);
         findViewById(R.id.addinfo_button_minus).setOnClickListener(this);
         findViewById(R.id.addinfo_select_button).setOnClickListener(this);
 
-        // preventing string null case
-        mComment.setText("");
-        mOwner.setText("");
-        mTypeOfBillboard = "";
     }
 
     @Override
@@ -61,29 +58,22 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
                     //photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
                     log(TAG, "uploading photo(s)...");
                     // for now it's sent together
-                    /*CameraActivity.currentPhoto.setComment(
-                            mOwner.getText().toString() +
-                                    mComment.getText().toString() +
-                                    "Typ nosiča: " + mTypeOfBillboard +
-                                    "Model telefónu: " + Build.MODEL);*/
-
-                    CameraActivity.currentPhoto.setComment(
+                    CameraActivity.mCurrentPhoto.setComment(
                             mOwner.getText().toString() +
                                     mComment.getText().toString() +
                                     mTypeOfBillboard +
                                     Build.MODEL);
 
-//                    CameraActivity.currentPhoto.setComment("jeskovy marenky");
-                    new UploadPhotoTask(this, new UploadPhotoCompleteListener()).execute(CameraActivity.currentPhoto);
+                    new UploadPhotoTask(this, new UploadPhotoCompleteListener()).execute(CameraActivity.mCurrentPhoto);
                 } else {
-                    CameraActivity.currentPhoto.setComment(
+                    CameraActivity.mCurrentPhoto.setComment(
                             mOwner.getText().toString() +
                                     mComment.getText().toString() +
                                     mTypeOfBillboard +
                                     Build.MODEL);
                     //save photo to the ArrayList and notify user about uploading photo next time he connects to the internet
-                    CameraActivity.photoList.add(CameraActivity.currentPhoto);
-                    serializeList(CameraActivity.photoList);
+                    CameraActivity.sPhotoList.add(CameraActivity.mCurrentPhoto);
+                    serializeList(CameraActivity.sPhotoList);
                     toastLong("Momentálne nie ste pripojený. Vaša fotka sa uložila a odoslať ju budete môcť pri najbližšom pripojení na internet.");
                 }
                 break;
@@ -95,7 +85,6 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.addinfo_select_button:
                 startActivityForResult(new Intent(this, SelectBillboardActivity.class), 0);
-//                startActivity(new Intent(this, SelectBillboardActivity.class));
             default:
                 break;
         }

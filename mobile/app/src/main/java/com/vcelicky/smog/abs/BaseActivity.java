@@ -109,8 +109,7 @@ public class BaseActivity extends Activity implements LocationListener {
 
     public List<?> deserializeList() {
         List<?> deserializedList = new ArrayList<Photo>();
-        Log.d(TAG, "pred inicializovanim fis");
-        FileInputStream fis = null;
+        FileInputStream fis;
         try {
             fis = this.openFileInput(Strings.SERIALIZED_LIST);
             deserializedList = (ArrayList)SerializationUtils.deserialize(fis);
@@ -120,7 +119,6 @@ public class BaseActivity extends Activity implements LocationListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "po inicializovani fis");
         return deserializedList;
     }
 

@@ -5,4 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="gps_not_found">Zatiaľ sa nepodarilo získať Vaše GPS súradnice. Skúste to opäť o chvíľu, prípadne zapnite GPS vo Vašom telefóne.</string>
+    <string name="not_connected">Momentálne nie ste pripojený. Vaša fotka sa uložila a odoslať ju budete môcť pri najbližšom pripojení na internet.</string>
+
 </resources>
