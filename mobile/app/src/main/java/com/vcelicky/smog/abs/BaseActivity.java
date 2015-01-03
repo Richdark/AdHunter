@@ -13,8 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.vcelicky.smog.R;
 import com.vcelicky.smog.models.Photo;
 import com.vcelicky.smog.utils.SerializationUtils;
