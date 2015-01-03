@@ -68,7 +68,7 @@ html, body {
 }
 
 #add-form img,
-#add-form [name="typ_nosica"] {
+#add-form [type="radio"] {
 	display: inline-block;
 	width: 64px;
 }
@@ -213,9 +213,8 @@ logn/register  fields*/
 	color: #fff;
 	font-family: 'Exo', sans-serif;
 	font-size: 16px;
-	font-weight: 400;
+	font-weight: 500;
 	padding: 4px;
-	margin-top: 10px;
 }
 /*LANDING PAGE CSS START*/
 

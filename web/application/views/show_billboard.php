@@ -36,18 +36,19 @@
 	<img src="<?php echo assets_url(); ?>img/types/hypercube.png">
 	<br>
 
-	<input type="radio" name="typ_nosica" value="1">
-	<input type="radio" name="typ_nosica" value="2">
-	<input type="radio" name="typ_nosica" value="3">
-	<input type="radio" name="typ_nosica" value="4">
-	<input type="radio" name="typ_nosica" value="5">
+	<input type="radio" name="backing_type" value="1">
+	<input type="radio" name="backing_type" value="2">
+	<input type="radio" name="backing_type" value="3">
+	<input type="radio" name="backing_type" value="4">
+	<input type="radio" name="backing_type" value="5">
 	<br>
 
 	<select name="provider">
+		<option value="0">Neznámy</option>
 		<?php
-			foreach($owners as $owner)
+			for($i=0; $i<count($owners); $i++)
 			{
-				echo "<option>$owner->nazov</option>";
+				echo '<option value="'.$i.'">'.$owners[$i]->name.'</option>';
 			}
 		?>
 	</select>

@@ -67,7 +67,7 @@ class Login_Registration extends CI_controller
 
 		$hashed_password = $this->hash_password($password,$salt);
 
-		$this->load->model('login_registration_model','model');
+		$this->load->model('user_model','model');
 		$this->model->save_user('DEFAULT',$name,$surname,$email,$hashed_password,$salt);
 		$this->load->view('registration_successful');
 	}
@@ -81,7 +81,7 @@ class Login_Registration extends CI_controller
 		$email          = $_POST['email'];
 		$typed_password = $_POST['password'] ;
 
-		$this->load->model('login_registration_model','model');
+		$this->load->model('user_model','model');
 		
 		$result  = $this->model->get_password_for_login($email);
 		$row_cnt = sizeof($result);
@@ -94,7 +94,7 @@ class Login_Registration extends CI_controller
 		{
 			foreach ($result as $row)
 			{
-				$db_password = $row->heslo;
+				$db_password = $row->password;
 				$salt        = $row->salt;
 			}
 

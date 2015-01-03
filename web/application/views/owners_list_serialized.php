@@ -5,7 +5,7 @@ $owners_arr = array();
 // make array from objects
 foreach ($owners as $o)
 {
-	array_push($owners_arr, array('id' => $o->id, 'name' => $o->nazov));
+	array_push($owners_arr, array('id' => $o->id, 'name' => $o->name));
 }
 
 // JSON encode

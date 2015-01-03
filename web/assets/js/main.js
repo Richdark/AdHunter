@@ -10,11 +10,11 @@ function addBillboards(map, billboard_img)
 		{
 			position:  p,
 			map:       map,
-			title:     billboards[i].nazov_suboru,
+			title:     billboards[i].filename,
 			icon:      billboard_img,
-			billboard: billboards[i].nazov_suboru,
-			uploaded:  billboards[i].nahrany,
-			comment:   billboards[i].komentar
+			billboard: billboards[i].filename,
+			uploaded:  billboards[i].uploaded,
+			comment:   billboards[i].comment
 		});
 
 		google.maps.event.addListener(marker, "click", function()
@@ -155,9 +155,9 @@ function initMap()
 
 function main(view)
 {
-	if (('#map').length > 0)
+	if ($('#map').length > 0)
 	{
-		$.getJSON("../get_ulovky", function(json)
+		$.getJSON("../get_catches", function(json)
 		{
 			$("#map").data("billboards", json);
 			$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&callback=initMap");
