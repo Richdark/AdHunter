@@ -10,11 +10,11 @@ class Owner_model extends CI_Model
 		/**
 		 * @todo Toto zmazat az sa stlpce a tabulky prepisu do anglictiny
 		*/
-		$sortby = ($sortby == 'name')? 'nazov' : $sortby;
+		$sortby = ($sortby == 'name') ? 'name' : $sortby;
 
 		$this->db->order_by($sortby, $order);
 		
-		$query = $this->db->get('vlastnici');
+		$query = $this->db->get('owners');
 
 		return $query->result();
 	}
