@@ -9,10 +9,11 @@
 	<meta name="viewport" content="width=device-width">
 	<title>AdHunter Landing Page</title>
 
-	<link rel="stylesheet" href="<?php echo assets_url(); ?>/css/normalize.css">
+	<!-- <link rel="stylesheet" href="<?php echo assets_url(); ?>/css/normalize.css">
 	<link rel="stylesheet" href="<?php echo assets_url(); ?>/css/foundation.min.css">
-	<link rel="stylesheet" href="<?php echo assets_url(); ?>/css/style.css">
 	<link rel="stylesheet" href="<?php echo assets_url(); ?>/css/ie.css">
+	<link rel="stylesheet" href="<?php echo assets_url(); ?>/css/style.css"> -->
+	<link rel="stylesheet" href="<?php echo assets_url(); ?>/css/style_temp.css">
 	<link href='http://fonts.googleapis.com/css?family=Noto+Sans:400,700' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Cabin+Condensed:600' rel='stylesheet' type='text/css'>
 
@@ -30,6 +31,19 @@
 	<script type="text/javascript" src="<?php echo assets_url(); ?>/js/custom.js"></script>
 </head>
 <body>
+	<header>
+		<div class="c">
+			<a href="<?php echo base_url(); ?>" id="logo"></a>
+			<ul>
+				<li><a href="<?php echo base_url(); ?>">Domov</a></li>
+				<li><a href="<?php echo base_url(); ?>billboards/show/">Mapa billboardov</a></li>
+				<li><a href="<?php echo base_url(); ?>login_registration/login/">Prihlásenie</a></li>
+				<li><a href="<?php echo base_url(); ?>login_registration/register/">Registrácia</a></li>
+			</ul>
+		</div>
+	</header>
+
+<!--
 	<div id="top" data-magellan-expedition="fixed">
 		<div class="row">
 			<div class="large-12 columns">
@@ -61,3 +75,4 @@
 			</div>
 		</div>
 	</div>
+-->

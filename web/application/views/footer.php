@@ -1,3 +1,8 @@
+<footer>
+	<div class="c">2014 &copy; FIIT STU</div>
+</footer>
+
+<!--
 		<footer>
 		<br><br>
 
@@ -17,5 +22,7 @@
 				</div>
 			</div>
 		</footer>
+-->
+
 	</body>
 </html>

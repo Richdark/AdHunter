@@ -28,20 +28,22 @@
 
 	<input name="photo" type="file" value="Vložiť fotku billboardu" required="true" accept="image/*"><br>
 
-	Vyberte typ billboardu:<br>
-	<img src="<?php echo assets_url(); ?>img/types/trojnozka.png">
-	<img src="<?php echo assets_url(); ?>img/types/citylight.png">
-	<img src="<?php echo assets_url(); ?>img/types/standard.png">
-	<img src="<?php echo assets_url(); ?>img/types/megaboard.png">
-	<img src="<?php echo assets_url(); ?>img/types/hypercube.png">
-	<br>
+	<h2>Vyberte typ billboardu:</h2>
+	<span class="center">
+			<img src="<?php echo assets_url(); ?>img/types/trojnozka.png">
+			<img src="<?php echo assets_url(); ?>img/types/citylight.png">
+			<img src="<?php echo assets_url(); ?>img/types/standard.png">
+			<img src="<?php echo assets_url(); ?>img/types/megaboard.png">
+			<img src="<?php echo assets_url(); ?>img/types/hypercube.png">
+	</span>
 
-	<input type="radio" name="backing_type" value="1">
-	<input type="radio" name="backing_type" value="2">
-	<input type="radio" name="backing_type" value="3">
-	<input type="radio" name="backing_type" value="4">
-	<input type="radio" name="backing_type" value="5">
-	<br>
+	<span class="center">
+		<input type="radio" name="backing_type" value="1">
+		<input type="radio" name="backing_type" value="2">
+		<input type="radio" name="backing_type" value="3">
+		<input type="radio" name="backing_type" value="4">
+		<input type="radio" name="backing_type" value="5">
+	</span>
 
 	<select name="provider">
 		<option value="0">Neznámy</option>
@@ -57,7 +59,7 @@
 	<textarea name="comment" placeholder="Môžete nám k nemu niečo napísať."></textarea>
 	<br>
 	
-	<input type="submit">
+	<input type="submit" value="Odoslať" />
 </form>
 
 <script src="<?php echo assets_url(); ?>js/main.js"></script>
