@@ -58,6 +58,7 @@ header {
 
 		header ul {
 			position: absolute;
+			z-index: 2;
 			top: 15px;
 			right: 0;
 			list-style: none;
