@@ -17,7 +17,7 @@ class MY_Loader extends CI_Loader
         $content .= $this->view($template_name, $vars, $return);
 
         // load footer
-        $content .= $this->view('footer', $vars, $return);
+        // $content .= $this->view('footer', $vars, $return);
 
         if ($return)
         {
