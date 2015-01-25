@@ -2,9 +2,13 @@ package com.vcelicky.smog.activities;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
@@ -217,13 +221,16 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public void onPictureTaken(byte[] bytes, Camera camera) {
+            mCamera.stopPreview();
+            log(TAG, "rotation of device = " + getWindowManager().getDefaultDisplay().getRotation());
 
             File compressedFile = FileUtils.getOutputMediaFile(MEDIA_TYPE_COMPRESSED, isWifiOrMobileOn);
-            Log.d(TAG, compressedFile.getAbsolutePath());
             if(compressedFile == null) {
                 Log.d(TAG, "Error creating media file, check storage permissions!");
                 return;
             }
+
+            Log.d(TAG, compressedFile.getAbsolutePath());
 
             //Fill the file with image/video bytes
             try {
@@ -234,10 +241,40 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 //Create Base64 image
                 FileOutputStream fos = new FileOutputStream(compressedFile);
                 fos.write(imageByteArray);
+
+//                BitmapFactory.Options bounds = new BitmapFactory.Options();
+//                bounds.inJustDecodeBounds = true;
+//                BitmapFactory.decodeFile(compressedFile.getAbsolutePath(), bounds);
+//
+//                BitmapFactory.Options opts = new BitmapFactory.Options();
+//                Bitmap bm = BitmapFactory.decodeFile(compressedFile.getAbsolutePath(), opts);
+//                ExifInterface exif = new ExifInterface(compressedFile.getAbsolutePath());
+//                String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+//                Log.d(TAG, "orientString = " + orientString);
+//                int orientation = orientString != null ? Integer.parseInt(orientString) :  ExifInterface.ORIENTATION_NORMAL;
+//
+//                int rotationAngle = 0;
+//                if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+//                    rotationAngle = 90;
+//                    log(TAG, "orientation == 90");
+//                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+//                    rotationAngle = 180;
+//                    log(TAG, "orientation == 180");
+//                } else if(orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+//                    rotationAngle = 270;
+//                    log(TAG, "orientation == 270");
+//                } else {
+//                    log(TAG, "orientation == 0");
+//                }
+//
+//                Matrix matrix = new Matrix();
+//                matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+//                Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
+//                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+
                 fos.close();
 
                 mCurrentPhoto = new Photo();
-//                mCurrentPhoto.setPath(mCompressedFile.getAbsolutePath());
                 mCurrentPhoto.setImageByteArray(imageByteArray);
 
                 Toast.makeText(CameraActivity.this,
