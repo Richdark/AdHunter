@@ -10,7 +10,7 @@ class Billboards extends CI_Controller
 	*/
 	public function index()
 	{
-		$this->load->template('index_billboard');
+		$this->load->template('home_page');
 	}
 
 	/**

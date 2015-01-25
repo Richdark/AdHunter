@@ -1,0 +1,52 @@
+@media screen and (max-width: 1024px) {
+	.app .text {
+		width: 35%;
+		font-size: 22px;
+		padding-left: 20px;
+	}
+	.app .text h1 {
+		font-size: 56px;
+	}
+}
+
+@media screen and (max-width: 840px) {
+	header #toggle {
+		display: inline-block;
+	}
+	header ul {
+		background-color: #fff;
+		top: 80px;
+		width: 200px;
+		text-align: left;
+		display: none;
+	}
+
+	.app {
+		height: auto;
+	}
+	.app .text {
+		width: auto;
+		padding: 130px 50px 50px;
+	}
+	.app .image {
+		display: block;
+		width: auto;
+		background-position: center;
+	}
+
+	.features .column p {
+		font-size: 10px;
+	}
+}
+
+@media screen and (max-width: 640px) {
+	.features .column {
+		width: auto;
+		display: block;
+		padding: 20px 50px 0;
+	}
+
+	.app .image {
+		background-position: right;
+	}
+}

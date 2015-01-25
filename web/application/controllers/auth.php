@@ -1,6 +1,6 @@
 <?php
 
-class Login_Registration extends CI_controller
+class Auth extends CI_controller
 {
 	/**
 	 * Funckcia zobrazi view login s prihlasovacim formularom
@@ -8,6 +8,16 @@ class Login_Registration extends CI_controller
 	public function login()
 	{
 		$this->load->template('login');
+	}
+
+	/**
+	 * Funckcia zobrazi view logout
+	*/
+	public function logout()
+	{
+		$this->session->sess_destroy();
+
+		$this->load->template('logout');
 	}
 
 	/**
@@ -69,7 +79,7 @@ class Login_Registration extends CI_controller
 
 		$this->load->model('user_model','model');
 		$this->model->save_user('DEFAULT',$name,$surname,$email,$hashed_password,$salt);
-		$this->load->view('registration_successful');
+		$this->load->template('registration_successful');
 	}
 
 	/**
@@ -88,7 +98,7 @@ class Login_Registration extends CI_controller
 		
 		if ($row_cnt == 0)
 		{
-			$this->load->view('login_failed');
+			$this->load->template('login_failed');
 		}
 		else
 		{
@@ -102,11 +112,13 @@ class Login_Registration extends CI_controller
 
 			if ($db_password == $hashed_password)
 			{
-				$this->load->view('login_successful');
+				$this->load->template('login_successful');
+
+				$this->session->set_userdata(array('email' => $email));
 			}
 			else
 			{
-				$this->load->view('login_failed');
+				$this->load->template('login_failed');
 			}
 		}
 	}

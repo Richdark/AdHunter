@@ -153,6 +153,24 @@ function initMap()
 	}
 }
 
+function fixMobile() {
+	if($(window).height() < parseInt($(".app").css("min-height")) ||
+	   $(window).width() < 840 ||
+	   typeof window.orientation !== "undefined")
+	{
+		$(".fixed").css("position", "relative");
+	} else {
+		$(".fixed").css("position", "fixed");
+	}
+}
+
+function initMenu() {
+	$("header").on("click", "#toggle", function() {
+		$("header ul").toggle();
+		return false;
+	});
+}
+
 function main(view)
 {
 	if ($('#map').length > 0)
@@ -163,6 +181,14 @@ function main(view)
 			$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&callback=initMap");
 		})
 	}
+
+	fixMobile();
+	initMenu();
 }
 
 main();
+
+$(window).resize(function()
+{
+	fixMobile();
+});
