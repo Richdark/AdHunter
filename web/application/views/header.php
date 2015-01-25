@@ -15,6 +15,9 @@
 	<script type="text/javascript" src="<?php echo assets_url(); ?>js/jquery-2.1.1.min.js"></script>
 </head>
 <body>
+	<?php
+	if (uri_string() == '') { echo '<div class="app"><div class="fixed">'; }
+	?>
 	<header>
 		<div class="c">
 			<a href="<?php echo base_url(); ?>" id="logo"></a>
@@ -22,8 +25,20 @@
 			<ul>
 				<li><a href="<?php echo base_url(); ?>">Domov</a></li>
 				<li><a href="<?php echo base_url(); ?>billboards/show/">Mapa billboardov</a></li>
-				<li><a href="<?php echo base_url(); ?>login_registration/login/">Prihlásenie</a></li>
-				<li><a href="<?php echo base_url(); ?>login_registration/register/">Registrácia</a></li>
+				
+				<?php
+
+				if ($this->session->userdata('email') != NULL)
+				{
+					echo '<li><a href="'. base_url(). 'auth/logout/">Odhlásiť</a></li>';
+				}
+				else
+				{
+					echo '<li><a href="'. base_url(). 'auth/login/">Prihlásenie</a></li>';
+					echo '<li><a href="'. base_url(). 'auth/register/">Registrácia</a></li>';
+				}
+
+				?>
 			</ul>
 		</div>
 	</header>
