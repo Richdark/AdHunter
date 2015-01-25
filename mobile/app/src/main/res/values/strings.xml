@@ -7,5 +7,7 @@
 
     <string name="gps_not_found">Zatiaľ sa nepodarilo získať Vaše GPS súradnice. Skúste to opäť o chvíľu, prípadne zapnite GPS vo Vašom telefóne.</string>
     <string name="not_connected">Momentálne nie ste pripojený. Vaša fotka sa uložila a odoslať ju budete môcť pri najbližšom pripojení na internet.</string>
+    <string name="send_photos">Odoslať fotky</string>
+    <string name="not_yet_send">Niekoľko Vami odfotených reklám zatiaľ nebolo odoslaných z dôvodu chýbajúceho pripojenia na internet. Chcete ich teraz odoslať?</string>
 
 </resources>
