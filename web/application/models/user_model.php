@@ -1,6 +1,6 @@
 <?php
 
-class Login_registration_model extends CI_Model
+class User_model extends CI_Model
 {
 	function __construct()
 	{
@@ -14,9 +14,8 @@ class Login_registration_model extends CI_Model
 	*/
 	function get_password_for_login($email)
 	{
-		$query = $this->db->query("SELECT heslo, salt FROM pouzivatelia WHERE pouzivatelia.email = '$email'");
+		$query = $this->db->query("SELECT password, salt FROM users WHERE users.email = '$email'");
 		
-		// spustenie query a vratenie hodnoty funkciou
 		return $query->result();
 	}
 
@@ -32,15 +31,15 @@ class Login_registration_model extends CI_Model
 	function save_user($id,$name,$surname,$email,$password,$salt)
 	{
 		$data = array(
-			'id'         => $id,
-			'meno'  	 => $name,
-			'priezvisko' => $surname,
-			'email'      => $email,
-			'heslo'      => $password,
-			'salt'       => $salt
+			'id'       => $id,
+			'name'     => $name,
+			'surname'  => $surname,
+			'email'    => $email,
+			'password' => $password,
+			'salt'     => $salt
 		);
 
-		$this->db->insert('pouzivatelia',$data);
+		$this->db->insert('users', $data);
 	}
 }
 

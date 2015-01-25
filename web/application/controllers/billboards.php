@@ -18,10 +18,10 @@ class Billboards extends CI_Controller
 	 *
 	 * @return object $json funkcia vracia zoznam vsetkych ulovkov aj s dodatocnymi informaciami
 	*/
-	public function get_ulovky()
+	public function get_catches()
 	{
-		$this->load->model('Ulovok_model', 'model');
-		$result = $this->model->get_ulovky();
+		$this->load->model('Catch_model', 'model');
+		$result = $this->model->get_all();
 
 		$json = array();
 		foreach ($result as $row)
@@ -33,7 +33,6 @@ class Billboards extends CI_Controller
 	}
 
 	/*
-	 * TODO
 	 * pridanie billboardu
 	 */
 	public function add()
@@ -44,7 +43,7 @@ class Billboards extends CI_Controller
 			die;
 		}
 
-		$folder = __DIR__. "/../../assets/pics";	// musi to byt realna cesta k suboru nie cez assets_url
+		$folder = __DIR__ . "/../../assets/pics";	// musi to byt realna cesta k suboru nie cez assets_url
 		$name   = $this->_get_filename($folder, $_FILES["photo"]["name"]);
 
 		// vytvor rekurzivne dany folder ak neexistuje
@@ -65,7 +64,7 @@ class Billboards extends CI_Controller
 			echo "Chyba: Neboli zadané GPS suradnice<br>";
 			die;
 		}
-		$suradnice = "POINT($lat, $lng)";
+		$coordinates = "POINT($lat, $lng)";
 			
 		// move z tmp foldra
 		if (!move_uploaded_file($_FILES["photo"]["tmp_name"], "$folder/$name"))
@@ -77,25 +76,25 @@ class Billboards extends CI_Controller
 		if (!empty($_POST["model"]))
 		{
 			$model = $_POST["model"];
-			$typ = 'm';		// ulovok prisiel z mobilneho zariadenia
+			$type = 'm';		// ulovok prisiel z mobilneho zariadenia
 		}
 		else
 		{
 			$model = null;
-			$typ = 'w';
+			$type = 'w';
 		}
 
 		/**
 		 * @todo typ nosica sa neuklada do db a ani nezobrazuje, treba mu vytvorit column
 		 */
-		$typ_nosica = !empty($_POST["typ_nosica"]) ? $_POST["typ_nosica"] : 1;
-		$komentar = !empty($_POST["comment"]) ? htmlspecialchars($_POST["comment"]) : null;
+		$backing_type = !empty($_POST["backing_type"]) ? $_POST["backing_type"] : 1;
+		$comment = !empty($_POST["comment"]) ? htmlspecialchars($_POST["comment"]) : null;
 
 		// vlozenie do databazy prostrednictvom modelu
-		$this->load->model('Ulovok_model', 'model');
-		$this->model->save_ulovok(1, 1, $suradnice, $name, $model, $typ, $komentar);
+		$this->load->model('Catch_model', 'model');
+		$this->model->save_catch(1, 1, $coordinates, $name, $model, $type, $comment);
 		
-		if ($typ == 'm')
+		if ($type == 'm')
 		{
 			echo "OK";
 		}
