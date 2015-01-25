@@ -113,7 +113,8 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         if(view.getId() == R.id.button_capture) {
             if(isPreviewStopped) {
                 mCamera.startPreview();
-                mCaptureButton.setBackgroundResource(R.drawable.camera_button_01);
+
+                mCaptureButton.setBackgroundResource(R.drawable.capture_selector);
                 mUploadButton.setVisibility(View.GONE);
                 mAddButton.setVisibility(View.GONE);
                 isPreviewStopped = false;
@@ -122,9 +123,11 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 if(mCurrentLocation != null) {
                     mCamera.takePicture(null, null, mPicture);
                     isPreviewStopped = true;
-                    mCaptureButton.setBackgroundResource(R.drawable.repeat_01);
+
+                    mCaptureButton.setBackgroundResource(R.drawable.refresh_selector);
                     mUploadButton.setVisibility(View.VISIBLE);
                     mAddButton.setVisibility(View.VISIBLE);
+
                 } else {
                     toastLong(getString(R.string.gps_not_found));
                 }

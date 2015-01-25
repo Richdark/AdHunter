@@ -64,18 +64,18 @@
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:layout_marginTop="24dp"
-            android:background="@drawable/upload_01"/>
+            android:background="@drawable/upload_selector"/>
 
         <Button
             android:id="@+id/addinfo_button_repeat"
-            android:background="@drawable/repeat_01"
+            android:background="@drawable/refresh_selector"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:layout_centerVertical="true" />
 
         <Button
             android:id="@+id/addinfo_button_minus"
-            android:background="@drawable/minus_01"
+            android:background="@drawable/lessinfo_selector"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:layout_marginBottom="24dp"
