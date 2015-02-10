@@ -47,7 +47,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private static final String TAG = CameraActivity.class.getSimpleName();
     public static final int MEDIA_TYPE_COMPRESSED = 2; //BASE64
 
-    public static List<Photo> sPhotoList = new ArrayList<Photo>();
+
     private Camera mCamera;
     private CameraPreview mPreview;
     private boolean isWifiOrMobileOn;
@@ -56,8 +56,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private Button mCaptureButton;
     private Button mUploadButton;
     private Button mAddButton;
-
-    public static Photo mCurrentPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +111,8 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         if(view.getId() == R.id.button_capture) {
             if(isPreviewStopped) {
                 mCamera.startPreview();
-                mCaptureButton.setBackgroundResource(R.drawable.camera_button_01);
+
+                mCaptureButton.setBackgroundResource(R.drawable.capture_selector);
                 mUploadButton.setVisibility(View.GONE);
                 mAddButton.setVisibility(View.GONE);
                 isPreviewStopped = false;
@@ -122,9 +121,11 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 if(mCurrentLocation != null) {
                     mCamera.takePicture(null, null, mPicture);
                     isPreviewStopped = true;
-                    mCaptureButton.setBackgroundResource(R.drawable.repeat_01);
+
+                    mCaptureButton.setBackgroundResource(R.drawable.refresh_selector);
                     mUploadButton.setVisibility(View.VISIBLE);
                     mAddButton.setVisibility(View.VISIBLE);
+
                 } else {
                     toastLong(getString(R.string.gps_not_found));
                 }
@@ -163,9 +164,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private void deserializeTest() {
         try {
             List<Photo> testList;
-            Log.d(TAG, "pred inicializovanim fis");
             FileInputStream fis = this.openFileInput(Strings.SERIALIZED_LIST);
-            Log.d(TAG, "po inicizliaovani fis");
             testList = (ArrayList)SerializationUtils.deserialize(fis);
             sPhotoList = testList;
             toastLong("Size = " + testList.size());
@@ -184,10 +183,8 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
      */
     private boolean checkCameraHardware() {
         if(getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            //this device has a camera
             return true;
         } else {
-            //no camera on this device
             return false;
         }
     }
@@ -212,7 +209,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         try {
             c = Camera.open();
         } catch (Exception e) {
-            // Camera is not available (in use or does not exist)
+            e.printStackTrace();
         }
         return c; //returns null if camera is unavailable
     }
@@ -222,11 +219,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onPictureTaken(byte[] bytes, Camera camera) {
             mCamera.stopPreview();
-            log(TAG, "rotation of device = " + getWindowManager().getDefaultDisplay().getRotation());
 
             File compressedFile = FileUtils.getOutputMediaFile(MEDIA_TYPE_COMPRESSED, isWifiOrMobileOn);
             if(compressedFile == null) {
-                Log.d(TAG, "Error creating media file, check storage permissions!");
                 return;
             }
 
@@ -300,7 +295,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private class UploadPhotoCompleteListener implements AsyncTaskCompleteListener {
         @Override
         public void onTaskComplete() {
-            Log.d(TAG, "onTaskComplete, mehehe");
+            //...
         }
     }
 

@@ -33,6 +33,8 @@ public class BaseActivity extends Activity implements LocationListener {
 
     protected LocationManager mLocationManager;
     protected Location mCurrentLocation;
+    protected static Photo mCurrentPhoto;
+    protected static List<Photo> sPhotoList = new ArrayList<Photo>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

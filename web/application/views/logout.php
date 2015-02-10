@@ -1,0 +1,1 @@
+Odhlásenie prebehlo úspešne.

@@ -26,6 +26,7 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_additional_info);
+        getActionBar().show();
 
         mComment = (TextView) findViewById(R.id.addinfo_comment);
         mOwner = (TextView) findViewById(R.id.addinfo_owner);
@@ -46,7 +47,6 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mTypeOfBillboard = data.getStringExtra("typeOfBillboard");
-        log(TAG, "returned String = " + mTypeOfBillboard);
     }
 
     @Override
@@ -56,25 +56,24 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
             case R.id.addinfo_button_upload:
                 if(isWifiOrMobileConnected(this)) {
                     //photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
-                    log(TAG, "uploading photo(s)...");
                     // for now it's sent together
-                    CameraActivity.mCurrentPhoto.setComment(
+                    mCurrentPhoto.setComment(
                             mOwner.getText().toString() +
                                     mComment.getText().toString() +
                                     mTypeOfBillboard +
                                     Build.MODEL);
 
-                    new UploadPhotoTask(this, new UploadPhotoCompleteListener()).execute(CameraActivity.mCurrentPhoto);
+                    new UploadPhotoTask(this, new UploadPhotoCompleteListener()).execute(mCurrentPhoto);
                 } else {
-                    CameraActivity.mCurrentPhoto.setComment(
+                    mCurrentPhoto.setComment(
                             mOwner.getText().toString() +
                                     mComment.getText().toString() +
                                     mTypeOfBillboard +
                                     Build.MODEL);
                     //save photo to the ArrayList and notify user about uploading photo next time he connects to the internet
-                    CameraActivity.sPhotoList.add(CameraActivity.mCurrentPhoto);
-                    serializeList(CameraActivity.sPhotoList);
-                    toastLong("Momentálne nie ste pripojený. Vaša fotka sa uložila a odoslať ju budete môcť pri najbližšom pripojení na internet.");
+                    sPhotoList.add(mCurrentPhoto);
+                    serializeList(sPhotoList);
+                    toastLong(getString(R.string.not_connected));
                 }
                 break;
             case R.id.addinfo_button_repeat:
@@ -93,7 +92,7 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     private class UploadPhotoCompleteListener implements AsyncTaskCompleteListener {
         @Override
         public void onTaskComplete() {
-            Log.d(TAG, "onTaskComplete, mehehe");
+            // something to do...
         }
     }
 }

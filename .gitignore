@@ -1,4 +1,5 @@
 web/.htaccess
+web/application/config/config.php
 web/application/config/database.php
 web/assets/pics
 mobile/.gradle
