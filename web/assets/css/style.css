@@ -125,6 +125,7 @@ footer {
 				color: #fff;
 				text-align: left;
 				font-size: 25px;
+				direction: ltr;
 			}
 
 				.app .text h1 {
