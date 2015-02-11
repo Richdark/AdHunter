@@ -3,14 +3,15 @@
 /**
  * obsahuje funkcie pre pracu s billboardami
 */
-class Billboards extends CI_Controller
+class Billboards extends MY_Controller
 {
 	/**
 	 * funkcia zobrazi view s hlavnou ponukou
 	*/
 	public function index()
 	{
-		$this->load->template('home_page');
+		$vars['logged'] = $this->is_logged();
+		$this->load->template('home_page', $vars);
 	}
 
 	/**
@@ -114,11 +115,14 @@ class Billboards extends CI_Controller
 	*/
 	public function show()
 	{
-			$this->load->model('Owner_model', 'model');
-			$owners = $this->model->get_all();
-			$data   = array('owners' => $owners);
+		$this->load->model('Owner_model', 'model');
+		$owners = $this->model->get_all();
+		$vars = array(
+			'owners' => $owners,
+			'logged' => $this->is_logged()
+		);
 
-			$this->load->template('show_billboard', $data);
+		$this->load->template('show_billboard', $vars);
 	}
 
 	// ------------------

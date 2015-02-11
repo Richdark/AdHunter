@@ -12,9 +12,9 @@ class User_model extends CI_Model
 	 * @param string email pouzivatelsky email na zaklade ktoreho vyhladame heslo
 	 * @return string result vysledok query do databazy
 	*/
-	function get_password_for_login($email)
+	function get_user_by_login($email)
 	{
-		$query = $this->db->query("SELECT password, salt FROM users WHERE users.email = '$email'");
+		$query = $this->db->query("SELECT id, password, salt FROM users WHERE users.email = '$email'");
 		
 		return $query->result();
 	}

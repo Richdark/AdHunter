@@ -27,8 +27,8 @@
 				<li><a href="<?php echo base_url(); ?>billboards/show/">Mapa billboardov</a></li>
 				
 				<?php
-
-				if ($this->session->userdata('email') != NULL)
+				// if ($this->session->userdata('email') != NULL)
+				if ($logged)
 				{
 					echo '<li><a href="'. base_url(). 'auth/logout/">Odhlásiť</a></li>';
 				}

@@ -1,13 +1,14 @@
 <?php
 
-class Auth extends CI_controller
+class Auth extends MY_Controller
 {
 	/**
 	 * Funckcia zobrazi view login s prihlasovacim formularom
 	*/
 	public function login()
 	{
-		$this->load->template('login');
+		$vars['logged'] = $this->is_logged();
+		$this->load->template('login', $vars);
 	}
 
 	/**
@@ -15,9 +16,9 @@ class Auth extends CI_controller
 	*/
 	public function logout()
 	{
-		$this->session->sess_destroy();
-
-		$this->load->template('logout');
+		$this->logout_user();
+		$vars['logged'] = $this->is_logged();
+		$this->load->template('logout', $vars);
 	}
 
 	/**
@@ -25,7 +26,8 @@ class Auth extends CI_controller
 	*/
 	public function register()
 	{
-		$this->load->template('register');
+		$vars['logged'] = $this->is_logged();
+		$this->load->template('register', $vars);
 	}
 
 	/**
@@ -79,31 +81,47 @@ class Auth extends CI_controller
 
 		$this->load->model('user_model','model');
 		$this->model->save_user('DEFAULT',$name,$surname,$email,$hashed_password,$salt);
-		$this->load->template('registration_successful');
+		$vars['logged'] = $this->is_logged();
+		$this->load->template('registration_successful', $vars);
 	}
 
 	/**
 	 * Funkcia overujuca spravnost zadanych prihlasovacich udajov na zaklade udajov poskytnutych
 	 * v prihlasovacom formulari pokial su spravne zobrzi view o uspesnosti prihlasenia v opacnom pripade o neuspesnosti
 	*/
-	public function authentificate_user()
+	// POST http://adhunter.eu/auth/login_user/ email&password&uid
+	public function login_user()
 	{
 		$email          = $_POST['email'];
-		$typed_password = $_POST['password'] ;
+		$typed_password = $_POST['password'];
+		$type           = parent::$type;
+
+		if ($type == 'w')
+		{
+			@session_start();
+			$uid = session_id();
+		}
+		else
+		{
+			$uid = $_POST['uid'];
+		}
 
 		$this->load->model('user_model','model');
 		
-		$result  = $this->model->get_password_for_login($email);
+		$result  = $this->model->get_user_by_login($email);
 		$row_cnt = sizeof($result);
 		
-		if ($row_cnt == 0)
+		$vars['logged'] = $this->is_logged();
+		
+		if ($row_cnt == 0)						// login not found
 		{
-			$this->load->template('login_failed');
+			$this->load->template('login_failed', $vars);
 		}
 		else
 		{
 			foreach ($result as $row)
 			{
+				$user_id     = $row->id;
 				$db_password = $row->password;
 				$salt        = $row->salt;
 			}
@@ -112,15 +130,34 @@ class Auth extends CI_controller
 
 			if ($db_password == $hashed_password)
 			{
-				$this->load->template('login_successful');
-
-				$this->session->set_userdata(array('email' => $email));
+				$this->Online_user_model->login_user('DEFAULT',$user_id,$uid,$type);
+				$vars['logged'] = $this->is_logged();
+				$this->load->template('login_successful', $vars);
 			}
 			else
 			{
-				$this->load->template('login_failed');
+				$this->load->template('login_failed', $vars);
 			}
 		}
+	}
+
+	/**
+	 * Funkcia na odhlasenie pouzivatela
+	*/
+	// POST http://adhunter.eu/auth/logout_user/ uid
+	public function logout_user()
+	{
+		$type = parent::$type;
+		if ($type == 'w')
+		{
+			@session_start();
+			$uid = session_id();
+		}
+		else
+		{
+			$uid = $_POST['uid'];
+		}
+		$this->Online_user_model->logout_user($uid,$type);
 	}
 }
 

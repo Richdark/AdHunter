@@ -1,6 +1,6 @@
 <?php
 
-class Owners extends CI_Controller
+class Owners extends MY_Controller
 {
 	public function index()
 	{
