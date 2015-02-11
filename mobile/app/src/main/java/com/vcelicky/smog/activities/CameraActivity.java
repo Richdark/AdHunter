@@ -9,17 +9,14 @@ import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.media.ExifInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.vcelicky.smog.AsyncTaskCompleteListener;
@@ -72,7 +69,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onStop() {
         super.onStop();
-        mLocationManager.removeUpdates(this);
     }
 
     @Override
@@ -97,7 +93,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         setPreviews();
         initListeners();
         checkNetworkStatus();
-        requestLocationUpdate();
     }
 
     private void setPreviews() {
@@ -120,7 +115,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 isPreviewStopped = false;
             } else {
                 //get an image from the camera; here the user gets first time after taking photo
-                if(mCurrentLocation != null) {
+                if(mLocation != null) {
                     mCamera.takePicture(null, null, mPicture);
                     isPreviewStopped = true;
 
@@ -282,11 +277,11 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
                 Toast.makeText(CameraActivity.this,
                                 "Latitude = "
-                                + String.valueOf(mCurrentLocation.getLatitude())
+                                + String.valueOf(mLocation.getLatitude())
                                 + "; longitude = "
-                                + String.valueOf(mCurrentLocation.getLongitude()), Toast.LENGTH_SHORT).show();
-                mCurrentPhoto.setLatitude(mCurrentLocation.getLatitude());
-                mCurrentPhoto.setLongitude(mCurrentLocation.getLongitude());
+                                + String.valueOf(mLocation.getLongitude()), Toast.LENGTH_SHORT).show();
+                mCurrentPhoto.setLatitude(mLocation.getLatitude());
+                mCurrentPhoto.setLongitude(mLocation.getLongitude());
 
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());

@@ -15,6 +15,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".activities.CameraActivity"
             android:label="@string/app_name"
@@ -26,7 +29,8 @@
         </activity>
         <activity android:name=".activities.AlreadyOnlineActivity" />
         <activity android:name=".activities.TakenActivity" />
-        <activity android:name=".activities.AdditionalnfoActivity" />
+        <activity android:name=".activities.AdditionalnfoActivity"
+            android:theme="@style/AppTheme.WithActionBar" />
         <activity android:name=".activities.SelectBillboardActivity" />
 
         <receiver android:name=".NetworkChangeReceiver"

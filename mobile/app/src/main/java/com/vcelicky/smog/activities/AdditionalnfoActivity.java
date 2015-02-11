@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_additional_info);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mComment = (TextView) findViewById(R.id.addinfo_comment);
         mOwner = (TextView) findViewById(R.id.addinfo_owner);
@@ -87,6 +89,17 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
                 startActivityForResult(new Intent(this, SelectBillboardActivity.class), 0);
             default:
                 break;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
