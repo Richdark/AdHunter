@@ -1,13 +1,13 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar.Fullscreen">
+    <style name="AppTheme" parent="android:Theme.Holo.Light">
         <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/ActionBar.AdHunter</item>
     </style>
 
-    <style name="AppTheme.WithActionBar" parent="android:Theme.Holo.Light">
+    <style name="AppTheme.NoActionBar" parent="android:Theme.Holo.Light.NoActionBar.Fullscreen">
         <!-- Customize your theme here -->
-        <item name="android:actionBarStyle">@style/ActionBar.AdHunter</item>
     </style>
 
     <style name="ActionBar.AdHunter" parent="android:style/Widget.Holo.Light.ActionBar">
