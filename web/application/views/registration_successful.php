@@ -1,2 +1,2 @@
 registration succesfull
-<a href="<?php echo base_url(); ?>login_registration/login/">Prihlasit sa</a>
+<a href="<?php echo base_url(); ?>auth/login/">Prihlasit sa</a>
