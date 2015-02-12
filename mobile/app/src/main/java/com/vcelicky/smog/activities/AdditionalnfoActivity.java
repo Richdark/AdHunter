@@ -1,5 +1,6 @@
 package com.vcelicky.smog.activities;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +28,12 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_additional_info);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        final ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setTitle("Typ billboardu");
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         mComment = (TextView) findViewById(R.id.addinfo_comment);
         mOwner = (TextView) findViewById(R.id.addinfo_owner);
@@ -38,9 +44,9 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         mTypeOfBillboard = "";
 
         findViewById(R.id.addinfo_button_upload).setOnClickListener(this);
-        findViewById(R.id.addinfo_button_repeat).setOnClickListener(this);
-        findViewById(R.id.addinfo_button_minus).setOnClickListener(this);
-        findViewById(R.id.addinfo_select_button).setOnClickListener(this);
+//        findViewById(R.id.addinfo_button_repeat).setOnClickListener(this);
+//        findViewById(R.id.addinfo_button_minus).setOnClickListener(this);
+//        findViewById(R.id.addinfo_select_button).setOnClickListener(this);
 
     }
 
@@ -79,14 +85,14 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
                     toastLong("Momentálne nie ste pripojený. Vaša fotka sa uložila a odoslať ju budete môcť pri najbližšom pripojení na internet.");
                 }
                 break;
-            case R.id.addinfo_button_repeat:
-                onBackPressed();
-                break;
-            case R.id.addinfo_button_minus:
-                onBackPressed();
-                break;
-            case R.id.addinfo_select_button:
-                startActivityForResult(new Intent(this, SelectBillboardActivity.class), 0);
+//            case R.id.addinfo_button_repeat:
+//                onBackPressed();
+//                break;
+//            case R.id.addinfo_button_minus:
+//                onBackPressed();
+//                break;
+//            case R.id.addinfo_select_button:
+//                startActivityForResult(new Intent(this, SelectBillboardActivity.class), 0);
             default:
                 break;
         }

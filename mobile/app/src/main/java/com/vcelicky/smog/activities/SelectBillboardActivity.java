@@ -1,7 +1,9 @@
 package com.vcelicky.smog.activities;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +28,6 @@ public class SelectBillboardActivity extends BaseActivity {
 
         initListeners();
     }
-
 
     private void initListeners() {
         ImageButton Button1 = (ImageButton) findViewById(R.id.holderButton1);
