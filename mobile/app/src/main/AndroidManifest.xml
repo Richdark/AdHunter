@@ -23,15 +23,20 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".activities.AlreadyOnlineActivity" />
         <activity android:name=".activities.TakenActivity" />
         <activity android:name=".activities.AdditionalnfoActivity" />
         <activity android:name=".activities.SelectBillboardActivity" />
+        <activity android:name=".activities.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <receiver android:name=".NetworkChangeReceiver"
             android:label="NetworkChangeReceiver" >

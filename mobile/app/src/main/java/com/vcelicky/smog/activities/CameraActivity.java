@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.vcelicky.smog.AsyncTaskCompleteListener;
@@ -50,9 +51,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private boolean isWifiOrMobileOn;
     private boolean isPreviewStopped;
 
-    private Button mCaptureButton;
-    private Button mUploadButton;
-    private Button mAddButton;
+    private ImageButton mCaptureButton;
+    private ImageButton mUploadButton;
+    private ImageButton mAddButton;
 
     public static Photo mCurrentPhoto;
 
@@ -109,7 +110,8 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
             if(isPreviewStopped) {
                 mCamera.startPreview();
 
-                mCaptureButton.setBackgroundResource(R.drawable.capture_selector);
+                mCaptureButton.setBackgroundResource(R.drawable.circle_selector);
+                mCaptureButton.setImageResource(R.drawable.ic_image_camera_alt);
                 mUploadButton.setVisibility(View.GONE);
                 mAddButton.setVisibility(View.GONE);
                 isPreviewStopped = false;
@@ -119,7 +121,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                     mCamera.takePicture(null, null, mPicture);
                     isPreviewStopped = true;
 
-                    mCaptureButton.setBackgroundResource(R.drawable.refresh_selector);
+                    mCaptureButton.setBackgroundResource(R.drawable.circle_selector);
+                    mCaptureButton.setImageResource(R.drawable.ic_av_replay);
+
                     mUploadButton.setVisibility(View.VISIBLE);
                     mAddButton.setVisibility(View.VISIBLE);
 
@@ -150,11 +154,11 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
      */
     private void initListeners() {
         isPreviewStopped = false;
-        mCaptureButton = (Button) findViewById(R.id.button_capture);
+        mCaptureButton = (ImageButton) findViewById(R.id.button_capture);
         mCaptureButton.setOnClickListener(this);
-        mUploadButton = (Button) findViewById(R.id.button_upload);
+        mUploadButton = (ImageButton) findViewById(R.id.button_upload);
         mUploadButton.setOnClickListener(this);
-        mAddButton = (Button) findViewById(R.id.button_add);
+        mAddButton = (ImageButton) findViewById(R.id.button_add);
         mAddButton.setOnClickListener(this);
     }
 

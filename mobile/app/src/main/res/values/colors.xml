@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="adhunter_deep_purple_500">#673AB7</color>
+    <color name="adhunter_deep_purple_500">#3F51B5</color> <!-- #673AB7 -->
+    <color name="adhunter_deep_purple_800">#283593</color> <!-- #4527A0 -->
+    <color name="adhunter_deep_purple_900">#1A237E</color>
 </resources>
