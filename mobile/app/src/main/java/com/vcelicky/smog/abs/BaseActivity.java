@@ -21,6 +21,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.vcelicky.smog.R;
 import com.vcelicky.smog.models.Photo;
+import com.vcelicky.smog.services.ServiceInterface;
+import com.vcelicky.smog.utils.Config;
 import com.vcelicky.smog.utils.SerializationUtils;
 import com.vcelicky.smog.utils.Strings;
 
@@ -30,23 +32,41 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.ErrorHandler;
+import retrofit.RequestInterceptor;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 /**
  * Created by Jerry on 10. 10. 2014.
  * Activity that all the other activities inherit from.
  */
-public class BaseActivity extends Activity implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
+public class BaseActivity extends Activity implements GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener,
+        LocationListener, RequestInterceptor, ErrorHandler {
     private static final String TAG = "BaseActivity";
 
     private LocationClient mLocationClient;
     private LocationRequest mLocationRequest;
     protected LocationManager mLocationManager;
     protected Location mLocation;
+    protected ServiceInterface mServiceInterface;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setLogLevel(Config.LOG_LEVEL)
+                .setEndpoint(Config.ENDPOINT_URL)
+                .setRequestInterceptor(this)
+                .setErrorHandler(this)
+                .build();
+
+        mServiceInterface = restAdapter.create(ServiceInterface.class);
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (servicesConnected()) {
@@ -56,6 +76,10 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
             mLocationRequest.setInterval(5000);
             mLocationRequest.setFastestInterval(5000);
         }
+    }
+
+    public ServiceInterface getServiceInterface() {
+        return mServiceInterface;
     }
 
     @Override
@@ -226,5 +250,25 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
 
     public void log(String tag, String log) {
         Log.d(tag, log);
+    }
+
+    @Override
+    public void intercept(RequestFacade request) {
+
+    }
+
+    @Override
+    public Throwable handleError(RetrofitError cause) {
+        Response r = cause.getResponse();
+        if (r != null)
+            switch (r.getStatus()){
+                case 401:
+                    Log.d(TAG, "returning unauthorised");
+                    return new RuntimeException();
+                case 400:
+                    Log.d(TAG, "returning invalid credentials");
+                    return new RuntimeException();
+            }
+        return cause;
     }
 }
