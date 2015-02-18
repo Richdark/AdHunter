@@ -132,7 +132,11 @@ class Auth extends MY_Controller
 			{
 				$this->Online_user_model->login_user('DEFAULT',$user_id,$uid,$type);
 				$vars['logged'] = $this->is_logged();
-				$this->load->template('login_successful', $vars);
+				if ($type == 'w') {
+					$this->load->template('login_successful', $vars);
+				} else {
+					echo "OK";
+				}
 			}
 			else
 			{
@@ -158,6 +162,9 @@ class Auth extends MY_Controller
 			$uid = $_POST['uid'];
 		}
 		$this->Online_user_model->logout_user($uid,$type);
+		if ($type != 'w') {
+			echo "OK";
+		}
 	}
 }
 
