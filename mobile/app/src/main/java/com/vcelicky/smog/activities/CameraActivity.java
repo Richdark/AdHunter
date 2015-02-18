@@ -8,6 +8,8 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.location.Address;
+import android.location.Geocoder;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.util.Base64;
@@ -18,11 +20,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vcelicky.smog.AsyncTaskCompleteListener;
 import com.vcelicky.smog.models.Photo;
+import com.vcelicky.smog.models.User;
 import com.vcelicky.smog.tasks.UploadPhotoTask;
+import com.vcelicky.smog.utils.Config;
 import com.vcelicky.smog.utils.FileUtils;
 import com.vcelicky.smog.utils.SerializationUtils;
 import com.vcelicky.smog.utils.Strings;
@@ -37,6 +43,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by jerry on 10. 10. 2014.
@@ -54,8 +65,13 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private ImageButton mCaptureButton;
     private ImageButton mUploadButton;
     private ImageButton mAddButton;
+    private LinearLayout mAddressLayout;
+    private TextView mAddressText;
+    private Button mLogOutButton;
 
     public static Photo mCurrentPhoto;
+
+    private int numberOfFailures = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +119,23 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         framePreview.addView(mPreview);
     }
 
+    /**
+     * Initializes all the listeners used in this activity.
+     */
+    private void initListeners() {
+        isPreviewStopped = false;
+        mCaptureButton = (ImageButton) findViewById(R.id.button_capture);
+        mCaptureButton.setOnClickListener(this);
+        mUploadButton = (ImageButton) findViewById(R.id.button_upload);
+        mUploadButton.setOnClickListener(this);
+        mAddButton = (ImageButton) findViewById(R.id.button_add);
+        mAddButton.setOnClickListener(this);
+        mLogOutButton = (Button) findViewById(R.id.button_logout);
+        mLogOutButton.setOnClickListener(this);
+        mAddressLayout = (LinearLayout) findViewById(R.id.address_layout);
+        mAddressText = (TextView) findViewById(R.id.address_text);
+    }
+
     @Override
     public void onClick(View view) {
 
@@ -114,6 +147,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 mCaptureButton.setImageResource(R.drawable.ic_image_camera_alt);
                 mUploadButton.setVisibility(View.GONE);
                 mAddButton.setVisibility(View.GONE);
+                mAddressLayout.setVisibility(View.GONE);
                 isPreviewStopped = false;
             } else {
                 //get an image from the camera; here the user gets first time after taking photo
@@ -126,6 +160,18 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
                     mUploadButton.setVisibility(View.VISIBLE);
                     mAddButton.setVisibility(View.VISIBLE);
+
+                    if(isWifiOrMobileConnected(CameraActivity.this)) {
+                        Geocoder geo = new Geocoder(CameraActivity.this, Locale.getDefault());
+                        try {
+                            List<Address> addresses = geo.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1);
+                            mAddressLayout.startAnimation(loadAnimation(android.R.anim.fade_in));
+                            mAddressLayout.setVisibility(View.VISIBLE);
+                            mAddressText.setText(addresses.get(0).getAddressLine(0));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
                 } else {
                     toastLong(getString(R.string.gps_not_found));
@@ -145,29 +191,45 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         } else if(view.getId() == R.id.button_add) {
             Intent intent = new Intent(CameraActivity.this, AdditionalnfoActivity.class);
             startActivity(intent);
+        } else if(view.getId() == R.id.button_logout) {
+            logoutUser();
         }
 
     }
 
-    /**
-     * Initializes all the listeners used in this activity.
-     */
-    private void initListeners() {
-        isPreviewStopped = false;
-        mCaptureButton = (ImageButton) findViewById(R.id.button_capture);
-        mCaptureButton.setOnClickListener(this);
-        mUploadButton = (ImageButton) findViewById(R.id.button_upload);
-        mUploadButton.setOnClickListener(this);
-        mAddButton = (ImageButton) findViewById(R.id.button_add);
-        mAddButton.setOnClickListener(this);
+    private void logoutUser() {
+        getServiceInterface().logoutUser(Config.DEVICE_ID, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                User.deleteApplicationDirectory();
+                Intent i = new Intent(CameraActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                numberOfFailures++;
+                if(numberOfFailures > 3) {
+                    toastShort("Odhlásenie neprebehlo úspešne. Uistite sa, že ste pripojený na internet a skúste to znova.");
+                    return;
+                }
+
+                try {
+                    Thread.sleep(200);
+                    log(TAG, "sleep(200)");
+                    getServiceInterface().logoutUser(Config.DEVICE_ID, this);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void deserializeTest() {
         try {
             List<Photo> testList;
-            Log.d(TAG, "pred inicializovanim fis");
             FileInputStream fis = this.openFileInput(Strings.SERIALIZED_LIST);
-            Log.d(TAG, "po inicizliaovani fis");
             testList = (ArrayList)SerializationUtils.deserialize(fis);
             sPhotoList = testList;
             toastLong("Size = " + testList.size());
@@ -224,15 +286,13 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onPictureTaken(byte[] bytes, Camera camera) {
             mCamera.stopPreview();
-            log(TAG, "rotation of device = " + getWindowManager().getDefaultDisplay().getRotation());
-
+//            log(TAG, "rotation of device = " + getWindowManager().getDefaultDisplay().getRotation());
             File compressedFile = FileUtils.getOutputMediaFile(MEDIA_TYPE_COMPRESSED, isWifiOrMobileOn);
             if(compressedFile == null) {
                 Log.d(TAG, "Error creating media file, check storage permissions!");
                 return;
             }
-
-            Log.d(TAG, compressedFile.getAbsolutePath());
+//            Log.d(TAG, compressedFile.getAbsolutePath());
 
             //Fill the file with image/video bytes
             try {
@@ -278,12 +338,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
                 mCurrentPhoto = new Photo();
                 mCurrentPhoto.setImageByteArray(imageByteArray);
-
-                Toast.makeText(CameraActivity.this,
-                                "Latitude = "
-                                + String.valueOf(mLocation.getLatitude())
-                                + "; longitude = "
-                                + String.valueOf(mLocation.getLongitude()), Toast.LENGTH_SHORT).show();
                 mCurrentPhoto.setLatitude(mLocation.getLatitude());
                 mCurrentPhoto.setLongitude(mLocation.getLongitude());
 

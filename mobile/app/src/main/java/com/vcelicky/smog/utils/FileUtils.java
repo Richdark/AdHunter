@@ -83,6 +83,22 @@ public class FileUtils {
         return file.isDirectory() && file.list().length == 0;
     }
 
+    public static void deleteFolder(String filename) {
+        java.io.File f = new java.io.File(filename);
+        if (f.isFile()) {
+            f.delete();
+        }
+        if (f.isDirectory() && !f.getName().equals(".") && !f.getName().equals("..")) {
+            String[] files = f.list();
+            for (String item : files) {
+                deleteFolder(filename + "/" + item);
+            }
+        }
+        if (f.isDirectory()) {
+            f.delete();
+        }
+    }
+
     // * * * * * JSON IS NOT USED IN THE APP ANYMORE, BUT THE CODE MIGHT BE USEFUL IN THE FUTURE * *
     public static File writeToJson(File path, String jsonObjectString) {
         File file = new File(path + File.separator + JSON_FILE_NAME);

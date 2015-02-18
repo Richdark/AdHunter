@@ -15,4 +15,8 @@ public interface ServiceInterface {
     @POST("/auth/login_user/")
     void loginUser(@Field("email") String email, @Field("password") String password, @Field("uid") String uid, Callback<Response> response);
 
+    @FormUrlEncoded
+    @POST("/auth/logout_user/")
+    void logoutUser(@Field("uid") String uid, Callback<Response> response);
+
 }

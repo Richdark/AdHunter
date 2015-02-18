@@ -29,7 +29,7 @@ public class Strings {
         BufferedReader reader = null;
         StringBuilder sb = new StringBuilder();
         try {
-            reader = new BufferedReader(new InputStreamReader(response.getBody().in(), "windows-1250"));
+            reader = new BufferedReader(new InputStreamReader(response.getBody().in(), "utf-8"));
             String line;
             while ((line = reader.readLine()) != null)
                 sb.append(line);

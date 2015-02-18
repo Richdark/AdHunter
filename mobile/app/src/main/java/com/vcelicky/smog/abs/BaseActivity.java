@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -76,6 +78,7 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
             mLocationRequest.setInterval(5000);
             mLocationRequest.setFastestInterval(5000);
         }
+
     }
 
     public ServiceInterface getServiceInterface() {
@@ -270,5 +273,15 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
                     return new RuntimeException();
             }
         return cause;
+    }
+
+    /**
+     *
+     * @param animationIdentifier animation resource ID (for example android.R.anim.fade_in)
+     * @return created animation
+     */
+    protected Animation loadAnimation(int animationIdentifier) {
+        Animation animation = AnimationUtils.loadAnimation(this, animationIdentifier);
+        return animation;
     }
 }
