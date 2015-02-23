@@ -27,7 +27,8 @@
         </activity>
         <activity android:name=".activities.AlreadyOnlineActivity" />
         <activity android:name=".activities.TakenActivity" />
-        <activity android:name=".activities.AdditionalnfoActivity" />
+        <activity android:name=".activities.AdditionalnfoActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".activities.SelectBillboardActivity" />
         <activity android:name=".activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
