@@ -1,5 +1,6 @@
 package com.vcelicky.smog.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,9 +15,11 @@ import android.media.ExifInterface;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -161,17 +164,20 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                     mUploadButton.setVisibility(View.VISIBLE);
                     mAddButton.setVisibility(View.VISIBLE);
 
-                    if(isWifiOrMobileConnected(CameraActivity.this)) {
-                        Geocoder geo = new Geocoder(CameraActivity.this, Locale.getDefault());
-                        try {
-                            List<Address> addresses = geo.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1);
-                            mAddressLayout.startAnimation(loadAnimation(android.R.anim.fade_in));
-                            mAddressLayout.setVisibility(View.VISIBLE);
-                            mAddressText.setText(addresses.get(0).getAddressLine(0));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    // not used yet, as it is slow if the internet connection is slow
+//                    if(isWifiOrMobileConnected(CameraActivity.this)) {
+//                        Geocoder geo = new Geocoder(CameraActivity.this, Locale.getDefault());
+//                        try {
+//                            List<Address> addresses = geo.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1);
+//                            if(!addresses.isEmpty()) {
+//                                mAddressLayout.startAnimation(loadAnimation(android.R.anim.fade_in));
+//                                mAddressLayout.setVisibility(View.VISIBLE);
+//                                mAddressText.setText(addresses.get(0).getAddressLine(0));
+//                            }
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
 
                 } else {
                     toastLong(getString(R.string.gps_not_found));
@@ -304,35 +310,35 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 FileOutputStream fos = new FileOutputStream(compressedFile);
                 fos.write(imageByteArray);
 
-//                BitmapFactory.Options bounds = new BitmapFactory.Options();
-//                bounds.inJustDecodeBounds = true;
-//                BitmapFactory.decodeFile(compressedFile.getAbsolutePath(), bounds);
-//
-//                BitmapFactory.Options opts = new BitmapFactory.Options();
-//                Bitmap bm = BitmapFactory.decodeFile(compressedFile.getAbsolutePath(), opts);
-//                ExifInterface exif = new ExifInterface(compressedFile.getAbsolutePath());
-//                String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-//                Log.d(TAG, "orientString = " + orientString);
-//                int orientation = orientString != null ? Integer.parseInt(orientString) :  ExifInterface.ORIENTATION_NORMAL;
-//
-//                int rotationAngle = 0;
-//                if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-//                    rotationAngle = 90;
-//                    log(TAG, "orientation == 90");
-//                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-//                    rotationAngle = 180;
-//                    log(TAG, "orientation == 180");
-//                } else if(orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-//                    rotationAngle = 270;
-//                    log(TAG, "orientation == 270");
-//                } else {
-//                    log(TAG, "orientation == 0");
-//                }
-//
-//                Matrix matrix = new Matrix();
-//                matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
-//                Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
-//                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                BitmapFactory.Options bounds = new BitmapFactory.Options();
+                bounds.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(compressedFile.getAbsolutePath(), bounds);
+
+                BitmapFactory.Options opts = new BitmapFactory.Options();
+                Bitmap bm = BitmapFactory.decodeFile(compressedFile.getAbsolutePath(), opts);
+                ExifInterface exif = new ExifInterface(compressedFile.getAbsolutePath());
+                String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+                Log.d(TAG, "orientString = " + orientString);
+                int orientation = orientString != null ? Integer.parseInt(orientString) :  ExifInterface.ORIENTATION_NORMAL;
+
+                int rotationAngle = 0;
+                if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                    rotationAngle = 90;
+                    log(TAG, "orientation == 90");
+                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                    rotationAngle = 180;
+                    log(TAG, "orientation == 180");
+                } else if(orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                    rotationAngle = 270;
+                    log(TAG, "orientation == 270");
+                } else {
+                    log(TAG, "orientation == 0");
+                }
+
+                Matrix matrix = new Matrix();
+                matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+                Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
+                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 
                 fos.close();
 

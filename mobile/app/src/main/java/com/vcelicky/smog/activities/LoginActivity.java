@@ -34,6 +34,7 @@ public class LoginActivity extends BaseActivity implements Callback<Response> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         if(User.isLogged()) {
             Intent i = new Intent(LoginActivity.this, CameraActivity.class);
             startActivity(i);
@@ -53,10 +54,10 @@ public class LoginActivity extends BaseActivity implements Callback<Response> {
     }
 
     private void loginUser() {
-//        Random rand = new Random();
-//        int randInt = rand.nextInt(10000) + 1;
-        getServiceInterface().loginUser(mEmail.getText().toString(), mPassword.getText().toString(), Config.DEVICE_ID, this);
-//        getServiceInterface().loginUser(mEmail.getText().toString(), mPassword.getText().toString(), String.valueOf(randInt), this);
+        Random rand = new Random();
+        int randInt = rand.nextInt(10000) + 1;
+//        getServiceInterface().loginUser(mEmail.getText().toString(), mPassword.getText().toString(), Config.DEVICE_ID, this);
+        getServiceInterface().loginUser(mEmail.getText().toString(), mPassword.getText().toString(), String.valueOf(randInt), this);
     }
 
     @Override

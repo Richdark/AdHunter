@@ -24,7 +24,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public List<Camera.Size> mSupportedPreviewSizes;
     private Camera.Size mPreviewSize;
     private int mRotate;
-
+    private int displayOrientation = 90;
     /**
      * Initializes Camera object and installs a SurfaceHolder.Callback
      * in order to get notified when the underlying surface is created and destroyed.
@@ -76,9 +76,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             try {
                 Camera.Parameters params = mCamera.getParameters();
                 List<Camera.Size> sizePictures = params.getSupportedPictureSizes();
-                for(Camera.Size s : sizePictures) {
-                    Log.d(TAG, s.width + "x" + s.height);
-                }
+//                for(Camera.Size s : sizePictures) {
+//                    Log.d(TAG, s.width + "x" + s.height);
+//                }
                 mRotate = getRotationDegrees();
 
                 params.setPictureSize(sizePictures.get(4).width, sizePictures.get(4).height);
@@ -92,7 +92,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 params.setRotation(mRotate);
 
                 mCamera.setParameters(params);
-                mCamera.setDisplayOrientation(90);
+                mCamera.setDisplayOrientation(displayOrientation);
                 mCamera.setPreviewDisplay(mHolder);
                 mCamera.startPreview();
 
@@ -160,6 +160,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public int getRotationDegrees() {
 
+        Log.d(TAG, "getRotationDegrees()");
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, info);
         DisplayMetrics metrics = new DisplayMetrics();
@@ -167,12 +168,28 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         int rotation = windowManager.getDefaultDisplay().getRotation();
         int degrees = 0;
         switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break; //Natural orientation
-            case Surface.ROTATION_90: degrees = 90; break; //Landscape left
-            case Surface.ROTATION_180: degrees = 180; break;//Upside down
-            case Surface.ROTATION_270: degrees = 270; break;//Landscape right
+            case Surface.ROTATION_0:
+                degrees = 0;
+                Log.d(TAG, "degrees = 0, Surface.ROTATION_ " + degrees + " = " + Surface.ROTATION_0);
+                displayOrientation = 90;
+                break; //Natural orientation
+            case Surface.ROTATION_90:
+                degrees = 90;
+                Log.d(TAG, "degrees = " + degrees + ", Surface.ROTATION_ " + degrees + " = " + Surface.ROTATION_90);
+                displayOrientation = 0;
+                break; //Landscape left
+            case Surface.ROTATION_180:
+                degrees = 180;
+                Log.d(TAG, "degrees = " + degrees + ", Surface.ROTATION_ " + degrees + " = " + Surface.ROTATION_180);
+                displayOrientation = 270;
+                break;//Upside down
+            case Surface.ROTATION_270:
+                degrees = 270;
+                Log.d(TAG, "degrees = " + degrees + ", Surface.ROTATION_ " + degrees + " = " + Surface.ROTATION_270);
+                displayOrientation = 180;
+                break;//Landscape right
         }
-        int rotate = (info.orientation - degrees + 360) % 360;
-        return rotate;
+
+        return (info.orientation - degrees + 360) % 360;
     }
 }
