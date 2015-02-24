@@ -62,7 +62,8 @@ function handleAdd(map, billboard_img)
 		{
 			var w = $(this).width();
 			var h = $(this).height();
-			map.panBy(e.offsetX - (w / 2), e.offsetY - (h / 2));
+
+			map.panBy(e.clientX - (w / 2), e.clientY - $("#map").offset().top - (h / 2));
 			var p = map.getCenter();
 			new google.maps.Marker({ position: p, map: map, icon: billboard_img });
 			map.setOptions({ draggableCursor: "" });
