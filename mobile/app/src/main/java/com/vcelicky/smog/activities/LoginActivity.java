@@ -53,8 +53,8 @@ public class LoginActivity extends BaseActivity implements Callback<Response> {
     }
 
     private void loginUser() {
-//        Random rand = new Random();
-//        int randInt = rand.nextInt(10000) + 1;
+        Random rand = new Random();
+        int randInt = rand.nextInt(10000) + 1;
         getServiceInterface().loginUser(mEmail.getText().toString(), mPassword.getText().toString(), Config.DEVICE_ID, this);
 //        getServiceInterface().loginUser(mEmail.getText().toString(), mPassword.getText().toString(), String.valueOf(randInt), this);
     }

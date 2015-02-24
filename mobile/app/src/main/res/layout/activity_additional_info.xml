@@ -78,6 +78,7 @@
             <FrameLayout
                 android:id="@+id/img_citylight"
                 android:layout_marginRight="4dp"
+                android:layout_marginBottom="8dp"
                 style="@style/FrameLayout.Category">
 
                 <ImageView
@@ -103,6 +104,7 @@
             <FrameLayout
                 android:id="@+id/img_trojnozka"
                 android:layout_marginLeft="4dp"
+                android:layout_marginBottom="8dp"
                 style="@style/FrameLayout.Category">
 
                 <ImageView
@@ -130,44 +132,84 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vlastník nosiča: "/>
+            <FrameLayout
+                android:id="@+id/img_hypercube"
+                android:layout_marginRight="4dp"
+                style="@style/FrameLayout.Category">
 
-            <EditText
-                android:id="@+id/addinfo_owner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <ImageView
+                    style="@style/ImageView.Category"
+                    android:src="@drawable/hypercube" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#55000000"
+                    android:layout_gravity="bottom|left">
+
+                    <TextView
+                        style="@style/TextView.CategoryTitle"
+                        android:layout_margin="0dp"
+                        android:padding="4dp"
+                        android:text="CITYLIGHT" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/img_no_idea"
+                android:layout_marginLeft="4dp"
+                style="@style/FrameLayout.Category">
+
+                <ImageView
+                    style="@style/ImageView.Category"
+                    android:src="@drawable/noidea" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#55000000"
+                    android:layout_gravity="bottom|left">
+
+                    <TextView
+                        style="@style/TextView.CategoryTitle"
+                        android:layout_margin="0dp"
+                        android:padding="4dp"
+                        android:text="ŽIADNY Z UVEDENÝCH" />
+
+                </LinearLayout>
+
+            </FrameLayout>
 
         </LinearLayout>
 
-        <LinearLayout
+
+
+        <EditText
+            android:id="@+id/addinfo_owner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:textColor="@color/adhunter_deep_purple_800"
+            android:singleLine="true"
+            android:layout_marginTop="16dp"
+            android:hint="Vlastník nosiča"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Poznámka: "/>
-
-            <EditText
-                android:id="@+id/addinfo_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
+        <EditText
+            android:id="@+id/addinfo_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/adhunter_deep_purple_800"
+            android:singleLine="true"
+            android:hint="Poznámka"/>
 
         <Button
             android:id="@+id/addinfo_button_upload"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:background="@color/adhunter_deep_purple_500"
             android:textColor="@android:color/white"
             android:text="UPLOAD"/>

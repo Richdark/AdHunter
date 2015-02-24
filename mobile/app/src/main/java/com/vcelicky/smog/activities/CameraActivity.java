@@ -1,5 +1,6 @@
 package com.vcelicky.smog.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,9 +15,11 @@ import android.media.ExifInterface;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -161,17 +164,20 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                     mUploadButton.setVisibility(View.VISIBLE);
                     mAddButton.setVisibility(View.VISIBLE);
 
-                    if(isWifiOrMobileConnected(CameraActivity.this)) {
-                        Geocoder geo = new Geocoder(CameraActivity.this, Locale.getDefault());
-                        try {
-                            List<Address> addresses = geo.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1);
-                            mAddressLayout.startAnimation(loadAnimation(android.R.anim.fade_in));
-                            mAddressLayout.setVisibility(View.VISIBLE);
-                            mAddressText.setText(addresses.get(0).getAddressLine(0));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    // not used yet, as it is slow if the internet connection is slow
+//                    if(isWifiOrMobileConnected(CameraActivity.this)) {
+//                        Geocoder geo = new Geocoder(CameraActivity.this, Locale.getDefault());
+//                        try {
+//                            List<Address> addresses = geo.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1);
+//                            if(!addresses.isEmpty()) {
+//                                mAddressLayout.startAnimation(loadAnimation(android.R.anim.fade_in));
+//                                mAddressLayout.setVisibility(View.VISIBLE);
+//                                mAddressText.setText(addresses.get(0).getAddressLine(0));
+//                            }
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
 
                 } else {
                     toastLong(getString(R.string.gps_not_found));
@@ -331,8 +337,13 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 //
 //                Matrix matrix = new Matrix();
 //                matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+//                log(TAG, "bm.getWidth() = " + bm.getWidth() + "; bm.getHeight() = " + bm.getHeight());
 //                Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
-//                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//                if(rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)) {
+//                    log(TAG, "successfully compressed");
+//                } else {
+//                    log(TAG, "compression NOT successful");
+//                }
 
                 fos.close();
 
