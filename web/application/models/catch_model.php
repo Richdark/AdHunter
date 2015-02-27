@@ -47,20 +47,26 @@ class Catch_model extends CI_Model
 		{
 			if ($merged != -1)
 			{
-				$merger = array(
-					'merged_from_id' => $merged,
-					'merged_into_id' => $main,
-					'user_id'        => $user_id,
-					'merge_state'    => '0'
-				);
+				// check if weren't already merged
+				$query = $this->db->get_where('catches', array('id' => $merged, 'state' => '0'));
 
-				$this->db->insert('catch_merges', $merger);
+				if (count($query->result()) == 0)
+				{
+					$merger = array(
+						'merged_from_id' => $merged,
+						'merged_into_id' => $main,
+						'user_id'        => $user_id,
+						'merge_state'    => '0'
+					);
 
-				// update merged catch state
-				$this->db->where('id', $merged);
-				$this->db->update('catches', array('state' => '0'));
+					$this->db->insert('catch_merges', $merger);
 
-				$updated++;
+					// update merged catch state
+					$this->db->where('id', $merged);
+					$this->db->update('catches', array('state' => '0'));
+
+					$updated++;
+				}
 			}
 		}
 
