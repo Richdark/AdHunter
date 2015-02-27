@@ -193,6 +193,7 @@ footer {
 	}
 
 		#map .info > .options {
+			display: none;
 			margin-bottom: 10px;
 			padding-bottom: 10px;
 			border-bottom: 1px #999 dashed;

@@ -49,7 +49,14 @@ class Online_user_model extends CI_Model
 	{
 		$query = $this->db->get_where('online_users', array('uid' => $uid))->result();
 
-		return $query[0]->user_id;
+		if (count($query) > 0)
+		{
+			return $query[0]->user_id;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 

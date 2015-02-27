@@ -48,10 +48,12 @@ function addBillboards(map)
 			if (this.state == '0')
 			{
 				$('#info-content .notices').css('display', 'block');
+				$('#info-content .options').css('display', 'none');
 			}
 			else
 			{
 				$('#info-content .notices').css('display', 'none');
+				$('#info-content .options').css('display', 'block');
 			}
 		});
 	}
