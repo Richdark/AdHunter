@@ -1,20 +1,24 @@
-function addBillboards(map, billboard_img)
+function addBillboards(map)
 {
 	var billboards = $("#map").data("billboards");
 	var info = new google.maps.InfoWindow();
 
 	for (var i = 0; i < billboards.length; i++)
 	{
+		billboard_img = (billboards[i].state == '1')? '../../assets/img/billboard_32.png' : '../../assets/img/billboard_32_transparent.png';
+
 		var p = new google.maps.LatLng(billboards[i].x, billboards[i].y);
 		var marker = new google.maps.Marker(
 		{
 			position:  p,
 			map:       map,
+			id:        billboards[i].id,
 			title:     billboards[i].filename,
 			icon:      billboard_img,
 			billboard: billboards[i].filename,
 			uploaded:  billboards[i].uploaded,
-			comment:   billboards[i].comment
+			comment:   billboards[i].comment,
+			state:     billboards[i].state
 		});
 
 		google.maps.event.addListener(marker, "click", function()
@@ -25,6 +29,7 @@ function addBillboards(map, billboard_img)
 			info.setContent(null);
 			$("#info-content").find(".uploaded").text(this.uploaded);
 			$("#info-content").find(".comment").text(this.comment ? this.comment : "");
+			$("#info-content").find(".options .merge").attr('href', '#/merge:' + this.id);
 			$("#info-content").find(".billboard").remove();
 			$("#info-content").prepend($("<img>",
 			{
@@ -39,6 +44,15 @@ function addBillboards(map, billboard_img)
 				info.setContent($("#info-content").html());
 				info.open(map, current);
 			}));
+
+			if (this.state == '0')
+			{
+				$('#info-content .notices').css('display', 'block');
+			}
+			else
+			{
+				$('#info-content .notices').css('display', 'none');
+			}
 		});
 	}
 }
@@ -145,13 +159,154 @@ function initMap()
 	var billboard_img = "../../assets/img/billboard_32.png";
 	google.maps.event.addListenerOnce(map, "idle", function()
 	{
-		addBillboards(map, billboard_img);
+		addBillboards(map);
 	});
 
 	if ($("#add-form").length)
 	{
 		handleAdd(map, billboard_img);
 	}
+
+	// handle hash links
+	if (window.location.hash)
+	{
+		//
+	}
+
+	$(window).bind('hashchange');
+}
+
+// add billboard to merge sidebar
+function add_merge_obj(caller)
+{
+	var href    = $(caller).attr('href');
+	var options = hash_options(href);
+
+	$.getJSON("../get_catch/" + options['merge'] + "/", function(json)
+	{
+		map_sidebar_add(json);
+	});
+}
+
+// add billboard html to sidebar
+function map_sidebar_add(billboard)
+{
+	// show sidebar if hidden
+	if ($('#map_sidebar').css('display') == 'none')
+	{
+		$('#map_sidebar').css('height', $('#map').height() + 'px');
+
+		$('#map').animate(
+		{
+			width: '80%'
+		}, 500, function()
+		{
+			$('#map_sidebar').fadeIn();
+		});
+	}
+
+	// there already was some merging
+	else if ($('#map_sidebar .merge').css('font-weight') == '700')
+	{
+		$('#map_sidebar .billboards .billboard').remove();
+		$('#map_sidebar .merge').css('font-weight', 'normal').text('zlúčiť vybrané billboardy').css('opacity', '0');
+	}
+
+	// push billboard
+	if (!($('#sdb_' + billboard['id']).length))
+	{
+		var billboards_num = $('#map_sidebar .billboards .billboard').length;
+
+		var html = '<div class="billboard" id="sdb_' + billboard['id'] + '" style="display: none;">';
+		html    += '<img src="../../assets/pics/' + billboard['filename'] + '" />';
+		html    += '<input type="hidden" name="id" value="' + billboard['id'] + '" />';
+		html    += '<span class="line input"><input type="radio" name="main_billboard"' + ((billboards_num == 0)? ' checked' : '') + '>zlúčiť do tohto</span>';
+		html    += '<span class="line"><strong>Vlastník:</strong> ' + null + '</span>';
+		html    += '<span class="line"><strong>Nahrané:</strong> ' + billboard['uploaded'] + '</span>';
+		html    += '<span class="line"><strong>Komentár:</strong> ' + billboard['comment'] + '</span>';
+		html    += '<div class="clear"></div>';
+		html    += '</div>';
+
+		$('#map_sidebar .billboards').append(html);
+		$('#sdb_' + billboard['id']).fadeIn();
+
+		billboards_num++;
+
+		// select merge link if there are at least two billboards
+		if (billboards_num == 2)
+		{
+			$('#map_sidebar .merge').animate(
+			{
+				opacity: 1
+			});
+		}
+	}
+}
+
+// merge selected billboards
+function merge_billboards()
+{
+	var billboards      = $('#map_sidebar .billboards .billboard');
+	var billboards_data = {
+		main: '',
+		merged: []
+	};
+
+	if (billboards.length >= 2)
+	{
+		billboards.each(function()
+		{
+			billboard = {};
+
+			var id = $(this).find('input[name="id"]').prop('value');
+			
+			if ($(this).find('input[name="main_billboard"]').is(':checked'))
+			{
+				billboards_data['main'] = id;
+			}
+			else
+			{
+				billboards_data['merged'].push(id);
+			}
+		});
+
+	}
+	
+	$.ajax(
+	{
+		type: 'GET',
+		url: '../merge_catches',
+		data:
+		{
+			main: billboards_data['main'],
+			merged: billboards_data['merged'].join(',')
+		}
+	}).done(function(msg)
+	{
+		$('#map_sidebar .merge').text(msg).css('font-weight', 'bold');
+		$('#map_sidebar .billboards .billboard').css('opacity', '0.5');
+	});
+}
+
+// store hash url into "associative array"
+function hash_options(source)
+{
+	// use hash from url address if source is not provided
+	var hash = (typeof source !== 'undefined')? source : window.location.hash;
+	hash     = hash.substring(2);
+
+	var options_ord = hash.split(';');
+	var options     = [];
+
+	for (var i = options_ord.length - 1; i >= 0; i--)
+	{
+		var option = options_ord[i].split(':');
+
+		// #/option:value ==> [option] = value
+		options[option[0]] = option[1];
+	}
+
+	return options;
 }
 
 function fixMobile() {

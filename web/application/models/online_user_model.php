@@ -45,7 +45,12 @@ class Online_user_model extends CI_Model
 		return $query->num_rows() > 0 ? true : false;
 	}
 
+	function get_user_id($uid)
+	{
+		$query = $this->db->get_where('online_users', array('uid' => $uid))->result();
 
+		return $query[0]->user_id;
+	}
 }
 
 ?>
