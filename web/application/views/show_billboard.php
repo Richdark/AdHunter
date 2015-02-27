@@ -12,16 +12,16 @@
 <div id="info-content">
 	<div class="info">
 		<img class="billboard" src="" />
-		
-		<?php
-		if ($logged)
-		{
-		?>
 
 		<!-- NOTICES -->
 		<div class="notices">
 			<p>Tento úlovok bol používateľom zlúčený s iným úlovkom.</p>
 		</div>
+		
+		<?php
+		if ($logged)
+		{
+		?>
 
 		<!-- OPTIONS -->
 		<div class="options">
