@@ -220,6 +220,16 @@ footer {
 			color: #ff0000;
 		}
 
+		#map .type img {
+			max-width: 64px;
+			height: auto;
+			display: none;
+		}
+
+			#map .info .form {
+				display: none;
+			}
+
 #map_sidebar {
 	display: none;
 	height: 100%;
@@ -361,45 +371,46 @@ footer {
 		font-size: 16px;
 	}
 	
-	#add-form .center {
+	.form .center {
 		display: inline-block;
 		width: 350px;
 		margin: 10px 0 0 25px;
 		text-align: center;
 	}
 
-		#add-form .center img,
-		#add-form .center [type="radio"] {
+		.form .center img,
+		.form .center [type="radio"] {
 			display: inline-block;
 			width: 64px;
+			height: auto;
 		}
 
 	#add-form [name="text"] {
 		width: 160px;
 	}
 
-	#add-form select,
-	#add-form textarea,
-	#add-form input[type="submit"] {
+	.form select,
+	.form textarea,
+	.form input[type="submit"] {
 		border: 1px #bbb solid;
 		background: #eee;
 		color: #444;
 		font-size: 12px;
 	}
 
-	#add-form select {
+	.form select {
 		width: 150px;
 		margin: 10px 0 5px 0;
 		padding: 5px 10px;
 	}
 
-	#add-form textarea {
+	.form textarea {
 		width: 300px;
 		margin-bottom: 15px;
 		padding: 5px 10px;
 	}
 
-	#add-form input[type="submit"] {
+	.form input[type="submit"] {
 		width: auto;
 		padding: 5px 10px;
 	}

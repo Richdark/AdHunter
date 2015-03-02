@@ -23,8 +23,9 @@ class Billboards extends MY_Controller
 	{
 		header('Content-type: application/json');
 
+		$user_id = $this->is_logged() ? $this->get_user_id() : -1;
 		$this->load->model('Catch_model', 'model');
-		$result = $this->model->get_all();
+		$result = $this->model->get_all($user_id);
 
 		$json = array();
 		foreach ($result as $row)
@@ -138,15 +139,13 @@ class Billboards extends MY_Controller
 			$type = 'w';
 		}
 
-		/**
-		 * @todo typ nosica sa neuklada do db a ani nezobrazuje, treba mu vytvorit column
-		 */
-		$backing_type = !empty($_POST["backing_type"]) ? $_POST["backing_type"] : 1;
+		$backing_type = !empty($_POST["backing_type"]) ? $_POST["backing_type"] : null;
 		$comment = !empty($_POST["comment"]) ? htmlspecialchars($_POST["comment"]) : null;
+		$user_id = $this->is_logged() ? $this->get_user_id() : null;
 
 		// vlozenie do databazy prostrednictvom modelu
 		$this->load->model('Catch_model', 'model');
-		$this->model->save_catch(1, 1, $coordinates, $name, $model, $type, $comment);
+		$this->model->save_catch($user_id, null, $coordinates, $name, $model, $type, $comment, $backing_type);
 		
 		if ($type == 'm')
 		{
@@ -157,6 +156,25 @@ class Billboards extends MY_Controller
 			$this->load->view('uploaded_billboard');
 		}
 	}
+
+	/*
+	 * update billboardu
+	 */
+	public function update()
+	{
+		if(empty($_POST["catch_id"])) {
+			die;
+		}
+
+		$catch_id = $_POST["catch_id"];
+		$backing_type = !empty($_POST["backing_type"]) ? $_POST["backing_type"] : null;
+
+		$this->load->model('Catch_model', 'model');
+		$this->model->update_catch($catch_id, $backing_type);
+
+		$this->load->view('uploaded_billboard');
+	}
+
 
 	/**
 	 * funkcia sluzi na zobrazenie billboardov

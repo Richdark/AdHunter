@@ -8,14 +8,14 @@ class Catch_model extends CI_Model
 		parent::__construct();
 	}
 
-	function get_all() {
-		$query = $this->db->query('SELECT id, filename, uploaded, phone_model, type, comment, X(coordinates) AS x, Y(coordinates) AS y, state FROM catches');
+	function get_all($user_id) {
+		$query = $this->db->query('SELECT id, (user_id='.$user_id.') AS privileged, filename, uploaded, phone_model, type, comment, X(coordinates) AS x, Y(coordinates) AS y, state, backing_type_id FROM catches');
 		return $query->result();
 	}
 
 	function get_catch_by_id($id)
 	{
-		$id = is_numeric($id)? $id : 0;
+		$id = is_numeric($id) ? $id : 0;
 
 		// where id = $id
 		//$this->db->where('id', $id);
@@ -73,14 +73,25 @@ class Catch_model extends CI_Model
 		return $updated;
 	}
 
-	function save_catch($user_id, $ad_id, $coordinates, $filename, $phone_model, $type, $comment)
+	function update_catch($catch_id, $backing_type)
 	{
 		$data = array(
-			'user_id'     => $user_id,
-			'ad_id'       => $ad_id,
-			'filename'    => $filename,
-			'type'        => $type,
-			'comment'     => $comment
+			'backing_type_id' => $backing_type
+		);
+
+		$this->db->where('id', $catch_id);
+		$this->db->update('catches', $data); 
+	}
+
+	function save_catch($user_id, $ad_id, $coordinates, $filename, $phone_model, $type, $comment, $backing_type)
+	{
+		$data = array(
+			'user_id'         => $user_id,
+			'ad_id'           => $ad_id,
+			'filename'        => $filename,
+			'type'            => $type,
+			'comment'         => $comment,
+			'backing_type_id' => $backing_type
 		);
 
 		// ak by to bolo v $data, tak by to CI vyescapoval

@@ -10,15 +10,17 @@ function addBillboards(map)
 		var p = new google.maps.LatLng(billboards[i].x, billboards[i].y);
 		var marker = new google.maps.Marker(
 		{
-			position:  p,
-			map:       map,
-			id:        billboards[i].id,
-			title:     billboards[i].filename,
-			icon:      billboard_img,
-			billboard: billboards[i].filename,
-			uploaded:  billboards[i].uploaded,
-			comment:   billboards[i].comment,
-			state:     billboards[i].state
+			position:     p,
+			map:          map,
+			id:           billboards[i].id,
+			title:        billboards[i].filename,
+			icon:         billboard_img,
+			billboard:    billboards[i].filename,
+			uploaded:     billboards[i].uploaded,
+			comment:      billboards[i].comment,
+			backing_type: billboards[i].backing_type_id,
+			state:        billboards[i].state,
+			privileged:   billboards[i].privileged
 		});
 
 		google.maps.event.addListener(marker, "click", function()
@@ -29,6 +31,11 @@ function addBillboards(map)
 			info.setContent(null);
 			$("#info-content").find(".uploaded").text(this.uploaded);
 			$("#info-content").find(".comment").text(this.comment ? this.comment : "");
+			$("#info-content").find(".type img").hide();
+			if(this.backing_type)
+			{
+				$("#info-content").find(".type img").eq(this.backing_type-1).show();
+			}
 			$("#info-content").find(".options .merge").attr('href', '#/merge:' + this.id);
 			$("#info-content").find(".billboard").remove();
 			$("#info-content").prepend($("<img>",
@@ -54,6 +61,16 @@ function addBillboards(map)
 			{
 				$('#info-content .notices').css('display', 'none');
 				$('#info-content .options').css('display', 'block');
+				if (this.privileged == "1")
+				{
+					var catch_id = this.id;
+					$('#info-content .info .form').show()
+					$('#catch_id').val(catch_id)
+				}
+				else
+				{
+					$('#info-content .info .form').hide();
+				}
 			}
 		});
 	}
@@ -151,8 +168,8 @@ function initMap()
 	});
 
 	var mcOptions = {gridSize: 50, maxZoom: 15};
-	var mc = new MarkerClusterer(map, [], mcOptions);
-	console.log(mc);
+	// var mc = new MarkerClusterer(map, [], mcOptions);
+	// console.log(mc);
 
 	var markers = [];
 	var searchBox = new google.maps.places.SearchBox($("#search").get(0));
@@ -180,6 +197,13 @@ function initMap()
 	}
 
 	$(window).bind('hashchange');
+}
+
+// edit billboard
+function edit_billboard(caller)
+{
+	$("#map .info .preview").hide();
+	$("#map .info .form").show();
 }
 
 // add billboard to merge sidebar
@@ -339,6 +363,7 @@ function main(view)
 	{
 		$.getJSON("../get_catches", function(json)
 		{
+			console.log(json);
 			$("#map").data("billboards", json);
 			// $.getScript("http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclustererplus/src/markerclusterer_packed.js");
 			$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&callback=initMap");
