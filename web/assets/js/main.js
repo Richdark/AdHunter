@@ -134,6 +134,10 @@ function initMap()
 		mapTypeControl: false
 	});
 
+	var mcOptions = {gridSize: 50, maxZoom: 15};
+	var mc = new MarkerClusterer(map, [], mcOptions);
+	console.log(mc);
+
 	var markers = [];
 	var searchBox = new google.maps.places.SearchBox($("#search").get(0));
 	google.maps.event.addListener(searchBox, "places_changed", function()
@@ -179,6 +183,7 @@ function main(view)
 		$.getJSON("../get_catches", function(json)
 		{
 			$("#map").data("billboards", json);
+			// $.getScript("http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclustererplus/src/markerclusterer_packed.js");
 			$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&callback=initMap");
 		})
 	}
