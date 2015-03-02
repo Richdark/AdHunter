@@ -4,10 +4,35 @@
 </div>
 
 <div id="map"></div>
+<div id="map_sidebar">
+	<h2>Billboardy na zlúčenie</h2>
+	<div class="billboards"></div>
+	<a href="javascript:void(0)" class="merge" onclick="merge_billboards()">zlúčiť vybrané billboardy</a>
+</div>
 <div id="info-content">
 	<div class="info">
-		<!-- <h2 class="title"></h2> -->
-		<img class="billboard" src="">
+		<img class="billboard" src="" />
+
+		<!-- NOTICES -->
+		<div class="notices">
+			<p>Tento úlovok bol používateľom zlúčený s iným úlovkom.</p>
+		</div>
+		
+		<?php
+		if ($logged)
+		{
+		?>
+
+		<!-- OPTIONS -->
+		<div class="options">
+			<a href="javascript:void()" class="edit">Upraviť údaje</a>
+			<a href="" class="merge" onclick="add_merge_obj(this)">Zlúčiť</a>
+		</div>
+		<?php
+		}
+		?>
+
+		<!-- INFO -->
 		<table>
 			<tr>
 				<td>Vlastník: </td><td class="provider"></td>

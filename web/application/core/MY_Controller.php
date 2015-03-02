@@ -14,11 +14,17 @@ class MY_Controller extends CI_Controller
         '|mobile|up\.browser|[1-4][0-9]{2}x[1-4][0-9]{2})\b#i', $_SERVER['HTTP_USER_AGENT']);
 
         self::$type = $ret ? 'm' : 'w';
+        
+        @session_start();
     }
 
     public function is_logged()
     {
-        @session_start();
         return $this->Online_user_model->is_logged(session_id(), self::$type);
+    }
+
+    public function get_user_id()
+    {
+        return $this->Online_user_model->get_user_id(session_id());
     }
 }

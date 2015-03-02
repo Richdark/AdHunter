@@ -21,6 +21,8 @@ class Billboards extends MY_Controller
 	*/
 	public function get_catches()
 	{
+		header('Content-type: application/json');
+
 		$this->load->model('Catch_model', 'model');
 		$result = $this->model->get_all();
 
@@ -31,6 +33,57 @@ class Billboards extends MY_Controller
 		}
 
 		echo json_encode($json);
+	}
+
+	/**
+	 * ulokov podla ID
+	 *
+	 * @return object $json funkcia vracia ulovok aj s dodatocnymi informaciami
+	*/
+	public function get_catch($id)
+	{
+		header('Content-type: application/json');
+		
+		$this->load->model('Catch_model', 'model');
+		$result = $this->model->get_catch_by_id($id);
+
+		echo json_encode($result[0]);
+	}
+
+	/**
+	 * zluci ulovky
+	*/
+	public function merge_catches()
+	{
+		// catch state:
+		//    '0' => merged into different catch
+		//    '1' => default (not merged)
+		
+		if ($this->is_logged())
+		{
+			$user_id = $this->get_user_id();
+
+			$main   = (is_numeric($_GET['main']))? $_GET['main'] : -1;
+			$merged = $_GET['merged'];
+			$merged = explode(',', $merged);
+
+			foreach ($merged as $key => $value)
+			{
+				if (!(is_numeric($value)))
+				{
+					$merged[$key] = -1;
+				}
+			}
+
+			$this->load->model('Catch_model', 'model');
+			$merged = $this->model->merge_catches($user_id, $main, $merged) + 1;
+
+			echo 'zlúčených '. $merged. ' úlovkov';
+		}
+		else
+		{
+			echo 'pre zlučovanie úlovkov sa musíte prihlásiť';
+		}
 	}
 
 	/*
@@ -118,8 +171,9 @@ class Billboards extends MY_Controller
 		$this->load->model('Owner_model', 'model');
 		$owners = $this->model->get_all();
 		$vars = array(
-			'owners' => $owners,
-			'logged' => $this->is_logged()
+			'owners'  => $owners,
+			'logged'  => $this->is_logged(),
+			'user_id' => $this->get_user_id()
 		);
 
 		$this->load->template('show_billboard', $vars);
