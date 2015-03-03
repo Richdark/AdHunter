@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "com.vcelicky.smog"
+        applicationId "sk.fiit.adhunter"
         minSdkVersion 13
         targetSdkVersion 20
         versionCode 1

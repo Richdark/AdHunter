@@ -23,6 +23,7 @@
                 style="@style/FrameLayout.Category">
 
                 <ImageView
+                    android:id="@+id/imageView_billboard"
                     style="@style/ImageView.Category"
                     android:src="@drawable/billboard" />
 
@@ -49,6 +50,7 @@
                 style="@style/FrameLayout.Category">
 
                 <ImageView
+                    android:id="@+id/imageView_megaboard"
                     style="@style/ImageView.Category"
                     android:src="@drawable/megaboard" />
 
@@ -82,6 +84,7 @@
                 style="@style/FrameLayout.Category">
 
                 <ImageView
+                    android:id="@+id/imageView_citylight"
                     style="@style/ImageView.Category"
                     android:src="@drawable/citylight" />
 
@@ -108,6 +111,7 @@
                 style="@style/FrameLayout.Category">
 
                 <ImageView
+                    android:id="@+id/imageView_trojnozka"
                     style="@style/ImageView.Category"
                     android:src="@drawable/trojnozka" />
 
@@ -140,6 +144,7 @@
                 style="@style/FrameLayout.Category">
 
                 <ImageView
+                    android:id="@+id/imageView_hypercube"
                     style="@style/ImageView.Category"
                     android:src="@drawable/hypercube" />
 
@@ -153,7 +158,7 @@
                         style="@style/TextView.CategoryTitle"
                         android:layout_margin="0dp"
                         android:padding="4dp"
-                        android:text="CITYLIGHT" />
+                        android:text="HYPERCUBE" />
 
                 </LinearLayout>
 
@@ -165,6 +170,7 @@
                 style="@style/FrameLayout.Category">
 
                 <ImageView
+                    android:id="@+id/imageView_unknown"
                     style="@style/ImageView.Category"
                     android:src="@drawable/noidea" />
 

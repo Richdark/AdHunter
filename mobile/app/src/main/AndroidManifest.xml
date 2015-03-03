@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.vcelicky.smog" >
+    package="sk.fiit.adhunter" >
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
-        android:name=".AdHunterApp"
+        android:name="sk.fiit.adhunter.AdHunterApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -20,17 +20,17 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".activities.CameraActivity"
+            android:name="sk.fiit.adhunter.activities.CameraActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".activities.AlreadyOnlineActivity" />
-        <activity android:name=".activities.TakenActivity" />
-        <activity android:name=".activities.AdditionalnfoActivity"
+        <activity android:name="sk.fiit.adhunter.activities.AlreadyOnlineActivity" />
+        <activity android:name="sk.fiit.adhunter.activities.TakenActivity" />
+        <activity android:name="sk.fiit.adhunter.activities.AdditionalnfoActivity"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".activities.SelectBillboardActivity" />
-        <activity android:name=".activities.LoginActivity"
+        <activity android:name="sk.fiit.adhunter.activities.SelectBillboardActivity" />
+        <activity android:name="sk.fiit.adhunter.activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".NetworkChangeReceiver"
+        <receiver android:name="sk.fiit.adhunter.NetworkChangeReceiver"
             android:label="NetworkChangeReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
