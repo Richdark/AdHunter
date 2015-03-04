@@ -148,7 +148,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                     mCaptureButton.setBackgroundResource(R.drawable.circle_selector);
                     mCaptureButton.setImageResource(R.drawable.ic_av_replay);
 
+                    mUploadButton.setAnimation(loadAnimation(android.R.anim.fade_in));
                     mUploadButton.setVisibility(View.VISIBLE);
+                    mAddButton.setAnimation(loadAnimation(android.R.anim.fade_in));
                     mAddButton.setVisibility(View.VISIBLE);
 
                 } else {

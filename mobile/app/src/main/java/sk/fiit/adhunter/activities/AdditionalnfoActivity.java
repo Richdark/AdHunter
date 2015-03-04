@@ -161,6 +161,7 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                startActivity(new Intent(AdditionalnfoActivity.this, CameraActivity.class));
                 finish();
                 return true;
             default:
@@ -195,5 +196,11 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         }
         imageView.setAlpha(0.5f);
         mLastSelected = imageView;
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(AdditionalnfoActivity.this, CameraActivity.class));
+        finish();
     }
 }
