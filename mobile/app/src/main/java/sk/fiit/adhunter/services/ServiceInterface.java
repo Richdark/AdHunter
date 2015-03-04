@@ -4,7 +4,12 @@ import retrofit.Callback;
 import retrofit.client.Response;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
+import retrofit.http.Multipart;
 import retrofit.http.POST;
+import retrofit.http.Part;
+import retrofit.mime.TypedByteArray;
+import retrofit.mime.TypedFile;
+import retrofit.mime.TypedString;
 
 /**
  * Created by jerry on 17. 2. 2015.
@@ -18,5 +23,14 @@ public interface ServiceInterface {
     @FormUrlEncoded
     @POST("/auth/logout_user/")
     void logoutUser(@Field("uid") String uid, Callback<Response> response);
+
+    @Multipart
+    @POST("/billboards/add")
+    void uploadPhoto(@Part("photo\"; filename=\"photo.jpg") TypedByteArray photo,
+                     @Part("lat") TypedString latitude,
+                     @Part("lng") TypedString longitude,
+                     @Part("comment") TypedString comment,
+                     @Part("backing_type") TypedString billboardType,
+                     Callback<Response> response);
 
 }

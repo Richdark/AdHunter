@@ -10,15 +10,25 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
+import retrofit.mime.TypedString;
 import sk.fiit.adhunter.AsyncTaskCompleteListener;
 import sk.fiit.adhunter.R;
 import sk.fiit.adhunter.abs.BaseActivity;
+import sk.fiit.adhunter.models.CurrentPhoto;
 import sk.fiit.adhunter.tasks.UploadPhotoTask;
+import sk.fiit.adhunter.utils.Strings;
 
 /**
  * Created by Sani on 10. 12. 2014.
  */
-public class AdditionalnfoActivity extends BaseActivity implements View.OnClickListener {
+public class AdditionalnfoActivity extends BaseActivity implements View.OnClickListener, Callback<Response> {
     private static final String TAG = "AdditionalInfoActivity";
 
     private TextView mComment;
@@ -26,6 +36,7 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     private String mTypeOfBillboard;
     private ImageView mBillboard, mCitylight, mHypercube, mMegaboard, mTrojnozka, mUnknown;
     private ImageView mLastSelected;
+    private CurrentPhoto mCurrentPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +65,14 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         mUnknown = (ImageView) findViewById(R.id.imageView_unknown);
         mUnknown.setOnClickListener(this);
 
+        mCurrentPhoto = CurrentPhoto.getInstance();
+
         // preventing string null case
         mComment.setText("");
         mOwner.setText("");
         mTypeOfBillboard = "";
 
         findViewById(R.id.addinfo_button_upload).setOnClickListener(this);
-//        findViewById(R.id.addinfo_button_repeat).setOnClickListener(this);
-//        findViewById(R.id.addinfo_button_minus).setOnClickListener(this);
 //        findViewById(R.id.addinfo_select_button).setOnClickListener(this);
 
     }
@@ -79,28 +90,33 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         switch (id) {
             case R.id.addinfo_button_upload:
                 if(isWifiOrMobileConnected(this)) {
-                    //photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
-                    log(TAG, "uploading photo(s)...");
+                    // photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
                     // for now it's sent together
-                    CameraActivity.mCurrentPhoto.setComment(
+                    mCurrentPhoto.setComment(
                             mOwner.getText().toString() + " " +
                                     mComment.getText().toString() + " " +
                                     mTypeOfBillboard + " " +
                                     Build.MANUFACTURER + " " + Build.MODEL);
-                    CameraActivity.mCurrentPhoto.setOwner(mOwner.getText().toString());
-                    CameraActivity.mCurrentPhoto.setBillboardType(mTypeOfBillboard);
+                    mCurrentPhoto.setOwner(mOwner.getText().toString());
+                    mCurrentPhoto.setBillboardType(mTypeOfBillboard);
 
-                    new UploadPhotoTask(this, new UploadPhotoCompleteListener()).execute(CameraActivity.mCurrentPhoto);
+//                    new UploadPhotoTask(this, new UploadPhotoCompleteListener()).execute(CameraActivity.mCurrentPhoto);
+                    getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mCurrentPhoto.getImageByteArray()),
+                            new TypedString(String.valueOf(mCurrentPhoto.getLatitude())),
+                            new TypedString(String.valueOf(mCurrentPhoto.getLongitude())),
+                            new TypedString(mCurrentPhoto.getComment()),
+                            new TypedString(mCurrentPhoto.getBillboardType()),
+                            this);
                 } else {
-                    CameraActivity.mCurrentPhoto.setComment(
+                    mCurrentPhoto.setComment(
                             mOwner.getText().toString() +
                                     mComment.getText().toString() +
                                     mTypeOfBillboard +
                                     Build.MANUFACTURER + " " + Build.MODEL);
                     //save photo to the ArrayList and notify user about uploading photo next time he connects to the internet
-                    CameraActivity.sPhotoList.add(CameraActivity.mCurrentPhoto);
+                    CameraActivity.sPhotoList.add(mCurrentPhoto);
                     serializeList(CameraActivity.sPhotoList);
-                    toastLong("Momentálne nie ste pripojený. Vaša fotka sa uložila a odoslať ju budete môcť pri najbližšom pripojení na internet.");
+                    toastLong(getString(R.string.not_connected));
                 }
                 break;
             case R.id.imageView_billboard:
@@ -134,12 +150,6 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
                 setBillboardClicked(mUnknown);
                 break;
 
-//            case R.id.addinfo_button_repeat:
-//                onBackPressed();
-//                break;
-//            case R.id.addinfo_button_minus:
-//                onBackPressed();
-//                break;
 //            case R.id.addinfo_select_button:
 //                startActivityForResult(new Intent(this, SelectBillboardActivity.class), 0);
             default:
@@ -156,6 +166,18 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void success(Response response, Response response2) {
+        toastShort(Strings.parseHtmlResponse(response, "h1"));
+        startActivity(new Intent(AdditionalnfoActivity.this, CameraActivity.class));
+        finish();
+    }
+
+    @Override
+    public void failure(RetrofitError error) {
+        toastShort("error = " + error.getMessage());
     }
 
     private class UploadPhotoCompleteListener implements AsyncTaskCompleteListener {

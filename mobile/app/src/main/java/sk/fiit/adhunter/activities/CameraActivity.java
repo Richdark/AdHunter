@@ -16,10 +16,12 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import retrofit.mime.TypedByteArray;
+import retrofit.mime.TypedString;
 import sk.fiit.adhunter.AsyncTaskCompleteListener;
+import sk.fiit.adhunter.models.CurrentPhoto;
 import sk.fiit.adhunter.models.Photo;
 import sk.fiit.adhunter.models.User;
-import sk.fiit.adhunter.tasks.UploadPhotoTask;
 import sk.fiit.adhunter.utils.Config;
 import sk.fiit.adhunter.utils.FileUtils;
 import sk.fiit.adhunter.utils.SerializationUtils;
@@ -43,7 +45,7 @@ import retrofit.client.Response;
 /**
  * Created by jerry on 10. 10. 2014.
  */
-public class CameraActivity extends BaseActivity implements View.OnClickListener{
+public class CameraActivity extends BaseActivity implements View.OnClickListener, Callback<Response> {
     private static final String TAG = CameraActivity.class.getSimpleName();
     public static final int MEDIA_TYPE_COMPRESSED = 2; //BASE64
 
@@ -59,8 +61,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private LinearLayout mAddressLayout;
     private TextView mAddressText;
     private Button mLogOutButton;
-
-    public static Photo mCurrentPhoto;
+    private CurrentPhoto mCurrentPhoto;
 
     private int numberOfFailures = 0;
 
@@ -83,7 +84,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     protected void onPause() {
         super.onPause();
         releaseCamera();
-        Log.d(TAG, "onPause()");
     }
 
     @Override
@@ -97,9 +97,8 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.activity_camera);
 
         mCamera = getCameraInstance();
-
         setPreviews();
-        initListeners();
+        initViews();
         checkNetworkStatus();
     }
 
@@ -111,9 +110,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     }
 
     /**
-     * Initializes all the listeners used in this activity.
+     * Initializes all the views used in this activity.
      */
-    private void initListeners() {
+    private void initViews() {
         isPreviewStopped = false;
         mCaptureButton = (ImageButton) findViewById(R.id.button_capture);
         mCaptureButton.setOnClickListener(this);
@@ -152,21 +151,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                     mUploadButton.setVisibility(View.VISIBLE);
                     mAddButton.setVisibility(View.VISIBLE);
 
-                    // not used yet, as it is slow if the internet connection is slow
-//                    if(isWifiOrMobileConnected(CameraActivity.this)) {
-//                        Geocoder geo = new Geocoder(CameraActivity.this, Locale.getDefault());
-//                        try {
-//                            List<Address> addresses = geo.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1);
-//                            if(!addresses.isEmpty()) {
-//                                mAddressLayout.startAnimation(loadAnimation(android.R.anim.fade_in));
-//                                mAddressLayout.setVisibility(View.VISIBLE);
-//                                mAddressText.setText(addresses.get(0).getAddressLine(0));
-//                            }
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-
                 } else {
                     toastLong(getString(R.string.gps_not_found));
                 }
@@ -174,7 +158,13 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         } else if(view.getId() == R.id.button_upload) {
             if(isWifiOrMobileConnected(CameraActivity.this)) {
                 //photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
-                new UploadPhotoTask(CameraActivity.this, new UploadPhotoCompleteListener()).execute(mCurrentPhoto);
+//                new UploadPhotoTask(CameraActivity.this, new UploadPhotoCompleteListener()).execute(mCurrentPhoto);
+                getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mCurrentPhoto.getImageByteArray()),
+                        new TypedString(String.valueOf(mCurrentPhoto.getLatitude())),
+                        new TypedString(String.valueOf(mCurrentPhoto.getLongitude())),
+                        new TypedString(mCurrentPhoto.getComment()),
+                        new TypedString(mCurrentPhoto.getBillboardType()),
+                        this);
             } else {
                 //save photo to the ArrayList and notify user about uploading photo next time he connects to the internet
                 sPhotoList.add(mCurrentPhoto);
@@ -206,13 +196,12 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
             public void failure(RetrofitError error) {
                 numberOfFailures++;
                 if(numberOfFailures > 3) {
-                    toastShort("Odhlásenie neprebehlo úspešne. Uistite sa, že ste pripojený na internet a skúste to znova.");
+                    toastShort(getString(R.string.logout_failed));
                     return;
                 }
 
                 try {
                     Thread.sleep(200);
-                    log(TAG, "sleep(200)");
                     getServiceInterface().logoutUser(Config.DEVICE_ID, this);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -243,10 +232,8 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
      */
     private boolean checkCameraHardware() {
         if(getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            //this device has a camera
             return true;
         } else {
-            //no camera on this device
             return false;
         }
     }
@@ -271,9 +258,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         try {
             c = Camera.open();
         } catch (Exception e) {
-            // Camera is not available (in use or does not exist)
+            e.printStackTrace();
         }
-        return c; //returns null if camera is unavailable
+        return c;
     }
 
     private PictureCallback mPicture = new PictureCallback() {
@@ -281,13 +268,11 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onPictureTaken(byte[] bytes, Camera camera) {
             mCamera.stopPreview();
-//            log(TAG, "rotation of device = " + getWindowManager().getDefaultDisplay().getRotation());
             File compressedFile = FileUtils.getOutputMediaFile(MEDIA_TYPE_COMPRESSED, isWifiOrMobileOn);
             if(compressedFile == null) {
-                Log.d(TAG, "Error creating media file, check storage permissions!");
+                toastShort("Error creating media file, check storage permissions!");
                 return;
             }
-//            Log.d(TAG, compressedFile.getAbsolutePath());
 
             //Fill the file with image/video bytes
             try {
@@ -298,45 +283,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 //Create Base64 image
                 FileOutputStream fos = new FileOutputStream(compressedFile);
                 fos.write(imageByteArray);
-
-//                BitmapFactory.Options bounds = new BitmapFactory.Options();
-//                bounds.inJustDecodeBounds = true;
-//                BitmapFactory.decodeFile(compressedFile.getAbsolutePath(), bounds);
-//
-//                BitmapFactory.Options opts = new BitmapFactory.Options();
-//                Bitmap bm = BitmapFactory.decodeFile(compressedFile.getAbsolutePath(), opts);
-//                ExifInterface exif = new ExifInterface(compressedFile.getAbsolutePath());
-//                String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-//                Log.d(TAG, "orientString = " + orientString);
-//                int orientation = orientString != null ? Integer.parseInt(orientString) :  ExifInterface.ORIENTATION_NORMAL;
-//
-//                int rotationAngle = 0;
-//                if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-//                    rotationAngle = 90;
-//                    log(TAG, "orientation == 90");
-//                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-//                    rotationAngle = 180;
-//                    log(TAG, "orientation == 180");
-//                } else if(orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-//                    rotationAngle = 270;
-//                    log(TAG, "orientation == 270");
-//                } else {
-//                    log(TAG, "orientation == 0");
-//                }
-//
-//                Matrix matrix = new Matrix();
-//                matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
-//                log(TAG, "bm.getWidth() = " + bm.getWidth() + "; bm.getHeight() = " + bm.getHeight());
-//                Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
-//                if(rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)) {
-//                    log(TAG, "successfully compressed");
-//                } else {
-//                    log(TAG, "compression NOT successful");
-//                }
-
                 fos.close();
 
-                mCurrentPhoto = new Photo();
+                mCurrentPhoto = CurrentPhoto.getInstance();
                 mCurrentPhoto.setImageByteArray(imageByteArray);
                 mCurrentPhoto.setLatitude(mLocation.getLatitude());
                 mCurrentPhoto.setLongitude(mLocation.getLongitude());
@@ -351,6 +300,17 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
     private void checkNetworkStatus() {
         isWifiOrMobileOn = isWifiOrMobileConnected(this);
+    }
+
+    @Override
+    public void success(Response response, Response response2) {
+        toastShort(Strings.parseHtmlResponse(response, "h1"));
+        mCamera.startPreview();
+    }
+
+    @Override
+    public void failure(RetrofitError error) {
+        log(TAG, "failure = " + error.getMessage());
     }
 
     private class UploadPhotoCompleteListener implements AsyncTaskCompleteListener {

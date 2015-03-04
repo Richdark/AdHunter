@@ -1,5 +1,7 @@
 package sk.fiit.adhunter.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -7,12 +9,22 @@ import java.io.Serializable;
  */
 public class Photo implements Serializable {
 
+    @SerializedName("photo")
     private byte[] imageByteArray;
+
+    @SerializedName("lat")
     private double latitude;
+
+    @SerializedName("lng")
     private double longitude;
-    private String comment;
-    private String billboardType;
-    private String owner;
+
+    @SerializedName("comment")
+    private String comment = "";
+
+    @SerializedName("backing_type")
+    private String billboardType = "";
+
+    private String owner = "";
 
     public byte[] getImageByteArray() {
         return imageByteArray;

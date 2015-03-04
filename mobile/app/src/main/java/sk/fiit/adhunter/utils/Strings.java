@@ -5,6 +5,8 @@ import android.widget.EditText;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit.client.Response;
 
@@ -37,6 +39,16 @@ public class Strings {
             e.printStackTrace();
         }
         return sb.substring(0, sb.length());
+    }
+
+    public static String parseHtmlResponse(Response response, String tag) {
+        final Pattern pattern = Pattern.compile("<" + tag + ">" + "(.+?)" + "</" + tag + ">");
+        final Matcher matcher = pattern.matcher(parseResponse(response));
+        if(matcher.find()) {
+            return matcher.group(1);
+        } else {
+            return parseResponse(response);
+        }
     }
 
 }
