@@ -12,6 +12,136 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:orientation="vertical">
 
+        <FrameLayout
+            android:id="@+id/Activity_Additional_Info.layoutPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:background="@drawable/edittext_form">
+
+            <ImageView
+                android:id="@+id/Activity_Additional_Info.imagePlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ActivityAdditional_Info.textPlus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="28sp"
+                    android:textColor="@color/adhunter_green_a400"
+                    android:text="+"/>
+
+                <TextView
+                    android:id="@+id/ActivityAdditional_Info.textSelectBillboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:text="VYBERTE TYP BILLBOARDU"
+                    android:textColor="@color/hint_color"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <EditText
+            android:id="@+id/addinfo_owner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/adhunter_deep_purple_800"
+            android:background="@drawable/edittext_form"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:singleLine="true"
+            android:layout_marginTop="16dp"
+            android:hint="Vlastník nosiča"/>
+
+        <EditText
+            android:id="@+id/addinfo_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_form"
+            android:padding="12dp"
+            android:textColor="@color/adhunter_deep_purple_800"
+            android:singleLine="true"
+            android:hint="Poznámka"/>
+
+        <Button
+            android:id="@+id/addinfo_button_upload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="16dp"
+            android:background="@drawable/button_upload_selector"
+            android:textColor="@android:color/white"
+            android:text="ODOSLAŤ"/>
+
+    </LinearLayout>
+</ScrollView>
+
+
+<!--
+
+<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:gravity="center"
+            android:background="@drawable/edittext_form">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="28sp"
+                    android:textColor="@color/adhunter_green_a400"
+                    android:text="+"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="18sp"
+                    android:text="VYBERTE TYP BILLBOARDU"
+                    android:textColor="@color/hint_color"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+-->
+
+
+<!--
+
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -199,6 +329,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/adhunter_deep_purple_800"
+            android:background="@drawable/edittext_form"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
             android:singleLine="true"
             android:layout_marginTop="16dp"
             android:hint="Vlastník nosiča"/>
@@ -207,6 +340,8 @@
             android:id="@+id/addinfo_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/edittext_form"
+            android:padding="12dp"
             android:textColor="@color/adhunter_deep_purple_800"
             android:singleLine="true"
             android:hint="Poznámka"/>
@@ -216,12 +351,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:padding="16dp"
             android:background="@color/adhunter_deep_purple_500"
             android:textColor="@android:color/white"
-            android:text="UPLOAD"/>
+            android:text="ODOSLAŤ"/>
 
     </LinearLayout>
 </ScrollView>
+
+
+-->
 
 <!--
 

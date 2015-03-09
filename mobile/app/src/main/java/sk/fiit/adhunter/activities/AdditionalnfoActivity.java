@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,12 +32,12 @@ import sk.fiit.adhunter.utils.Strings;
 public class AdditionalnfoActivity extends BaseActivity implements View.OnClickListener, Callback<Response> {
     private static final String TAG = "AdditionalInfoActivity";
 
-    private TextView mComment;
-    private TextView mOwner;
+    private TextView mComment, mOwner, mTextSelectBillboard, mPlus;
     private String mTypeOfBillboard;
-    private ImageView mBillboard, mCitylight, mHypercube, mMegaboard, mTrojnozka, mUnknown;
+    private ImageView mBillboard, mCitylight, mHypercube, mMegaboard, mTrojnozka, mUnknown, mImagePlaceholder;
     private ImageView mLastSelected;
     private CurrentPhoto mCurrentPhoto;
+    private FrameLayout mLayoutPlaceholder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +52,19 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
 
         mComment = (TextView) findViewById(R.id.addinfo_comment);
         mOwner = (TextView) findViewById(R.id.addinfo_owner);
+        mLayoutPlaceholder = (FrameLayout) findViewById(R.id.Activity_Additional_Info_layoutPlaceholder);
+        mLayoutPlaceholder.setOnClickListener(this);
+        mImagePlaceholder = (ImageView) findViewById(R.id.Activity_Additional_Info_imagePlaceholder);
+        mImagePlaceholder.setOnClickListener(this);
+        mTextSelectBillboard = (TextView) findViewById(R.id.ActivityAdditional_Info_textSelectBillboard);
+        mPlus = (TextView) findViewById(R.id.ActivityAdditional_Info_textPlus);
 
         mBillboard = (ImageView) findViewById(R.id.imageView_billboard);
-        mBillboard.setOnClickListener(this);
         mCitylight = (ImageView) findViewById(R.id.imageView_citylight);
-        mCitylight.setOnClickListener(this);
         mHypercube = (ImageView) findViewById(R.id.imageView_hypercube);
-        mHypercube.setOnClickListener(this);
         mMegaboard = (ImageView) findViewById(R.id.imageView_megaboard);
-        mMegaboard.setOnClickListener(this);
         mTrojnozka = (ImageView) findViewById(R.id.imageView_trojnozka);
-        mTrojnozka.setOnClickListener(this);
         mUnknown = (ImageView) findViewById(R.id.imageView_unknown);
-        mUnknown.setOnClickListener(this);
 
         mCurrentPhoto = CurrentPhoto.getInstance();
 
@@ -81,7 +82,40 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mTypeOfBillboard = data.getStringExtra("typeOfBillboard");
-        log(TAG, "returned String = " + mTypeOfBillboard);
+
+        if(Strings.isValid(mTextSelectBillboard.getText().toString())
+                && Strings.isValid(mPlus.getText().toString())) {
+            mTextSelectBillboard.setText("");
+            mPlus.setText("");
+        }
+
+        switch (Integer.valueOf(mTypeOfBillboard)) {
+            case 1:
+                mImagePlaceholder.setBackgroundResource(R.drawable.billboard);
+                break;
+            case 2:
+                mImagePlaceholder.setBackgroundResource(R.drawable.megaboard);
+                break;
+            case 3:
+                mImagePlaceholder.setBackgroundResource(R.drawable.citylight);
+                break;
+            case 4:
+                mImagePlaceholder.setBackgroundResource(R.drawable.hypercube);
+                break;
+            case 5:
+                mImagePlaceholder.setBackgroundResource(R.drawable.trojnozka);
+                break;
+            case 6:
+                mImagePlaceholder.setBackgroundResource(R.drawable.noidea);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
     }
 
     @Override
@@ -119,39 +153,42 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
                     toastLong(getString(R.string.not_connected));
                 }
                 break;
-            case R.id.imageView_billboard:
-//                mTypeOfBillboard = "billboard";
-                mTypeOfBillboard = "1";
-                setBillboardClicked(mBillboard);
-                break;
-            case R.id.imageView_megaboard:
-//                mTypeOfBillboard = "megaboard";
-                mTypeOfBillboard = "2";
-                setBillboardClicked(mMegaboard);
-                break;
-            case R.id.imageView_citylight:
-//                mTypeOfBillboard = "citylight";
-                mTypeOfBillboard = "3";
-                setBillboardClicked(mCitylight);
-                break;
-            case R.id.imageView_hypercube:
-//                mTypeOfBillboard = "hypercube";
-                mTypeOfBillboard = "4";
-                setBillboardClicked(mHypercube);
-                break;
-            case R.id.imageView_trojnozka:
-//                mTypeOfBillboard = "trojnozka";
-                mTypeOfBillboard = "5";
-                setBillboardClicked(mTrojnozka);
-                break;
-            case R.id.imageView_unknown:
-//                mTypeOfBillboard = "unknown";
-                mTypeOfBillboard = "6";
-                setBillboardClicked(mUnknown);
-                break;
+//            case R.id.imageView_billboard:
+////                mTypeOfBillboard = "billboard";
+//                mTypeOfBillboard = "1";
+//                setBillboardClicked(mBillboard);
+//                break;
+//            case R.id.imageView_megaboard:
+////                mTypeOfBillboard = "megaboard";
+//                mTypeOfBillboard = "2";
+//                setBillboardClicked(mMegaboard);
+//                break;
+//            case R.id.imageView_citylight:
+////                mTypeOfBillboard = "citylight";
+//                mTypeOfBillboard = "3";
+//                setBillboardClicked(mCitylight);
+//                break;
+//            case R.id.imageView_hypercube:
+////                mTypeOfBillboard = "hypercube";
+//                mTypeOfBillboard = "4";
+//                setBillboardClicked(mHypercube);
+//                break;
+//            case R.id.imageView_trojnozka:
+////                mTypeOfBillboard = "trojnozka";
+//                mTypeOfBillboard = "5";
+//                setBillboardClicked(mTrojnozka);
+//                break;
+//            case R.id.imageView_unknown:
+////                mTypeOfBillboard = "unknown";
+//                mTypeOfBillboard = "6";
+//                setBillboardClicked(mUnknown);
+//                break;
 
 //            case R.id.addinfo_select_button:
 //                startActivityForResult(new Intent(this, SelectBillboardActivity.class), 0);
+            case R.id.Activity_Additional_Info_imagePlaceholder:
+                startActivityForResult(new Intent(this, SelectBillboardActivity.class), 0);
+                break;
             default:
                 break;
         }
@@ -184,7 +221,6 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     private class UploadPhotoCompleteListener implements AsyncTaskCompleteListener {
         @Override
         public void onTaskComplete() {
-            Log.d(TAG, "onTaskComplete, mehehe");
             startActivity(new Intent(AdditionalnfoActivity.this, CameraActivity.class));
             finish();
         }
