@@ -1,15 +1,19 @@
 package sk.fiit.adhunter.services;
 
+import java.util.List;
+
 import retrofit.Callback;
 import retrofit.client.Response;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
+import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedFile;
 import retrofit.mime.TypedString;
+import sk.fiit.adhunter.models.Owner;
 
 /**
  * Created by jerry on 17. 2. 2015.
@@ -32,5 +36,8 @@ public interface ServiceInterface {
                      @Part("comment") TypedString comment,
                      @Part("backing_type") TypedString billboardType,
                      Callback<Response> response);
+
+    @GET("/owners/current_list/")
+    void getOwnersList(Callback<List<Owner>> response);
 
 }

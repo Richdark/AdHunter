@@ -45,7 +45,7 @@ import retrofit.client.Response;
 /**
  * Created by jerry on 10. 10. 2014.
  */
-public class CameraActivity extends BaseActivity implements View.OnClickListener, Callback<Response> {
+public class CameraActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = CameraActivity.class.getSimpleName();
     public static final int MEDIA_TYPE_COMPRESSED = 2; //BASE64
 
@@ -166,7 +166,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                         new TypedString(String.valueOf(mCurrentPhoto.getLongitude())),
                         new TypedString(mCurrentPhoto.getComment()),
                         new TypedString(mCurrentPhoto.getBillboardType()),
-                        this);
+                        uploadResponse);
             } else {
                 //save photo to the ArrayList and notify user about uploading photo next time he connects to the internet
                 sPhotoList.add(mCurrentPhoto);
@@ -304,23 +304,37 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         isWifiOrMobileOn = isWifiOrMobileConnected(this);
     }
 
-    @Override
-    public void success(Response response, Response response2) {
-        toastShort(Strings.parseHtmlResponse(response, "h1"));
-        mCamera.startPreview();
-    }
-
-    @Override
-    public void failure(RetrofitError error) {
-        log(TAG, "failure = " + error.getMessage());
-    }
-
     private class UploadPhotoCompleteListener implements AsyncTaskCompleteListener {
         @Override
         public void onTaskComplete() {
             Log.d(TAG, "onTaskComplete, mehehe");
         }
     }
+
+    private Callback<Response> uploadResponse = new Callback<Response>() {
+        @Override
+        public void success(Response response, Response response2) {
+            toastShort(Strings.parseHtmlResponse(response, "h1"));
+            mCamera.startPreview();
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            log(TAG, "failure = " + error.getMessage());
+        }
+    };
+
+    private Callback<Response> ownersResponse = new Callback<Response>() {
+        @Override
+        public void success(Response response, Response response2) {
+            toastShort("owners successfully loaded");
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            toastShort("loading owners failed");
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

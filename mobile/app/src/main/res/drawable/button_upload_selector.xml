@@ -2,15 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_pressed="true"
-        android:state_enabled="true"
         android:drawable="@color/adhunter_green_a700" />
-    <item
-        android:state_focused="true"
-        android:state_enabled="true"
-        android:drawable="@color/adhunter_green_a700" />
-    <item
-        android:state_focused="false"
-        android:state_enabled="false"
-        android:drawable="@color/adhunter_green_a400" />
+
     <item android:drawable="@color/adhunter_green_a400"/>
 </selector>

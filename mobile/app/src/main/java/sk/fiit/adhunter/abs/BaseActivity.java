@@ -230,7 +230,7 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
 
     @Override
     public void onConnected(Bundle bundle) {
-        mLocation = mLocationClient.getLastLocation();
+//        mLocation = mLocationClient.getLastLocation();
         mLocationClient.requestLocationUpdates(mLocationRequest, this);
     }
 
