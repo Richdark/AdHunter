@@ -91,6 +91,7 @@ class Catch_model extends CI_Model
 			'filename'        => $filename,
 			'type'            => $type,
 			'comment'         => $comment,
+			'state'           => '1',
 			'backing_type_id' => $backing_type
 		);
 
