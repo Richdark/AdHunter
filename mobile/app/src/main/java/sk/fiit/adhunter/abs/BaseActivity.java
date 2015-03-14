@@ -75,8 +75,8 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
             mLocationClient = new LocationClient(this, this, this);
             mLocationRequest = LocationRequest.create();
             mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            mLocationRequest.setInterval(5000);
-            mLocationRequest.setFastestInterval(5000);
+            mLocationRequest.setInterval(0);
+            mLocationRequest.setFastestInterval(0);
         }
 
     }
@@ -87,16 +87,12 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.base, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;

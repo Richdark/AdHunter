@@ -170,6 +170,8 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
                     CameraActivity.sPhotoList.add(mCurrentPhoto);
                     serializeList(CameraActivity.sPhotoList);
                     toastLong(getString(R.string.not_connected));
+                    startActivity(new Intent(AdditionalnfoActivity.this, CameraActivity.class));
+                    finish();
                 }
                 break;
             case R.id.Activity_Additional_Info_imagePlaceholder:
@@ -226,6 +228,7 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         @Override
         public void success(List<Owner> owners, Response response) {
             mOwnerList = new ArrayList<Owner>(owners);
+            mOwnerSpinner.setVisibility(View.VISIBLE);
             List<String> ownerStringList = new ArrayList<String>();
 
             for(Owner o : owners) {
@@ -241,7 +244,6 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         @Override
         public void failure(RetrofitError error) {
             log(TAG, "failure = " + error.getMessage());
-            mOwnerSpinner.setVisibility(View.GONE);
         }
     };
 
