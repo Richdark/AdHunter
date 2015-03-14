@@ -138,9 +138,8 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         int id = view.getId();
         switch (id) {
             case R.id.addinfo_button_upload:
-                mOwnerSelected = mOwnerSpinner.getSelectedItem().toString();
-                log(TAG, "selected owner is = " + mOwnerSelected);
                 if(isWifiOrMobileConnected(this)) {
+                    mOwnerSelected = mOwnerSpinner.getSelectedItem().toString();
                     // photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
                     // for now it's sent together
                     mCurrentPhoto.setComment(
