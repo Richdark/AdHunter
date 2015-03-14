@@ -26,8 +26,50 @@ class Auth extends MY_Controller
 	*/
 	public function register()
 	{
-		$vars['logged'] = $this->is_logged();
-		$this->load->template('register', $vars);
+		$this->load->helper('auth');
+		
+		$vars['invalid_fields'] = array();
+
+		if (isset($_POST['send']))
+		{
+
+			if (!(check_email($_POST['email'])))
+			{
+				array_push($vars['invalid_fields'], 'email');
+			}
+			
+			// all fields are valid
+			if (empty($vars['invalid_fields']))
+			{
+				$email    = $_POST['email'];
+				$password = $_POST['password'] ;
+				$name     = $_POST['name'];
+				$surname  = $_POST['surrname'];
+				$salt     = $this->generate_salt(32);
+
+				$hashed_password = $this->hash_password($password, $salt);
+
+				$this->load->model('user_model','model');
+				$this->model->save_user('DEFAULT', $name, $surname, $email, $hashed_password, $salt);
+				
+				$vars['logged'] = $this->is_logged();
+				$this->load->template('registration_successful', $vars);
+			}
+
+			// one or more fields are invalid
+			else
+			{
+				$vars['logged'] = $this->is_logged();
+
+				$this->load->template('register', $vars);
+			}
+		}
+		else
+		{
+			$vars['logged'] = $this->is_logged();
+			
+			$this->load->template('register', $vars);
+		}
 	}
 
 	/**
