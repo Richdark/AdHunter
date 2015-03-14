@@ -23,6 +23,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private Context mContext;
     public List<Camera.Size> mSupportedPreviewSizes;
     private Camera.Size mPreviewSize;
+    private Camera.Parameters mParameters;
     private int mRotate;
     private int displayOrientation = 90;
     /**
@@ -37,7 +38,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         super(context);
         mCamera = camera;
         mContext = context;
-        mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
+        mParameters = mCamera.getParameters();
+
+        if(mParameters.getSupportedPreviewSizes() != null) {
+            mSupportedPreviewSizes = mParameters.getSupportedPreviewSizes();
+        }
+
 
         //Install a SurfaceHolder.Callback so we get notified when the
         //underlying surface is created and destroyed
@@ -72,18 +78,25 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         // set preview size and make any resize, rotate or
         // reformatting changes here
         try {
-            Log.d(TAG, "surfaceChanged");
             try {
                 Camera.Parameters params = mCamera.getParameters();
-                List<Camera.Size> sizePictures = params.getSupportedPictureSizes();
-//                for(Camera.Size s : sizePictures) {
-//                    Log.d(TAG, s.width + "x" + s.height);
-//                }
+
+                if(params.getSupportedPreviewSizes() != null) {
+                    List<Camera.Size> sizePictures = params.getSupportedPictureSizes();
+                    for(Camera.Size s : sizePictures) {
+                        Log.d(TAG, s.width + "x" + s.height);
+                    }
+
+                    int positionOfSize = 4;
+                    if(sizePictures.size() > positionOfSize) {
+                        params.setPictureSize(sizePictures.get(positionOfSize).width, sizePictures.get(positionOfSize).height);
+                    }
+
+                }
+
                 mRotate = getRotationDegrees();
 
-                params.setPictureSize(sizePictures.get(4).width, sizePictures.get(4).height);
                 params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
-                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
                 params.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
                 params.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
                 params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
@@ -119,7 +132,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         final int width = resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
         final int height = resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
         setMeasuredDimension(width, height);
-        Log.d(TAG, "onMeasure()");
 
         if (mSupportedPreviewSizes != null) {
             mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, width, height);
