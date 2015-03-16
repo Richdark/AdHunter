@@ -438,6 +438,12 @@ footer {
 		font-size: 70px;
 	}
 
+	.default-form h3 {
+		font-family: 'Cabin Condensed', sans-serif;
+		color: #ff2d00;
+		font-size: 18px;
+	}
+
 	.default-form input {
 		display: inline-block;
 		width: 280px;
@@ -446,6 +452,11 @@ footer {
 		padding: 5px 10px;
 		background: transparent;
 		color: #fff;
+	}
+
+	.default-form input.invalid {
+		border: 1px #ff0000 solid;
+		color: #ff0000;
 	}
 
 	.default-form input:first-child {
