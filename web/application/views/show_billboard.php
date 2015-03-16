@@ -94,7 +94,7 @@
 	<input type="hidden" name="lat">
 	<input type="hidden" name="lng">
 
-	<input name="photo" type="file" value="Vložiť fotku billboardu" required="true" accept="image/*"><br>
+	<input name="photo" type="file" value="Vložiť fotku billboardu" required="true" accept="image/jpeg"><br>
 
 	<h2>Vyberte typ billboardu:</h2>
 	<span class="center">

@@ -96,7 +96,8 @@ class Billboards extends MY_Controller
 			die;
 		}
 
-		$folder = __DIR__ . "/../../assets/pics";	// musi to byt realna cesta k suboru nie cez assets_url
+		// musi to byt realna cesta k suboru nie cez assets_url
+		$folder = __DIR__ . "/../../assets/pics";
 		$name   = $this->_get_filename($folder, $_FILES["photo"]["name"]);
 
 		// vytvor rekurzivne dany folder ak neexistuje
@@ -118,18 +119,53 @@ class Billboards extends MY_Controller
 			die;
 		}
 		$coordinates = "POINT($lat, $lng)";
-			
+		
+		// destination filename
+		$dest_name = $folder. '/'. $name;
+
 		// move z tmp foldra
-		if (!move_uploaded_file($_FILES["photo"]["tmp_name"], "$folder/$name"))
+		if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $dest_name))
 		{
 			echo "Chyba: Nepodarilo sa uploadovať billboard na server<br>";
 			die;
 		}
 
+		// rotate image if needed
+		$exif_data = read_exif_data($dest_name);
+
+		// image orientation is not default
+		if (isset($exif_data['Orientation']) and $exif_data['Orientation'] != 1)
+		{
+			// load image
+			$original_image = imagecreatefromjpeg($dest_name);
+
+			// find rotation angle
+			switch ($exif_data['Orientation'])
+			{
+				// rotate clockwise
+				case 6: $angle = -90;
+					break;
+
+				// rotate counter-clockwise
+				case 8: $angle = 90;
+					break;
+				
+				// do not rotate
+				default: $angle = 0;
+					break;
+			}
+
+			$rotated_image = imagerotate($original_image, $angle, 0);
+
+			// save rotated image
+			imagejpeg($rotated_image, $dest_name);
+		}
+
+		// ulovok prisiel z mobilneho zariadenia
 		if (!empty($_POST["model"]))
 		{
 			$model = $_POST["model"];
-			$type = 'm';		// ulovok prisiel z mobilneho zariadenia
+			$type = 'm';
 		}
 		else
 		{
