@@ -22,7 +22,6 @@ class Catch_model extends CI_Model
 
 		// samotny select z tabulky catches
 		$query = $this->db->query('SELECT id, filename, uploaded, phone_model, type, comment, X(coordinates) AS x, Y(coordinates) AS y, state FROM catches WHERE id = '. $id);
-		//$query = $this->db->get('catches');
 
 		// spustenie query a vratenie hodnoty funkciou
 		return $query->result();
@@ -73,14 +72,21 @@ class Catch_model extends CI_Model
 		return $updated;
 	}
 
-	function update_catch($catch_id, $backing_type)
+	function update_catch($catch_id, $comment, $backing_type)
 	{
 		$data = array(
+			'comment'         => $comment,
 			'backing_type_id' => $backing_type
 		);
 
 		$this->db->where('id', $catch_id);
 		$this->db->update('catches', $data); 
+	}
+
+	function delete_catch($catch_id)
+	{
+		$this->db->where('id', $catch_id);
+		$this->db->delete('catches'); 
 	}
 
 	function save_catch($user_id, $ad_id, $coordinates, $filename, $phone_model, $type, $comment, $backing_type)

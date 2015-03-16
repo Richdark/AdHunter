@@ -21,8 +21,6 @@ class Billboards extends MY_Controller
 	*/
 	public function get_catches()
 	{
-		header('Content-type: application/json');
-
 		$user_id = $this->is_logged() ? $this->get_user_id() : -1;
 		$this->load->model('Catch_model', 'model');
 		$result = $this->model->get_all($user_id);
@@ -33,6 +31,7 @@ class Billboards extends MY_Controller
 			$json[] = $row;
 		}
 
+		header('Content-type: application/json');
 		echo json_encode($json);
 	}
 
@@ -43,11 +42,10 @@ class Billboards extends MY_Controller
 	*/
 	public function get_catch($id)
 	{
-		header('Content-type: application/json');
-		
 		$this->load->model('Catch_model', 'model');
 		$result = $this->model->get_catch_by_id($id);
 
+		header('Content-type: application/json');
 		echo json_encode($result[0]);
 	}
 
@@ -123,7 +121,7 @@ class Billboards extends MY_Controller
 			
 		// move z tmp foldra
 		if (!move_uploaded_file($_FILES["photo"]["tmp_name"], "$folder/$name"))
-		{		
+		{
 			echo "Chyba: Nepodarilo sa uploadovať billboard na server<br>";
 			die;
 		}
@@ -162,19 +160,35 @@ class Billboards extends MY_Controller
 	 */
 	public function update()
 	{
-		if(empty($_POST["catch_id"])) {
-			die;
+		if(empty($_POST["catch_id"]) || !$this->is_logged()) {
+			die("error");
 		}
 
 		$catch_id = $_POST["catch_id"];
+		$comment = !empty($_POST["comment"]) ? $_POST["comment"] : null;
 		$backing_type = !empty($_POST["backing_type"]) ? $_POST["backing_type"] : null;
 
 		$this->load->model('Catch_model', 'model');
-		$this->model->update_catch($catch_id, $backing_type);
+		$this->model->update_catch($catch_id, $comment, $backing_type);
 
-		$this->load->view('uploaded_billboard');
+		echo "OK";
 	}
 
+	/*
+	 * zmazanie billboardu
+	 */
+	public function delete()
+	{
+		if(empty($_POST["catch_id"]) || !$this->is_logged()) {
+			die("error");
+		}
+
+		$catch_id = $_POST["catch_id"];
+		$this->load->model('Catch_model', 'model');
+		$this->model->delete_catch($catch_id);
+
+		echo "OK";
+	}
 
 	/**
 	 * funkcia sluzi na zobrazenie billboardov

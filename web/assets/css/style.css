@@ -186,17 +186,18 @@ footer {
 	bottom: 0;
 }
 
+	#map img.billboard {
+		margin: 0 auto;
+		width: auto;
+	}
+
 	#map .info {
-		margin-top: 10px;
-		padding-top: 10px;
-		border-top: 1px #999 dashed;
+		margin-left: 15px;
 	}
 
 		#map .info > .options {
 			display: none;
-			margin-bottom: 10px;
-			padding-bottom: 10px;
-			border-bottom: 1px #999 dashed;
+			padding: 10px 0;
 		}
 
 			#map .info > .options a {
@@ -214,9 +215,7 @@ footer {
 
 		#map .info > .notices {
 			display: none;
-			margin-bottom: 10px;
-			padding-bottom: 10px;
-			border-bottom: 1px #999 dashed;
+			padding: 10px 0;
 			color: #ff0000;
 		}
 
@@ -230,68 +229,69 @@ footer {
 				display: none;
 			}
 
-#map_sidebar {
+.sidebar {
 	display: none;
-	height: 100%;
 	position: absolute;
-	left: 80%;
-	width: 20%;
+	left: 70%;
+	top: 80px;
+	bottom: 0;
+	width: 30%;
 	background: #fafafa;
 	overflow-y: scroll;
 }
 
-	#map_sidebar h2 {
+	.sidebar > * {
+		margin: 0 5%;
+	}
+
+	.sidebar h2 {
 		margin: 20px 0;
 		color: #333;
 		font-size: 22px;
 		text-align: center;
 	}
 
-	#map_sidebar .billboards {
-		margin: 0 5%;
-	}
-
-		#map_sidebar .billboards > .billboard {
+		#merge-sidebar .billboards > .billboard {
 			margin-top: 10px;
 			padding-top: 10px;
 			border-top: 1px #999 dashed;
 		}
 
-		#map_sidebar .billboards > .billboard:first-child {
+		#merge-sidebar .billboards > .billboard:first-child {
 			border-top: 0;
 		}
 
-			#map_sidebar .billboards > .billboard img {
+			#merge-sidebar .billboards > .billboard img {
 				float: left;
 				max-width: 50%;
 				margin-right: 5px;
 			}
 
-			#map_sidebar .billboards > .billboard .line {
+			#merge-sidebar .billboards > .billboard .line {
 				display: block;
 				margin-bottom: 5px;
 				font-size: 12px;
 			}
 
-			#map_sidebar .billboards > .billboard .line.input {
+			#merge-sidebar .billboards > .billboard .line.input {
 				margin-bottom: 10px;
 				padding: 5px 0;
 				background: #f0f0f0;
 				text-transform: uppercase;
 			}
 
-				#map_sidebar .billboards > .billboard .line.input input {
+				#merge-sidebar .billboards > .billboard .line.input input {
 					position: relative;
 					top: 3px;
 					margin-right: 10px;
 				}
 
-			#map_sidebar .billboards > .billboard .clear {
+			#merge-sidebar .billboards > .billboard .clear {
 				display: block;
 				clear: left;
 			}
 
-	#map_sidebar .merge {
+	#merge-sidebar .merge {
 		display: block;
 		opacity: 0;
 		border-top: 1px #999 dashed;
@@ -305,7 +305,7 @@ footer {
 		text-decoration: none;
 	}
 
-		#map_sidebar .merge:hover {
+		#merge-sidebar .merge:hover {
 			background: #f5f5f5;
 		}
 
@@ -374,7 +374,7 @@ footer {
 	.form .center {
 		display: inline-block;
 		width: 350px;
-		margin: 10px 0 0 25px;
+		margin: 10px 0 0 20px;
 		text-align: center;
 	}
 
