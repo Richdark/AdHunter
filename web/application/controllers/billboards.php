@@ -143,7 +143,7 @@ class Billboards extends MY_Controller
 
 		// vlozenie do databazy prostrednictvom modelu
 		$this->load->model('Catch_model', 'model');
-		$this->model->save_catch($user_id, null, $coordinates, $name, $model, $type, $comment, $backing_type);
+		$this->model->save_catch($user_id, 1, $coordinates, $name, $model, $type, $comment, $backing_type);
 		
 		if ($type == 'm')
 		{
