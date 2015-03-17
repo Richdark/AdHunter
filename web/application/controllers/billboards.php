@@ -142,6 +142,10 @@ class Billboards extends MY_Controller
 			// find rotation angle
 			switch ($exif_data['Orientation'])
 			{
+				// rotate 180 degrees
+				case 3: $angle = 180;
+					break;
+
 				// rotate clockwise
 				case 6: $angle = -90;
 					break;
