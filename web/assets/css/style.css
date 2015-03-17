@@ -310,11 +310,13 @@ footer {
 		}
 
 #panel {
+	background: rgba(255,255,255,.6);
 	position: absolute;
-	left: 10px;
+	left: 0;
 	top: 80px;
 	z-index: 1;
-	padding-top: 10px;
+	padding: 10px 0;
+	width: 100%;
 }
 
 	#panel > * {
@@ -324,10 +326,12 @@ footer {
 		color: #fff;
 		font-size: 20px;
 		text-decoration: none;
+		margin: 5px 15px;
 	}
 
 	#panel > a {
 		padding: 5px;
+		float: right;
 	}
 
 	#panel > a:hover {

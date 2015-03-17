@@ -21,7 +21,8 @@ function addBillboard(billboard, open)
 
 	google.maps.event.addListener(marker, "click", function()
 	{
-		var height  = $("#map").height() - 100;
+		var width = $("#map").width() / 4;
+		var height = $("#map").height() - 150;
 
 		// map.infoWindow.close();
 		// map.infoWindow.setContent(null);
@@ -34,8 +35,6 @@ function addBillboard(billboard, open)
 			$("#info-content").find(".type img").eq(marker.backing_type-1).show();
 		}
 		var current = $("#info-content").find(".billboard").attr("src");
-		console.log($("#info-content"));
-		console.log(billboard);
 		if (current == "../../assets/pics/" + marker.billboard) {
 			if (open) {
 				map.infoWindow.setContent($("#info-content").html());
@@ -44,6 +43,7 @@ function addBillboard(billboard, open)
 		} else {
 			$("#info-content").find(".billboard").attr("src", "../../assets/pics/" + marker.billboard).css(
 			{
+				"max-width": width,
 				"max-height": height
 			}).load(function() {
 				map.infoWindow.setContent($("#info-content").html());
@@ -54,11 +54,11 @@ function addBillboard(billboard, open)
 		if (marker.state == '0')
 		{
 			$('#info-content .notices').css('display', 'block');
-			$('#info-content .options').css('display', 'none');
+			$('#info-content .options').hide();
 		}
 		else
 		{
-			$('#info-content .notices').css('display', 'none');
+			$('#info-content .notices').hide();
 			$('#info-content .options').css('display', 'block');
 			marker.privileged == "1" ? $('#info-content .info .form').show() : $('#info-content .info .form').hide();
 		}
@@ -158,6 +158,7 @@ function initMap()
 		// mapTypeControlOptions: { mapTypeIds: ["roadmap", "satellite" ] },
 		// scrollwheel: false,
 		// draggable: false,
+		streetViewControl: false,
 
 		panControlOptions:
 		{
@@ -218,7 +219,7 @@ function map_sidebar_edit()
 	}
 	else
 	{
-		$('#map').animate({ width: '70%' }, 500, function() {
+		$('#map,#panel').animate({ width: '70%' }, 500, function() {
 			$('#edit-sidebar').fadeIn();
 		});
 	}
@@ -305,7 +306,7 @@ function map_sidebar_merge(billboard)
 	}
 	else if ($('#merge-sidebar').css('display') == 'none')		// show sidebar if hidden
 	{
-		$('#map').animate(
+		$('#map,#panel').animate(
 		{
 			width: '70%'
 		}, 500, function()
@@ -351,7 +352,7 @@ function map_sidebar_merge(billboard)
 
 function closeSidebar() {
 	$('.sidebar').fadeOut(function () {
-		$('#map').animate({ width: '100%' }, 500);
+		$('#map,#panel').animate({ width: '100%' }, 500);
 	});
 }
 
