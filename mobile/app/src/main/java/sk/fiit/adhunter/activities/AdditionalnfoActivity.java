@@ -59,7 +59,7 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
 
         final ActionBar actionBar = getActionBar();
         if(actionBar != null) {
-            actionBar.setTitle("Typ billboardu");
+            actionBar.setTitle("Pridať informácie");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -97,6 +97,10 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mTypeOfBillboard = data.getStringExtra("typeOfBillboard");
+
+        if(mTypeOfBillboard.equals("notChosen")) {
+            return;
+        }
 
         if(Strings.isValid(mTextSelectBillboard.getText().toString())
                 && Strings.isValid(mPlus.getText().toString())) {
@@ -156,6 +160,7 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
                             new TypedString(String.valueOf(mCurrentPhoto.getLongitude())),
                             new TypedString(mCurrentPhoto.getComment()),
                             new TypedString(mCurrentPhoto.getBillboardType()),
+                            new TypedString(mCurrentPhoto.getOwner()),
                             uploadResponse);
                 } else {
                     mCurrentPhoto.setComment(

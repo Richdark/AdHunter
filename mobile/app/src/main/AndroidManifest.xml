@@ -27,10 +27,14 @@
         </activity>
         <activity android:name="sk.fiit.adhunter.activities.AlreadyOnlineActivity" />
         <activity android:name="sk.fiit.adhunter.activities.TakenActivity" />
+
         <activity android:name="sk.fiit.adhunter.activities.AdditionalnfoActivity"
             android:icon="@drawable/login01"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name="sk.fiit.adhunter.activities.SelectBillboardActivity" />
+
+        <activity android:name="sk.fiit.adhunter.activities.SelectBillboardActivity"
+            android:icon="@drawable/login01" />
+
         <activity android:name="sk.fiit.adhunter.activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" >

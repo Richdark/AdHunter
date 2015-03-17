@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -15,6 +16,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.location.LocationListener;
 
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedString;
@@ -45,7 +48,7 @@ import retrofit.client.Response;
 /**
  * Created by jerry on 10. 10. 2014.
  */
-public class CameraActivity extends BaseActivity implements View.OnClickListener {
+public class CameraActivity extends BaseActivity implements View.OnClickListener, LocationListener {
     private static final String TAG = CameraActivity.class.getSimpleName();
     public static final int MEDIA_TYPE_COMPRESSED = 2; //BASE64
 
@@ -58,8 +61,8 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private ImageButton mCaptureButton;
     private ImageButton mUploadButton;
     private ImageButton mAddButton;
-    private LinearLayout mAddressLayout;
-    private TextView mAddressText;
+    private LinearLayout mAddressLayout, mLoadingGPSLayout;
+    private TextView mAddressText, mLatitude, mLongitude;
     private Button mLogOutButton;
     private CurrentPhoto mCurrentPhoto;
 
@@ -100,6 +103,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         setPreviews();
         initViews();
         checkNetworkStatus();
+        if(!isGPSEnabled()) {
+            showGPSAlert();
+        }
     }
 
     private void setPreviews() {
@@ -124,6 +130,11 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         mLogOutButton.setOnClickListener(this);
         mAddressLayout = (LinearLayout) findViewById(R.id.address_layout);
         mAddressText = (TextView) findViewById(R.id.address_text);
+
+        mLatitude = (TextView) findViewById(R.id.Activity_Camera_latitude);
+        mLongitude = (TextView) findViewById(R.id.Activity_Camera_longitude);
+
+        mLoadingGPSLayout = (LinearLayout) findViewById(R.id.loading_gps_layout);
     }
 
     @Override
@@ -137,7 +148,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 mCaptureButton.setImageResource(R.drawable.ic_image_camera_alt);
                 mUploadButton.setVisibility(View.GONE);
                 mAddButton.setVisibility(View.GONE);
-                mAddressLayout.setVisibility(View.GONE);
                 isPreviewStopped = false;
             } else {
                 //get an image from the camera; here the user gets first time after taking photo
@@ -166,6 +176,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                         new TypedString(String.valueOf(mCurrentPhoto.getLongitude())),
                         new TypedString(mCurrentPhoto.getComment()),
                         new TypedString(mCurrentPhoto.getBillboardType()),
+                        new TypedString(mCurrentPhoto.getOwner()),
                         uploadResponse);
             } else {
                 //save photo to the ArrayList and notify user about uploading photo next time he connects to the internet
@@ -351,4 +362,20 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        super.onLocationChanged(location);
+
+        if(mLoadingGPSLayout.getVisibility() == View.VISIBLE) {
+            mLoadingGPSLayout.setAnimation(loadAnimation(android.R.anim.slide_out_right));
+            mLoadingGPSLayout.setVisibility(View.GONE);
+        }
+
+        if(mLocation != null) {
+            mLatitude.setText("latitude: " + String.valueOf(mLocation.getLatitude()));
+            mLongitude.setText("longitude: " + String.valueOf(mLocation.getLongitude()));
+        }
+    }
+
 }

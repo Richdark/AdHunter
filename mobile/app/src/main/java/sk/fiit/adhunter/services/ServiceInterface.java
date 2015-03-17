@@ -35,6 +35,7 @@ public interface ServiceInterface {
                      @Part("lng") TypedString longitude,
                      @Part("comment") TypedString comment,
                      @Part("backing_type") TypedString billboardType,
+                     @Part("owner") TypedString owner,
                      Callback<Response> response);
 
     @GET("/owners/current_list/")

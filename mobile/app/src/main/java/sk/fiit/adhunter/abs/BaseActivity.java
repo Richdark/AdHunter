@@ -1,13 +1,17 @@
 package sk.fiit.adhunter.abs;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -211,6 +215,10 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
         return false;
     }
 
+    public boolean isGPSEnabled() {
+        return mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         if (connectionResult.hasResolution()) {
@@ -236,6 +244,9 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
 
     @Override
     public void onLocationChanged(Location location) {
+        if(location == null) {
+            toastShort("Vaša poloha bola úspešne inicializovaná!"); // will be called first time of invoking this method
+        }
         this.mLocation = location;
     }
 
@@ -279,5 +290,29 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
     protected Animation loadAnimation(int animationIdentifier) {
         Animation animation = AnimationUtils.loadAnimation(this, animationIdentifier);
         return animation;
+    }
+
+    public void showGPSAlert(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        alertDialog.setTitle("GPS je vypnuté");
+        alertDialog.setMessage("Aktivujte v nastaveniach lokalizačnú službu GPS.");
+
+        //alertDialog.setIcon(R.drawable.location);
+
+        alertDialog.setPositiveButton("Nastavenia", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        });
+
+        alertDialog.setNegativeButton("Zrušiť", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alertDialog.show();
     }
 }
