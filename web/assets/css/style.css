@@ -456,6 +456,7 @@ footer {
 
 	.default-form input.invalid {
 		border: 1px #ff0000 solid;
+		background: #000;
 		color: #ff0000;
 	}
 

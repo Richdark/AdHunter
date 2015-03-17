@@ -7,8 +7,72 @@ class Auth extends MY_Controller
 	*/
 	public function login()
 	{
-		$vars['logged'] = $this->is_logged();
-		$this->load->template('login', $vars);
+		$this->load->helper('auth');
+		
+		$vars['invalid_fields'] = array();
+
+		if (isset($_POST['send']))
+		{
+			$email          = $_POST['email'];
+			$typed_password = $_POST['password'];
+			$type           = parent::$type;
+
+			if ($type == 'w')
+			{
+				@session_start();
+				$uid = session_id();
+			}
+			else
+			{
+				$uid = $_POST['uid'];
+			}
+
+			$this->load->model('user_model','model');
+			
+			$result  = $this->model->get_user_by_login($email);
+			$row_cnt = sizeof($result);
+			
+			$vars['logged'] = $this->is_logged();
+			
+			// login not found
+			if ($row_cnt == 0)
+			{
+				array_push($vars['invalid_fields'], 'email');
+				array_push($vars['invalid_fields'], 'password');
+				$this->load->template('login', $vars);
+			}
+			else
+			{
+				foreach ($result as $row)
+				{
+					$user_id     = $row->id;
+					$db_password = $row->password;
+					$salt        = $row->salt;
+				}
+
+				$hashed_password = $this->hash_password($typed_password,$salt);
+
+				if ($db_password == $hashed_password)
+				{
+					$this->Online_user_model->login_user('DEFAULT',$user_id,$uid,$type);
+					$vars['logged'] = $this->is_logged();
+					if ($type == 'w') {
+						$this->load->template('login_successful', $vars);
+					} else {
+						echo "OK";
+					}
+				}
+				else
+				{
+					$this->load->template('login_failed', $vars);
+				}
+			}
+		}
+		else
+		{
+			$vars['logged'] = $this->is_logged();
+			$this->load->template('login', $vars);
+		}
 	}
 
 	/**
