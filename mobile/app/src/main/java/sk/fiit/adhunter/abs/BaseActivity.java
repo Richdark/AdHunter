@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,9 +23,12 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
 import sk.fiit.adhunter.R;
 import sk.fiit.adhunter.models.Photo;
 import sk.fiit.adhunter.services.ServiceInterface;
@@ -48,17 +52,21 @@ import retrofit.client.Response;
  * Created by Jerry on 10. 10. 2014.
  * Activity that all the other activities inherit from.
  */
-public class BaseActivity extends Activity implements GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener,
+public class BaseActivity extends Activity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
         LocationListener, RequestInterceptor, ErrorHandler {
+
     private static final String TAG = "BaseActivity";
 
     private LocationClient mLocationClient;
     private LocationRequest mLocationRequest;
     protected LocationManager mLocationManager;
     protected Location mLocation;
+    private GoogleApiClient mGoogleApiClient;
     protected ServiceInterface mServiceInterface;
-    protected int mNumberOfGPSAttempts;
+    protected boolean isFirstKnownLocation;
+    protected long mFirstTime, mSecondTime;
+    protected String mTimeDifference = "";
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -76,16 +84,56 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
         mServiceInterface = restAdapter.create(ServiceInterface.class);
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (servicesConnected()) {
-            mLocationClient = new LocationClient(this, this, this);
-            mLocationRequest = LocationRequest.create();
-            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            mLocationRequest.setInterval(0);
-            mLocationRequest.setFastestInterval(0);
+        isFirstKnownLocation = true; // first known location is usually old and wrong
+        buildGoogleApiClient();
+
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(1000)        // 1 seconds, in milliseconds
+                .setFastestInterval(1000); // 1 second, in milliseconds
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
         }
+    }
 
-        mNumberOfGPSAttempts = 0;
+    @Override
+    protected void onPause() {
+        super.onPause();
 
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mLocationClient != null)
+            mLocationClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        if (mLocationClient != null && mLocationClient.isConnected()) {
+            mLocationClient.removeLocationUpdates(this);
+            mLocationClient.disconnect();
+        }
+        super.onStop();
     }
 
     public ServiceInterface getServiceInterface() {
@@ -169,22 +217,6 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
         return deserializedList;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mLocationClient != null)
-            mLocationClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        if (mLocationClient != null && mLocationClient.isConnected()) {
-            mLocationClient.removeLocationUpdates(this);
-            mLocationClient.disconnect();
-        }
-        super.onStop();
-    }
-
     private boolean servicesConnected() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (ConnectionResult.SUCCESS == resultCode) {
@@ -237,26 +269,36 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
 
     @Override
     public void onConnected(Bundle bundle) {
-//        mLocation = mLocationClient.getLastLocation();
-        mLocationClient.requestLocationUpdates(mLocationRequest, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     @Override
-    public void onDisconnected() {
+    public void onConnectionSuspended(int i) {
+
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        log(TAG, "onLocationChanged");
-        mNumberOfGPSAttempts++;
 
-        if(location == null) {
-            toastShort("Vaša poloha bola úspešne inicializovaná!"); // will be called first time of invoking this method
+//        log(TAG, String.valueOf(location.getLatitude()));
+
+        if(isFirstKnownLocation) {
+            isFirstKnownLocation = false;
+            mFirstTime = System.currentTimeMillis(); // get time of this wrong location
+            return;
         }
 
-        if(mNumberOfGPSAttempts > 1) {
-            this.mLocation = location;
-        }
+        mSecondTime = System.currentTimeMillis();
+        long diffTime = mSecondTime - mFirstTime;
+        long diffTimeInSeconds = diffTime / DateUtils.SECOND_IN_MILLIS;
+        mTimeDifference = DateUtils.formatElapsedTime(diffTimeInSeconds);
+
+        mFirstTime = mSecondTime;
+
+        mLocation = location;
+
+//        log(TAG, "refresh interval = " + mTimeDifference);
+//        log(TAG, "onLocationChanged");
 
     }
 
@@ -297,9 +339,8 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
      * @param animationIdentifier animation resource ID (for example android.R.anim.fade_in)
      * @return created animation
      */
-    protected Animation loadAnimation(int animationIdentifier) {
-        Animation animation = AnimationUtils.loadAnimation(this, animationIdentifier);
-        return animation;
+    protected Animation createAnimation(int animationIdentifier) {
+        return AnimationUtils.loadAnimation(this, animationIdentifier);
     }
 
     public void showGPSAlert(){

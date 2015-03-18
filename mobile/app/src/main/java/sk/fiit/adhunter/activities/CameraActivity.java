@@ -17,8 +17,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.location.LocationListener;
-
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedString;
 import sk.fiit.adhunter.AsyncTaskCompleteListener;
@@ -48,7 +46,7 @@ import retrofit.client.Response;
 /**
  * Created by jerry on 10. 10. 2014.
  */
-public class CameraActivity extends BaseActivity implements View.OnClickListener, LocationListener {
+public class CameraActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = CameraActivity.class.getSimpleName();
     public static final int MEDIA_TYPE_COMPRESSED = 2; //BASE64
 
@@ -62,7 +60,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private ImageButton mUploadButton;
     private ImageButton mAddButton;
     private LinearLayout mAddressLayout, mLoadingGPSLayout;
-    private TextView mAddressText, mLatitude, mLongitude;
+    private TextView mAddressText, mLatitude, mLongitude, mRefreshInterval;
     private Button mLogOutButton;
     private CurrentPhoto mCurrentPhoto;
 
@@ -133,6 +131,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
         mLatitude = (TextView) findViewById(R.id.Activity_Camera_latitude);
         mLongitude = (TextView) findViewById(R.id.Activity_Camera_longitude);
+        mRefreshInterval = (TextView) findViewById(R.id.Activity_Camera_refreshInterval);
 
         mLoadingGPSLayout = (LinearLayout) findViewById(R.id.loading_gps_layout);
     }
@@ -158,9 +157,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                     mCaptureButton.setBackgroundResource(R.drawable.circle_selector);
                     mCaptureButton.setImageResource(R.drawable.ic_av_replay);
 
-                    mUploadButton.setAnimation(loadAnimation(android.R.anim.fade_in));
+                    mUploadButton.setAnimation(createAnimation(android.R.anim.fade_in));
                     mUploadButton.setVisibility(View.VISIBLE);
-                    mAddButton.setAnimation(loadAnimation(android.R.anim.fade_in));
+                    mAddButton.setAnimation(createAnimation(android.R.anim.fade_in));
                     mAddButton.setVisibility(View.VISIBLE);
 
                 } else {
@@ -367,14 +366,15 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
 
-        if(mLoadingGPSLayout.getVisibility() == View.VISIBLE && mNumberOfGPSAttempts > 1) {
-            mLoadingGPSLayout.setAnimation(loadAnimation(android.R.anim.slide_out_right));
+        if(mLoadingGPSLayout.getVisibility() == View.VISIBLE) {
+            mLoadingGPSLayout.setAnimation(createAnimation(android.R.anim.slide_out_right));
             mLoadingGPSLayout.setVisibility(View.GONE);
         }
 
         if(mLocation != null) {
             mLatitude.setText("latitude: " + String.valueOf(mLocation.getLatitude()));
             mLongitude.setText("longitude: " + String.valueOf(mLocation.getLongitude()));
+            mRefreshInterval.setText("refresh interval: " + mTimeDifference);
         }
     }
 
