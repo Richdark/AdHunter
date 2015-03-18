@@ -367,7 +367,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
 
-        if(mLoadingGPSLayout.getVisibility() == View.VISIBLE) {
+        if(mLoadingGPSLayout.getVisibility() == View.VISIBLE && mNumberOfGPSAttempts > 1) {
             mLoadingGPSLayout.setAnimation(loadAnimation(android.R.anim.slide_out_right));
             mLoadingGPSLayout.setVisibility(View.GONE);
         }

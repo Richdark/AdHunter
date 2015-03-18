@@ -58,6 +58,7 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
     protected LocationManager mLocationManager;
     protected Location mLocation;
     protected ServiceInterface mServiceInterface;
+    protected int mNumberOfGPSAttempts;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -82,6 +83,8 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
             mLocationRequest.setInterval(0);
             mLocationRequest.setFastestInterval(0);
         }
+
+        mNumberOfGPSAttempts = 0;
 
     }
 
@@ -244,10 +247,17 @@ public class BaseActivity extends Activity implements GooglePlayServicesClient.C
 
     @Override
     public void onLocationChanged(Location location) {
+        log(TAG, "onLocationChanged");
+        mNumberOfGPSAttempts++;
+
         if(location == null) {
             toastShort("Vaša poloha bola úspešne inicializovaná!"); // will be called first time of invoking this method
         }
-        this.mLocation = location;
+
+        if(mNumberOfGPSAttempts > 1) {
+            this.mLocation = location;
+        }
+
     }
 
     public void toastShort(String toast) {
