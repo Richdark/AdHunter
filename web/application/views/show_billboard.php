@@ -44,7 +44,7 @@
 			<img class="billboard" src="">
 		</td>
 		<td valign="top">
-			<div class="info">
+			<div class="info" style="min-width:200px">
 				<!-- INFO -->
 				<table class="preview">
 					<tr>
