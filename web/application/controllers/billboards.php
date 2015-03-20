@@ -36,20 +36,6 @@ class Billboards extends MY_Controller
 	}
 
 	/**
-	 * ulokov podla ID
-	 *
-	 * @return object $json funkcia vracia ulovok aj s dodatocnymi informaciami
-	*/
-	public function get_catch($id)
-	{
-		$this->load->model('Catch_model', 'model');
-		$result = $this->model->get_catch_by_id($id);
-
-		header('Content-type: application/json');
-		echo json_encode($result[0]);
-	}
-
-	/**
 	 * zluci ulovky
 	*/
 	public function merge_catches()
@@ -177,13 +163,14 @@ class Billboards extends MY_Controller
 			$type = 'w';
 		}
 
-		$backing_type = !empty($_POST["backing_type"]) ? $_POST["backing_type"] : null;
 		$comment = !empty($_POST["comment"]) ? htmlspecialchars($_POST["comment"]) : null;
+		$backing_type = !empty($_POST["backing_type"]) ? $_POST["backing_type"] : null;
+		$owner_id = !empty($_POST["owner_id"]) ? $_POST["owner_id"] : null;
 		$user_id = $this->is_logged() ? $this->get_user_id() : null;
 
 		// vlozenie do databazy prostrednictvom modelu
 		$this->load->model('Catch_model', 'model');
-		$this->model->save_catch($user_id, 1, $coordinates, $name, $model, $type, $comment, $backing_type);
+		$this->model->save_catch($user_id, null, $coordinates, $name, $model, $type, $comment, $backing_type, $owner_id);
 		
 		if ($type == 'm')
 		{
@@ -206,10 +193,11 @@ class Billboards extends MY_Controller
 
 		$catch_id = $_POST["catch_id"];
 		$comment = !empty($_POST["comment"]) ? $_POST["comment"] : null;
-		$backing_type = !empty($_POST["backing_type"]) ? $_POST["backing_type"] : null;
+		$owner_id = isset($_POST["owner_id"]) ? $_POST["owner_id"] : null;
+		$backing_type = isset($_POST["backing_type"]) ? $_POST["backing_type"] : null;
 
 		$this->load->model('Catch_model', 'model');
-		$this->model->update_catch($catch_id, $comment, $backing_type);
+		$this->model->update_catch($catch_id, $comment, $owner_id, $backing_type);
 
 		echo "OK";
 	}
