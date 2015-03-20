@@ -20,6 +20,27 @@ class User_model extends CI_Model
 	}
 
 	/**
+	 * Check if provided email isn't already registered
+	 * @param string $email Provided email address
+	 * @return boolean True if email is registered, false otherwise
+	 */
+	function email_exists($email)
+	{
+		$this->db->select('id');
+		$this->db->from('users');
+		$this->db->where('email', $email);
+		
+		if ($this->db->count_all_results() > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
 	 * Modelova funkcia nukladajuca uzivatela na zaklade zadanych parametrov
 	 * @param int - id unikatny identifikator v databaze
 	 * @param string name realne meno pouzivatela

@@ -24,3 +24,22 @@ if ( ! function_exists('check_email'))
 		}
 	}
 }
+if ( ! function_exists('check_password'))
+{
+	function check_password($password)
+	{
+		if (strlen($password) < 6)
+		{
+			return false;
+		}
+
+		if (preg_match('/([a-z]+[0-9]+)|([0-9]+[a-z]+)/i', $password))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+}

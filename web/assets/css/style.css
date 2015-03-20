@@ -444,15 +444,38 @@ footer {
 		font-size: 18px;
 	}
 
+	.default-form .warning {
+		display: inline-block;
+		margin-top: 10px;
+		padding: 5px 10px;
+		border-radius: 8px;
+		background: #000;
+		color: #fff;
+		font-size: 12px;
+	}
+
 	.default-form input {
 		display: inline-block;
 		width: 280px;
-		border: 1px #fff solid;
+		border: 1px #d0d0d0 solid;
 		margin: 0 0 10px 0;
 		padding: 5px 10px;
-		background: transparent;
+		background: rgba(0, 0, 0, 0.8);
 		color: #fff;
 	}
+
+	.default-form .with_hint {
+		position: relative;
+		display: inline-block;
+	}
+
+		.default-form .with_hint > .warning {
+			position: absolute;
+			left: 310px;
+			top: 22px;
+			display: block;
+			min-width: 250px;
+		}
 
 	.default-form input.invalid {
 		border: 1px #ff0000 solid;

@@ -96,10 +96,23 @@ class Auth extends MY_Controller
 
 		if (isset($_POST['send']))
 		{
-
+			// handle email
 			if (!(check_email($_POST['email'])))
 			{
-				array_push($vars['invalid_fields'], 'email');
+				$vars['invalid_fields']['email'] = 'invform';
+			}
+
+			$this->load->model('user_model','model');
+
+			if ($this->model->email_exists($_POST['email']))
+			{
+				$vars['invalid_fields']['email'] = 'alrdreg';
+			}
+
+			// handle password
+			if (!(check_password($_POST['password'])))
+			{
+				$vars['invalid_fields']['password'] = 'invform';
 			}
 			
 			// all fields are valid
@@ -113,7 +126,6 @@ class Auth extends MY_Controller
 
 				$hashed_password = $this->hash_password($password, $salt);
 
-				$this->load->model('user_model','model');
 				$this->model->save_user('DEFAULT', $name, $surname, $email, $hashed_password, $salt);
 				
 				$vars['logged'] = $this->is_logged();
@@ -196,6 +208,7 @@ class Auth extends MY_Controller
 	 * v prihlasovacom formulari pokial su spravne zobrzi view o uspesnosti prihlasenia v opacnom pripade o neuspesnosti
 	*/
 	// POST http://adhunter.eu/auth/login_user/ email&password&uid
+	/*
 	public function login_user()
 	{
 		$email          = $_POST['email'];
@@ -250,6 +263,7 @@ class Auth extends MY_Controller
 			}
 		}
 	}
+	*/
 
 	/**
 	 * Funkcia na odhlasenie pouzivatela
