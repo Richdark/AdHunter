@@ -108,6 +108,12 @@ public class UploadPhotoTask extends AsyncTask<Photo, Integer, String> {
                 request.writeBytes(String.valueOf(photos[i].getBillboardType()));
                 request.writeBytes(crlf);
 
+                request.writeBytes(twoHyphens + boundary + crlf);
+                request.writeBytes("Content-Disposition: form-data; name=\"owner_id\"" + crlf);
+                request.writeBytes(crlf);
+                request.writeBytes(String.valueOf(photos[i].getOwner()));
+                request.writeBytes(crlf);
+
                 // sending a comment
                 request.writeBytes(twoHyphens + boundary + crlf);
                 request.writeBytes("Content-Disposition: form-data; name=\"comment\"" + crlf);

@@ -21,8 +21,8 @@ import sk.fiit.adhunter.models.Owner;
 public interface ServiceInterface {
 
     @FormUrlEncoded
-    @POST("/auth/login_user/")
-    void loginUser(@Field("email") String email, @Field("password") String password, @Field("uid") String uid, Callback<Response> response);
+    @POST("/auth/login/")
+    void loginUser(@Field("email") String email, @Field("password") String password, @Field("uid") String uid, @Field("send") String send, Callback<Response> response);
 
     @FormUrlEncoded
     @POST("/auth/logout_user/")
@@ -35,7 +35,7 @@ public interface ServiceInterface {
                      @Part("lng") TypedString longitude,
                      @Part("comment") TypedString comment,
                      @Part("backing_type") TypedString billboardType,
-                     @Part("owner") TypedString owner,
+                     @Part("owner_id") TypedString owner,
                      Callback<Response> response);
 
     @GET("/owners/current_list/")

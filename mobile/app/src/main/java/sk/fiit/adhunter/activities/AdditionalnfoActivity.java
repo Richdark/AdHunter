@@ -48,7 +48,7 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     private FrameLayout mLayoutPlaceholder;
     private Spinner mOwnerSpinner;
     private ArrayAdapter mOwnerAdapter;
-    private List mOwnerList;
+    private List<Owner> mOwnerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +143,9 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         switch (id) {
             case R.id.addinfo_button_upload:
                 if(isWifiOrMobileConnected(this)) {
-                    mOwnerSelected = mOwnerSpinner.getSelectedItem().toString();
+//                    mOwnerSelected = mOwnerSpinner.getSelectedItem().toString();
+                    mOwnerSelected = mOwnerList.get(mOwnerSpinner.getSelectedItemPosition()).id;
+                    log(TAG, "mOwnerSelected = " + mOwnerSelected);
                     // photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
                     // for now it's sent together
                     mCurrentPhoto.setComment(

@@ -54,7 +54,7 @@ public class LoginActivity extends BaseActivity implements Callback<Response> {
     private void loginUser() {
         Random rand = new Random();
         int randInt = rand.nextInt(10000) + 1;
-        getServiceInterface().loginUser(mEmail.getText().toString(), mPassword.getText().toString(), Config.DEVICE_ID, this);
+        getServiceInterface().loginUser(mEmail.getText().toString(), mPassword.getText().toString(), Config.DEVICE_ID, "Send", this);
 //        getServiceInterface().loginUser(mEmail.getText().toString(), mPassword.getText().toString(), String.valueOf(randInt), this);
     }
 
@@ -86,7 +86,7 @@ public class LoginActivity extends BaseActivity implements Callback<Response> {
         try {
             Thread.sleep(200);
             log(TAG, "sleep(200)");
-            getServiceInterface().loginUser(mEmail.getText().toString(), mPassword.getText().toString(), Config.DEVICE_ID, this);
+            getServiceInterface().loginUser(mEmail.getText().toString(), mPassword.getText().toString(), Config.DEVICE_ID, "Send", this);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

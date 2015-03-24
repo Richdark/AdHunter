@@ -366,15 +366,19 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
 
-        if(mLoadingGPSLayout.getVisibility() == View.VISIBLE) {
-            mLoadingGPSLayout.setAnimation(createAnimation(android.R.anim.slide_out_right));
-            mLoadingGPSLayout.setVisibility(View.GONE);
+        if(mLoadingGPSLayout != null) {
+            if(mLoadingGPSLayout.getVisibility() == View.VISIBLE) {
+                mLoadingGPSLayout.setAnimation(createAnimation(android.R.anim.slide_out_right));
+                mLoadingGPSLayout.setVisibility(View.GONE);
+            }
         }
 
-        if(mLocation != null) {
-            mLatitude.setText("latitude: " + String.valueOf(mLocation.getLatitude()));
-            mLongitude.setText("longitude: " + String.valueOf(mLocation.getLongitude()));
-            mRefreshInterval.setText("refresh interval: " + mTimeDifference);
+        if(mLatitude != null && mLongitude != null && mRefreshInterval != null) {
+            if(mLocation != null) {
+                mLatitude.setText("latitude: " + String.valueOf(mLocation.getLatitude()));
+                mLongitude.setText("longitude: " + String.valueOf(mLocation.getLongitude()));
+                mRefreshInterval.setText("refresh interval: " + mTimeDifference);
+            }
         }
     }
 
