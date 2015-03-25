@@ -2,9 +2,7 @@ package sk.fiit.adhunter.activities;
 
 import android.app.ActionBar;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,34 +14,28 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedString;
-import sk.fiit.adhunter.AsyncTaskCompleteListener;
 import sk.fiit.adhunter.R;
 import sk.fiit.adhunter.abs.BaseActivity;
 import sk.fiit.adhunter.models.CurrentPhoto;
 import sk.fiit.adhunter.models.Owner;
-import sk.fiit.adhunter.tasks.UploadPhotoTask;
 import sk.fiit.adhunter.utils.Strings;
 
 /**
  * Created by Sani on 10. 12. 2014.
  */
-public class AdditionalnfoActivity extends BaseActivity implements View.OnClickListener {
+public class AdditionalInfoActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "AdditionalInfoActivity";
 
     private TextView mTextSelectBillboard, mPlus;
     private EditText mComment;
-//    private Spinner mOwner;
     private String mTypeOfBillboard, mOwnerSelected;
-    private ImageView mBillboard, mCitylight, mHypercube, mMegaboard, mTrojnozka, mUnknown, mImagePlaceholder;
-    private ImageView mLastSelected;
+    private ImageView mImagePlaceholder;
     private CurrentPhoto mCurrentPhoto;
     private FrameLayout mLayoutPlaceholder;
     private Spinner mOwnerSpinner;
@@ -64,7 +56,6 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         }
 
         mComment = (EditText) findViewById(R.id.addinfo_comment);
-//        mOwner = (Spinner) findViewById(R.id.Activity_Additional_Info_spinnerOwners);
         mLayoutPlaceholder = (FrameLayout) findViewById(R.id.Activity_Additional_Info_layoutPlaceholder);
         mLayoutPlaceholder.setOnClickListener(this);
         mImagePlaceholder = (ImageView) findViewById(R.id.Activity_Additional_Info_imagePlaceholder);
@@ -73,23 +64,14 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         mPlus = (TextView) findViewById(R.id.ActivityAdditional_Info_textPlus);
         mOwnerSpinner = (Spinner) findViewById(R.id.Activity_Additional_Info_spinnerOwners);
 
-        mBillboard = (ImageView) findViewById(R.id.imageView_billboard);
-        mCitylight = (ImageView) findViewById(R.id.imageView_citylight);
-        mHypercube = (ImageView) findViewById(R.id.imageView_hypercube);
-        mMegaboard = (ImageView) findViewById(R.id.imageView_megaboard);
-        mTrojnozka = (ImageView) findViewById(R.id.imageView_trojnozka);
-        mUnknown = (ImageView) findViewById(R.id.imageView_unknown);
-
         mCurrentPhoto = CurrentPhoto.getInstance();
 
         // preventing string null case
         mComment.setText("");
-//        mOwner.setText("");
         mTypeOfBillboard = "";
         mOwnerSelected = "";
 
         findViewById(R.id.addinfo_button_upload).setOnClickListener(this);
-//        findViewById(R.id.addinfo_select_button).setOnClickListener(this);
 
     }
 
@@ -133,52 +115,37 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-    }
-
-    @Override
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
             case R.id.addinfo_button_upload:
                 if(isWifiOrMobileConnected(this)) {
-//                    mOwnerSelected = mOwnerSpinner.getSelectedItem().toString();
                     mOwnerSelected = mOwnerList.get(mOwnerSpinner.getSelectedItemPosition()).id;
                     log(TAG, "mOwnerSelected = " + mOwnerSelected);
-                    // photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
-                    // for now it's sent together
-                    mCurrentPhoto.setComment(
-                            mOwnerSelected + " " +
-                                    mComment.getText().toString() + " " +
-                                    mTypeOfBillboard + " " +
-                                    Build.MANUFACTURER + " " + Build.MODEL);
-                    mCurrentPhoto.setOwner(mOwnerSelected);
-                    mCurrentPhoto.setBillboardType(mTypeOfBillboard);
 
-//                    new UploadPhotoTask(this, new UploadPhotoCompleteListener()).execute(CameraActivity.mCurrentPhoto);
-                    getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mCurrentPhoto.getImageByteArray()),
-                            new TypedString(String.valueOf(mCurrentPhoto.getLatitude())),
-                            new TypedString(String.valueOf(mCurrentPhoto.getLongitude())),
-                            new TypedString(mCurrentPhoto.getComment()),
-                            new TypedString(mCurrentPhoto.getBillboardType()),
-                            new TypedString(mCurrentPhoto.getOwner()),
-                            uploadResponse);
+                    if(mCurrentPhoto != null) {
+                        setPhotoAttributes();
+                        getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mCurrentPhoto.getImageByteArray()),
+                                new TypedString(String.valueOf(mCurrentPhoto.getLatitude())),
+                                new TypedString(String.valueOf(mCurrentPhoto.getLongitude())),
+                                new TypedString(mCurrentPhoto.getComment()),
+                                new TypedString(mCurrentPhoto.getBillboardType()),
+                                new TypedString(mCurrentPhoto.getOwner()),
+                                uploadResponse);
+                    } else {
+                        toastShort(getResources().getString(R.string.photo_upload_failed));
+                    }
+
                 } else {
-                    mCurrentPhoto.setComment(
-                            mOwnerSelected + " " +
-                                    mComment.getText().toString() + " " +
-                                    mTypeOfBillboard + " " +
-                                    Build.MANUFACTURER + " " + Build.MODEL);
-                    mCurrentPhoto.setOwner(mOwnerSelected);
-                    mCurrentPhoto.setBillboardType(mTypeOfBillboard);
+                    setPhotoAttributes();
 
                     //save photo to the ArrayList and notify user about uploading photo next time he connects to the internet
                     CameraActivity.sPhotoList.add(mCurrentPhoto);
                     serializeList(CameraActivity.sPhotoList);
                     toastLong(getString(R.string.not_connected));
-                    startActivity(new Intent(AdditionalnfoActivity.this, CameraActivity.class));
+                    startActivity(new Intent(AdditionalInfoActivity.this, CameraActivity.class));
                     finish();
+
                 }
                 break;
             case R.id.Activity_Additional_Info_imagePlaceholder:
@@ -193,7 +160,7 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                startActivity(new Intent(AdditionalnfoActivity.this, CameraActivity.class));
+                startActivity(new Intent(AdditionalInfoActivity.this, CameraActivity.class));
                 finish();
                 return true;
             default:
@@ -201,27 +168,11 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         }
     }
 
-    private class UploadPhotoCompleteListener implements AsyncTaskCompleteListener {
-        @Override
-        public void onTaskComplete() {
-            startActivity(new Intent(AdditionalnfoActivity.this, CameraActivity.class));
-            finish();
-        }
-    }
-
-    private void setBillboardClicked(ImageView imageView) {
-        if(mLastSelected != null) {
-            mLastSelected.setAlpha(1.0f);
-        }
-        imageView.setAlpha(0.5f);
-        mLastSelected = imageView;
-    }
-
     private Callback<Response> uploadResponse = new Callback<Response>() {
         @Override
         public void success(Response response, Response response2) {
             toastShort(Strings.parseHtmlResponse(response, "h1"));
-            startActivity(new Intent(AdditionalnfoActivity.this, CameraActivity.class));
+            startActivity(new Intent(AdditionalInfoActivity.this, CameraActivity.class));
             finish();
         }
 
@@ -236,13 +187,14 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         public void success(List<Owner> owners, Response response) {
             mOwnerList = new ArrayList<Owner>(owners);
             mOwnerSpinner.setVisibility(View.VISIBLE);
-            List<String> ownerStringList = new ArrayList<String>();
 
+            List<String> ownerStringList = new ArrayList<String>();
             for(Owner o : owners) {
                 ownerStringList.add(o.name);
             }
 
-            mOwnerAdapter = new ArrayAdapter<String>(AdditionalnfoActivity.this, android.R.layout.simple_spinner_dropdown_item, ownerStringList);
+            mOwnerAdapter = new ArrayAdapter<String>
+                    (AdditionalInfoActivity.this, android.R.layout.simple_spinner_dropdown_item, ownerStringList);
             if(mOwnerList != null) {
                 mOwnerSpinner.setAdapter(mOwnerAdapter);
             }
@@ -254,9 +206,15 @@ public class AdditionalnfoActivity extends BaseActivity implements View.OnClickL
         }
     };
 
+    public void setPhotoAttributes() {
+        mCurrentPhoto.setComment(mComment.getText().toString());
+        mCurrentPhoto.setOwner(mOwnerSelected);
+        mCurrentPhoto.setBillboardType(mTypeOfBillboard);
+    }
+
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(AdditionalnfoActivity.this, CameraActivity.class));
+        startActivity(new Intent(AdditionalInfoActivity.this, CameraActivity.class));
         finish();
     }
 }

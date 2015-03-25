@@ -10,7 +10,8 @@ import retrofit.RestAdapter;
  */
 public class Config {
 
-    public static final String ENDPOINT_URL = "http://team14-14.ucebne.fiit.stuba.sk/adhunter";
+//    public static final String ENDPOINT_URL = "http://team14-14.ucebne.fiit.stuba.sk/adhunter"; // test
+    public static final String ENDPOINT_URL = "http://adhunter.eu";
     public static final RestAdapter.LogLevel LOG_LEVEL = RestAdapter.LogLevel.FULL;
     public static String DEVICE_ID;
 

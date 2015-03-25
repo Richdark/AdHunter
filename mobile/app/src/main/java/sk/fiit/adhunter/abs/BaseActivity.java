@@ -2,6 +2,7 @@ package sk.fiit.adhunter.abs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,15 +59,16 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
 
     private static final String TAG = "BaseActivity";
 
-    private LocationClient mLocationClient;
     private LocationRequest mLocationRequest;
     protected LocationManager mLocationManager;
     protected Location mLocation;
     private GoogleApiClient mGoogleApiClient;
     protected ServiceInterface mServiceInterface;
-    protected boolean isFirstKnownLocation;
+    protected boolean isFirstKnownLocation, isCorrectGPS;
     protected long mFirstTime, mSecondTime;
     protected String mTimeDifference = "";
+
+    protected ProgressDialog mProgressDialog;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -85,6 +87,7 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         isFirstKnownLocation = true; // first known location is usually old and wrong
+        isCorrectGPS = false;
         buildGoogleApiClient();
 
         mLocationRequest = LocationRequest.create()
@@ -118,22 +121,6 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mLocationClient != null)
-            mLocationClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        if (mLocationClient != null && mLocationClient.isConnected()) {
-            mLocationClient.removeLocationUpdates(this);
-            mLocationClient.disconnect();
-        }
-        super.onStop();
     }
 
     public ServiceInterface getServiceInterface() {
@@ -186,8 +173,7 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnected();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnected();
         boolean isWiFiOrMobile = false;
         if(isConnected) {
             //pri mobilnu siet by activeNetwork.getType() malo vracat 0, pre WiFi 1
@@ -274,7 +260,6 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
 
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
     @Override
@@ -296,6 +281,7 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
         mFirstTime = mSecondTime;
 
         mLocation = location;
+        isCorrectGPS = true;
 
 //        log(TAG, "refresh interval = " + mTimeDifference);
 //        log(TAG, "onLocationChanged");
@@ -349,8 +335,6 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
         alertDialog.setTitle("GPS je vypnuté");
         alertDialog.setMessage("Aktivujte v nastaveniach lokalizačnú službu GPS.");
 
-        //alertDialog.setIcon(R.drawable.location);
-
         alertDialog.setPositiveButton("Nastavenia", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -366,4 +350,21 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
 
         alertDialog.show();
     }
+
+    protected void showProgressDialog(Context context, String message) {
+        try {
+            mProgressDialog = new ProgressDialog(context);
+            mProgressDialog.setMessage(message);
+            mProgressDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void dismissProgressDialog() {
+        try{
+            mProgressDialog.dismiss();
+        }catch (Exception e){e.printStackTrace();}
+    }
+
 }

@@ -4,7 +4,6 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_green_dark"
     >
 
     <FrameLayout
@@ -16,7 +15,7 @@
     <LinearLayout
         android:id="@+id/address_layout"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="64dp"
         android:background="#22000000"
         android:orientation="horizontal">
 
@@ -59,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/TextView.CategoryTitle"
+                android:visibility="gone"
                 android:text="refresh interval: 00:00"/>
 
         </LinearLayout>
@@ -68,16 +68,21 @@
     <LinearLayout
         android:id="@+id/loading_gps_layout"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginTop="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
         android:background="#22000000"
         android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/Activity_Camera.loadingGPSProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginBottom="4dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
             style="@style/TextView.CategoryTitle"
             android:text="Načítava sa GPS..."/>
 

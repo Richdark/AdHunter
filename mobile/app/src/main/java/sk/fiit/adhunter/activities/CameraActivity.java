@@ -5,6 +5,8 @@ import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.location.Location;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import retrofit.mime.TypedByteArray;
@@ -64,6 +67,11 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private Button mLogOutButton;
     private CurrentPhoto mCurrentPhoto;
 
+    private SoundPool mSoundPool;
+    private int mSoundId;
+
+    private ProgressBar mGPSProgressBar;
+
     private int numberOfFailures = 0;
 
     @Override
@@ -104,6 +112,10 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         if(!isGPSEnabled()) {
             showGPSAlert();
         }
+
+        mSoundPool = new SoundPool(3, AudioManager.STREAM_NOTIFICATION, 0); // STREAM_NOTIFICATION !!!
+        mSoundId = mSoundPool.load(this, R.raw.snapshot, 1);
+
     }
 
     private void setPreviews() {
@@ -134,6 +146,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         mRefreshInterval = (TextView) findViewById(R.id.Activity_Camera_refreshInterval);
 
         mLoadingGPSLayout = (LinearLayout) findViewById(R.id.loading_gps_layout);
+        mGPSProgressBar = (ProgressBar) findViewById(R.id.Activity_Camera_loadingGPSProgressBar);
     }
 
     @Override
@@ -145,7 +158,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
                 mCaptureButton.setBackgroundResource(R.drawable.circle_selector);
                 mCaptureButton.setImageResource(R.drawable.ic_image_camera_alt);
+                mUploadButton.setAnimation(createAnimation(android.R.anim.fade_out));
                 mUploadButton.setVisibility(View.GONE);
+                mAddButton.setAnimation(createAnimation(android.R.anim.fade_out));
                 mAddButton.setVisibility(View.GONE);
                 isPreviewStopped = false;
             } else {
@@ -153,6 +168,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 if(mLocation != null) {
                     mCamera.takePicture(null, null, mPicture);
                     isPreviewStopped = true;
+                    playCameraSound();
 
                     mCaptureButton.setBackgroundResource(R.drawable.circle_selector);
                     mCaptureButton.setImageResource(R.drawable.ic_av_replay);
@@ -185,7 +201,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
             }
 
         } else if(view.getId() == R.id.button_add) {
-            Intent intent = new Intent(CameraActivity.this, AdditionalnfoActivity.class);
+            Intent intent = new Intent(CameraActivity.this, AdditionalInfoActivity.class);
             startActivity(intent);
             finish();
         } else if(view.getId() == R.id.button_logout) {
@@ -228,7 +244,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
             FileInputStream fis = this.openFileInput(Strings.SERIALIZED_LIST);
             testList = (ArrayList)SerializationUtils.deserialize(fis);
             sPhotoList = testList;
-            toastLong("Size = " + testList.size());
+            toastLong("Počet neodoslaných fotiek = " + testList.size());
             fis.close();
         } catch (FileNotFoundException e) {
             // if internal serialized file has already been removed before...
@@ -362,22 +378,28 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    public void playCameraSound() {
+        mSoundPool.play(mSoundId, 1.0f, 1.0f, 1, 0, 1);
+
+    }
+
     @Override
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
 
-        if(mLoadingGPSLayout != null) {
+        if(mLoadingGPSLayout != null && isCorrectGPS) {
             if(mLoadingGPSLayout.getVisibility() == View.VISIBLE) {
+                mGPSProgressBar.setVisibility(View.GONE);
                 mLoadingGPSLayout.setAnimation(createAnimation(android.R.anim.slide_out_right));
                 mLoadingGPSLayout.setVisibility(View.GONE);
             }
         }
 
-        if(mLatitude != null && mLongitude != null && mRefreshInterval != null) {
+        if(mLatitude != null && mLongitude != null) { //  && mRefreshInterval != null
             if(mLocation != null) {
                 mLatitude.setText("latitude: " + String.valueOf(mLocation.getLatitude()));
                 mLongitude.setText("longitude: " + String.valueOf(mLocation.getLongitude()));
-                mRefreshInterval.setText("refresh interval: " + mTimeDifference);
+//                mRefreshInterval.setText("refresh interval: " + mTimeDifference);
             }
         }
     }

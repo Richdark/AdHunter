@@ -75,7 +75,7 @@ activity#sk.fiit.adhunter.activities.TakenActivity
 ADDED from AndroidManifest.xml:29:9
 	android:name
 		ADDED from AndroidManifest.xml:29:19
-activity#sk.fiit.adhunter.activities.AdditionalnfoActivity
+activity#sk.fiit.adhunter.activities.AdditionalInfoActivity
 ADDED from AndroidManifest.xml:30:9
 	android:windowSoftInputMode
 		ADDED from AndroidManifest.xml:31:13

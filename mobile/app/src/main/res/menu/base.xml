@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".BaseActivity" >
     <item android:id="@+id/action_settings"
-        android:title="Deserialize"
+        android:title="Počet neodoslaných fotiek"
         android:orderInCategory="100"
         app:showAsAction="always" />
 </menu>

@@ -9,6 +9,14 @@ import java.io.Serializable;
  */
 public class Photo implements Serializable {
 
+    /**
+     * SerializedName annotation is maybe not necessary, as there are multiple parameters
+     * being used in our web service, not Body annotation (see Retrofit documentation
+     * and ServiceInterface.java)
+     *
+     * Body annotation also serializes data, which is not our case
+     */
+
     @SerializedName("photo")
     private byte[] imageByteArray;
 
@@ -24,6 +32,7 @@ public class Photo implements Serializable {
     @SerializedName("backing_type")
     private String billboardType = "";
 
+    @SerializedName("owner_id")
     private String owner = "";
 
     public byte[] getImageByteArray() {

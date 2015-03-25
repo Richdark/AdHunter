@@ -9,5 +9,6 @@
     <string name="gps_not_found">Zatiaľ sa nepodarilo získať Vaše GPS súradnice. Skúste to opäť o chvíľu, prípadne zapnite GPS vo Vašom telefóne.</string>
     <string name="not_connected">Momentálne nie ste pripojený. Vaša fotka sa uložila a odoslať ju budete môcť pri najbližšom pripojení na internet.</string>
     <string name="logout_failed">Odhlásenie neprebehlo úspešne. Uistite sa, že ste pripojený na internet a skúste to znova.</string>
+    <string name="photo_upload_failed">Fotku sa nepodarilo odoslať. Skúste to znova!</string>
 
 </resources>
