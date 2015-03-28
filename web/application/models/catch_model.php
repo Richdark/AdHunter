@@ -9,21 +9,7 @@ class Catch_model extends CI_Model
 	}
 
 	function get_all($user_id) {
-		$query = $this->db->query('SELECT id, (user_id='.$user_id.') AS privileged, filename, uploaded, phone_model, type, comment, X(coordinates) AS x, Y(coordinates) AS y, state, backing_type_id FROM catches');
-		return $query->result();
-	}
-
-	function get_catch_by_id($id)
-	{
-		$id = is_numeric($id) ? $id : 0;
-
-		// where id = $id
-		//$this->db->where('id', $id);
-
-		// samotny select z tabulky catches
-		$query = $this->db->query('SELECT id, filename, uploaded, phone_model, type, comment, X(coordinates) AS x, Y(coordinates) AS y, state FROM catches WHERE id = '. $id);
-
-		// spustenie query a vratenie hodnoty funkciou
+		$query = $this->db->query('SELECT id, (user_id='.$user_id.') AS privileged, filename, uploaded, phone_model, type, comment, X(coordinates) AS x, Y(coordinates) AS y, state, backing_type_id, owner_id FROM catches');
 		return $query->result();
 	}
 
@@ -72,10 +58,11 @@ class Catch_model extends CI_Model
 		return $updated;
 	}
 
-	function update_catch($catch_id, $comment, $backing_type)
+	function update_catch($catch_id, $comment, $owner_id, $backing_type)
 	{
 		$data = array(
 			'comment'         => $comment,
+			'owner_id' => $owner_id,
 			'backing_type_id' => $backing_type
 		);
 
@@ -89,7 +76,7 @@ class Catch_model extends CI_Model
 		$this->db->delete('catches'); 
 	}
 
-	function save_catch($user_id, $ad_id, $coordinates, $filename, $phone_model, $type, $comment, $backing_type)
+	function save_catch($user_id, $ad_id, $coordinates, $filename, $phone_model, $type, $comment, $backing_type, $owner_id)
 	{
 		$data = array(
 			'user_id'         => $user_id,
@@ -98,7 +85,8 @@ class Catch_model extends CI_Model
 			'type'            => $type,
 			'comment'         => $comment,
 			'state'           => '1',
-			'backing_type_id' => $backing_type
+			'backing_type_id' => $backing_type,
+			'owner_id'        => $owner_id
 		);
 
 		// ak by to bolo v $data, tak by to CI vyescapoval

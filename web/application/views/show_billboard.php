@@ -14,6 +14,16 @@
 	<h2>Editácia billboardu</h2>
 
 	<form action="<?php echo base_url(); ?>billboards/update/" class="form" method="post" enctype="multipart/form-data">
+		Vlastník:
+		<select name="owner_id">
+			<option value="0">Neznámy</option>
+			<?php
+				for($i=0; $i<count($owners); $i++)
+				{
+					echo '<option value="'.$owners[$i]->id.'">'.$owners[$i]->name.'</option>';
+				}
+			?>
+		</select><br>
 		Typ nosiča:
 		<span class="center">
 			<img src="<?php echo assets_url(); ?>img/types/trojnozka.png">
@@ -44,11 +54,11 @@
 			<img class="billboard" src="">
 		</td>
 		<td valign="top">
-			<div class="info">
+			<div class="info" style="min-width:200px">
 				<!-- INFO -->
 				<table class="preview">
 					<tr>
-						<td>Vlastník: </td><td class="provider"></td>
+						<td>Vlastník: </td><td class="owner"></td>
 					</tr>
 					<tr>
 						<td>Nahrané: </td><td class="uploaded"></td>
@@ -113,12 +123,12 @@
 		<input type="radio" name="backing_type" value="5">
 	</span>
 
-	<select name="provider">
+	<select name="owner_id">
 		<option value="0">Neznámy</option>
 		<?php
 			for($i=0; $i<count($owners); $i++)
 			{
-				echo '<option value="'.$i.'">'.$owners[$i]->name.'</option>';
+				echo '<option value="'.$owners[$i]->id.'">'.$owners[$i]->name.'</option>';
 			}
 		?>
 	</select>

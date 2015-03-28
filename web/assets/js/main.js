@@ -15,17 +15,21 @@ function addBillboard(billboard, open)
 		uploaded:     billboard.uploaded,
 		comment:      billboard.comment,
 		backing_type: billboard.backing_type_id,
+		owner_id:     billboard.owner_id,
 		state:        billboard.state,
 		privileged:   billboard.privileged
 	});
 
 	google.maps.event.addListener(marker, "click", function()
 	{
-		var height  = $("#map").height() - 100;
+		var width = $("#map").width() / 4;
+		var height = $("#map").height() - 150;
 
+		var owner_name = $.grep($("#map").data("owners"), function(o){ return o.id == marker.owner_id; })[0].name;
 		// map.infoWindow.close();
 		// map.infoWindow.setContent(null);
 		$("#info-content").data("id", this.id);
+		$("#info-content").find(".owner").text(owner_name);
 		$("#info-content").find(".uploaded").text(marker.uploaded);
 		$("#info-content").find(".comment").text(marker.comment ? marker.comment : "");
 		$("#info-content").find(".type img").hide();
@@ -34,8 +38,6 @@ function addBillboard(billboard, open)
 			$("#info-content").find(".type img").eq(marker.backing_type-1).show();
 		}
 		var current = $("#info-content").find(".billboard").attr("src");
-		console.log($("#info-content"));
-		console.log(billboard);
 		if (current == "../../assets/pics/" + marker.billboard) {
 			if (open) {
 				map.infoWindow.setContent($("#info-content").html());
@@ -44,6 +46,7 @@ function addBillboard(billboard, open)
 		} else {
 			$("#info-content").find(".billboard").attr("src", "../../assets/pics/" + marker.billboard).css(
 			{
+				"max-width": width,
 				"max-height": height
 			}).load(function() {
 				map.infoWindow.setContent($("#info-content").html());
@@ -54,11 +57,11 @@ function addBillboard(billboard, open)
 		if (marker.state == '0')
 		{
 			$('#info-content .notices').css('display', 'block');
-			$('#info-content .options').css('display', 'none');
+			$('#info-content .options').hide();
 		}
 		else
 		{
-			$('#info-content .notices').css('display', 'none');
+			$('#info-content .notices').hide();
 			$('#info-content .options').css('display', 'block');
 			marker.privileged == "1" ? $('#info-content .info .form').show() : $('#info-content .info .form').hide();
 		}
@@ -158,6 +161,7 @@ function initMap()
 		// mapTypeControlOptions: { mapTypeIds: ["roadmap", "satellite" ] },
 		// scrollwheel: false,
 		// draggable: false,
+		streetViewControl: false,
 
 		panControlOptions:
 		{
@@ -218,14 +222,16 @@ function map_sidebar_edit()
 	}
 	else
 	{
-		$('#map').animate({ width: '70%' }, 500, function() {
+		$('#map,#panel').animate({ width: '70%' }, 500, function() {
 			$('#edit-sidebar').fadeIn();
 		});
 	}
 
 	var id = $("#info-content").data("id");
 	var billboard = $.grep($("#map").data("billboards"), function(b){ return b.id == id; })[0];
+	var owner = $.grep($("#map").data("owners"), function(o){ return o.id == billboard.owner_id; })[0];
 
+	$("#edit-sidebar [name='owner_id']").val(owner.id);
 	$("#edit-sidebar [name='backing_type'][value='"+billboard.backing_type_id+"']").prop("checked", true);
 	$("#edit-sidebar [name='comment']").text(billboard.comment);
 }
@@ -305,7 +311,7 @@ function map_sidebar_merge(billboard)
 	}
 	else if ($('#merge-sidebar').css('display') == 'none')		// show sidebar if hidden
 	{
-		$('#map').animate(
+		$('#map,#panel').animate(
 		{
 			width: '70%'
 		}, 500, function()
@@ -351,19 +357,23 @@ function map_sidebar_merge(billboard)
 
 function closeSidebar() {
 	$('.sidebar').fadeOut(function () {
-		$('#map').animate({ width: '100%' }, 500);
+		$('#map,#panel').animate({ width: '100%' }, 500);
 	});
 }
 
 function initSidebar() {
 	$("#map").on("click", "a.merge", function() {
 		var id = $("#info-content").data("id");
-		$.getJSON("../get_catch/" + id + "/", function(json) {
-			map_sidebar_merge(json);
-		});
+		var billboard = $.grep($("#map").data("billboards"), function(b){ return b.id == id; })[0];
+		map_sidebar_merge(billboard);
 		return false;
 	}).on("click", "a.edit", function() {
 		map_sidebar_edit();
+		return false;
+	});
+
+	$("#merge-sidebar a.merge").click(function() {
+		merge_billboards();
 		return false;
 	});
 
@@ -371,10 +381,11 @@ function initSidebar() {
 		var id = $("#info-content").data("id");
 		var form = $(this).closest("form");
 		var comment = form.find("[name='comment']").val();
+		var owner_id = form.find("[name='owner_id']").val();
 		var backing_type = form.find("[name='backing_type']:checked").val();
 
 		if ($(this).attr("name") == "edit") {
-			$.post("../update/", { catch_id: id, comment: comment, backing_type: backing_type }, function (ret) {
+			$.post("../update/", { catch_id: id, comment: comment, owner_id: owner_id, backing_type: backing_type }, function (ret) {
 				if(ret == "OK") {
 					for(var i=0; i<map.markers.length; i++) {
 						if(map.markers[i].id == id) {
@@ -382,6 +393,7 @@ function initSidebar() {
 							marker.setMap(null);
 							var billboard = $.grep($("#map").data("billboards"), function(b){ return b.id == id; })[0];
 							billboard.comment = comment;
+							billboard.owner_id = owner_id;
 							billboard.backing_type_id = backing_type;
 							addBillboard(billboard, true);
 						}
@@ -425,10 +437,17 @@ var map = null;
 
 $(function() {
 	if ($('#map').length > 0) {
-		$.get("../get_catches", function(json) {
-			$("#map").data("billboards", json);
-			// $.getScript("http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclustererplus/src/markerclusterer_packed.js");
-			$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&callback=initMap");
+		$.get("../get_catches/", function(billboards) {
+			$("#map").data("billboards", billboards);
+			$.get("../../owners/current_list/", function(ret) {
+				try {
+					var owners = $.parseJSON(ret);
+					$("#map").data("owners", owners);
+					// $.getScript("http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclustererplus/src/markerclusterer_packed.js");
+					$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&callback=initMap");
+				}
+				catch(e){ console.log("invalid JSON " + e); }
+			});
 		});
 
 		initSidebar();

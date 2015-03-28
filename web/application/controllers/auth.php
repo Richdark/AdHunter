@@ -7,10 +7,73 @@ class Auth extends MY_Controller
 	*/
 	public function login()
 	{
-		$vars['page_title'] = 'Prihlásenie';
-		$vars['logged']     = $this->is_logged();
+		$this->load->helper('auth');
 		
-		$this->load->template('login', $vars);
+		$vars['page_title']     = 'Prihlásenie';
+		$vars['invalid_fields'] = array();
+
+		if (isset($_POST['send']))
+		{
+			$email          = $_POST['email'];
+			$typed_password = $_POST['password'];
+			$type           = parent::$type;
+
+			if ($type == 'w')
+			{
+				@session_start();
+				$uid = session_id();
+			}
+			else
+			{
+				$uid = $_POST['uid'];
+			}
+
+			$this->load->model('user_model','model');
+			
+			$result  = $this->model->get_user_by_login($email);
+			$row_cnt = sizeof($result);
+			
+			$vars['logged'] = $this->is_logged();
+			
+			// login not found
+			if ($row_cnt == 0)
+			{
+				array_push($vars['invalid_fields'], 'email');
+				array_push($vars['invalid_fields'], 'password');
+				$this->load->template('login', $vars);
+			}
+			else
+			{
+				foreach ($result as $row)
+				{
+					$user_id     = $row->id;
+					$db_password = $row->password;
+					$salt        = $row->salt;
+				}
+
+				$hashed_password = $this->hash_password($typed_password,$salt);
+
+				if ($db_password == $hashed_password)
+				{
+					$this->Online_user_model->login_user('DEFAULT',$user_id,$uid,$type);
+					$vars['logged'] = $this->is_logged();
+					if ($type == 'w') {
+						$this->load->template('login_successful', $vars);
+					} else {
+						echo "OK";
+					}
+				}
+				else
+				{
+					$this->load->template('login_failed', $vars);
+				}
+			}
+		}
+		else
+		{
+			$vars['logged'] = $this->is_logged();
+			$this->load->template('login', $vars);
+		}
 	}
 
 	/**
@@ -35,10 +98,23 @@ class Auth extends MY_Controller
 
 		if (isset($_POST['send']))
 		{
-
+			// handle email
 			if (!(check_email($_POST['email'])))
 			{
-				array_push($vars['invalid_fields'], 'email');
+				$vars['invalid_fields']['email'] = 'invform';
+			}
+
+			$this->load->model('user_model','model');
+
+			if ($this->model->email_exists($_POST['email']))
+			{
+				$vars['invalid_fields']['email'] = 'alrdreg';
+			}
+
+			// handle password
+			if (!(check_password($_POST['password'])))
+			{
+				$vars['invalid_fields']['password'] = 'invform';
 			}
 			
 			// all fields are valid
@@ -52,7 +128,6 @@ class Auth extends MY_Controller
 
 				$hashed_password = $this->hash_password($password, $salt);
 
-				$this->load->model('user_model','model');
 				$this->model->save_user('DEFAULT', $name, $surname, $email, $hashed_password, $salt);
 				
 				$vars['logged'] = $this->is_logged();
@@ -135,6 +210,7 @@ class Auth extends MY_Controller
 	 * v prihlasovacom formulari pokial su spravne zobrzi view o uspesnosti prihlasenia v opacnom pripade o neuspesnosti
 	*/
 	// POST http://adhunter.eu/auth/login_user/ email&password&uid
+	/*
 	public function login_user()
 	{
 		$email          = $_POST['email'];
@@ -189,6 +265,7 @@ class Auth extends MY_Controller
 			}
 		}
 	}
+	*/
 
 	/**
 	 * Funkcia na odhlasenie pouzivatela

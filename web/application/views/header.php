@@ -14,11 +14,11 @@
 
 	<script type="text/javascript" src="<?php echo assets_url(); ?>js/jquery-2.1.1.min.js"></script>
 </head>
-<body<?php if ($layout_version == 'regular') { echo ' class="regular"'; } ?>>
+<body class="<?php echo $layout_version; ?>">
 	<?php
 	if (uri_string() == '') { echo '<div class="app"><div class="fixed">'; }
 	?>
-	<header class="<?php if ($layout_version != 'landing') { echo 'regular'; } else { echo 'landing'; } ?>">
+	<header>
 		<div class="c">
 			<a href="<?php echo base_url(); ?>" id="logo"></a>
 			<a href="#" id="toggle">Menu</a>

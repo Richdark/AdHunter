@@ -1,9 +1,34 @@
 <div class="default-form">
 	<div class="c">
-		<?php if (!(empty($invalid_fields))) { echo '<h3>Registrácia neprebehla úspešne</h3>'; } ?>
+		<?php if (isset($invalid_fields['email'])) {
+			echo '<h3>Registrácia neprebehla úspešne</h3>';
+		} ?>
 		<form  method="post" action="../register/">
-			<input type="text" name="email" value="E-mail"<?php if (array_search('email', $invalid_fields) !== false) { echo ' class = "invalid"'; } ?> onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'E-mail';}"><br>
-			<input type="text" name="password" value="Heslo" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Heslo'}" onkeyup="this.type = (this.value == '') ? 'text' : 'password'"><br>
+			<span class="with_hint">
+				<input type="text" name="email" value="E-mail"<?php if (isset($invalid_fields['email'])) { echo ' class = "invalid"'; } ?> onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'E-mail';}">
+				<?php
+				if (isset($invalid_fields['email']))
+				{
+					if ($invalid_fields['email'] == 'invform')
+					{
+						echo '<p class="warning">Emailová adresa nie je v správnom tvare!</p>';
+					}
+					elseif ($invalid_fields['email'] == 'alrdreg')
+					{
+						echo '<p class="warning">Táto emailová adresa už je zaregistrovaná!</p>';
+					}
+				}
+				?>
+			</span><br />
+			<span class="with_hint">
+				<input type="text" name="password" value="Heslo"<?php if (isset($invalid_fields['password'])) { echo ' class = "invalid"'; } ?> onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Heslo'}" onkeyup="this.type = (this.value == '') ? 'text' : 'password'">
+				<?php
+				if (isset($invalid_fields['password']) and ($invalid_fields['password'] == 'invform'))
+				{
+					echo '<p class="warning">Musí mať min. 6 znakov a obsahovať písmeno aj číslicu!</p>';
+				}
+				?>
+			</span><br />
 			<input type="text" name="name" value="Meno" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Meno';}"><br>
 			<input type="text" name="surrname" value="Priezvisko" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Priezvisko';}"><br>
 			<input type="submit" name="send" value="Registrovať">
