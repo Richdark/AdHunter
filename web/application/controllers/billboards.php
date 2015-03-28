@@ -11,7 +11,7 @@ class Billboards extends MY_Controller
 	public function index()
 	{
 		$vars['logged'] = $this->is_logged();
-		$this->load->template('home_page', $vars);
+		$this->load->template('home_page', $vars, 'landing');
 	}
 
 	/**
@@ -244,7 +244,7 @@ class Billboards extends MY_Controller
 			'user_id' => $this->get_user_id()
 		);
 
-		$this->load->template('show_billboard', $vars);
+		$this->load->template('show_billboard', $vars, 'map');
 	}
 
 	// ------------------

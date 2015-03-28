@@ -16,10 +16,17 @@ body, html {
 	height: 100%;
 }
 
+body.regular {
+	background-image: url('../img/header_regular.png'), url('../img/background_regular.png');
+	background-repeat: no-repeat, repeat;
+	background-position: center 80px, center center;
+	background-color: #091624;
+
+}
 
 .c {
 	display: block;
-	max-width: 1000px;
+	max-width: 1200px;
 	margin: 0 auto;
 }
 
@@ -27,14 +34,30 @@ header {
 	display: block;
 	height: 80px;
 	margin: 0 auto;
+}
+
+header.landing {
+	background: #091624;
+}
+
+header.regular {
 	background: #fff;
+	box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.05);
 }
 
 	header a {
-		color: #222;
 		font-family: 'Cabin Condensed', sans-serif;
-		font-size: 20px;
+		font-size: 16px;
 		text-decoration: none;
+		text-transform: uppercase;
+	}
+
+	header.landing a {
+		color: #fff;
+	}
+
+	header.regular a {
+		color: #091624;
 	}
 
 	header .c {
@@ -45,7 +68,14 @@ header {
 			display: inline-block;
 			width: 237px;
 			height: 80px;
-			background: url('../img/adhunter.png') left center no-repeat;
+		}
+
+		header.landing #logo {
+			background: url('../img/logo-light.png') left center no-repeat;
+		}
+
+		header.regular #logo {
+			background: url('../img/logo-dark.png') left center no-repeat;
 		}
 
 		header #toggle {
@@ -74,9 +104,10 @@ header {
 footer {
 	position: relative;
 	padding: 10px 0;
-	color: #222;
+	background-color: #091624;
+	color: #fff;
 	font-size: 16px;
-	background-color: #fff;
+	text-align: center;
 }
 
 
@@ -95,47 +126,57 @@ footer {
 	.app .fixed {
 		width: 100%;
 		height: 100%;
-		/*min-height: 600px;*/
-		background: url('../img/super.jpg');
+		background: url('../img/background.png');
 		background-size: cover;
 		position: fixed;
 	}
 
 		.app .fixed > .c {
+			position: relative;
 			height: 100%;
 			margin-top: -80px;
 			text-align: center;
-			direction: rtl;
 		}
 
 			.app .image {
-				display: inline-block;
-				width: 500px;
-				height: 100%;
-				min-height: 500px;
-				background: url('../img/handphone.png') no-repeat;
-				background-position: right bottom;
+				position: absolute;
+				left: 10px;
+				bottom: 0;
+				width: 490px;
+				height: 580px;
+				background: url('../img/hand.png') center no-repeat;
 			}
 
+				.app .image > img {
+					position: absolute;
+					left: 180px;
+					top: 61px;
+				}
+
 			.app .text {
-				display: inline-block;
-				vertical-align: bottom;
+				position: absolute;
+				left: 520px;
+				bottom: 200px;
 				width: 450px;
-				padding: 50px 0 50px 50px;
 				color: #fff;
-				text-align: left;
 				font-size: 25px;
-				direction: ltr;
+				text-align: left;
 			}
 
 				.app .text h1 {
+					display: inline;
+					line-height: 80px;
 					margin-top: 0;
+					padding: 5px 15px;
+					background: #091624;
 					font-family: 'Cabin Condensed', sans-serif;
 					font-size: 70px;
 				}
 				
 				.app .text p {
-					margin-top: 50px;
+					margin-top: 20px;
+					padding: 5px 15px;
+					background: #091624;
 				}
 
 				.app .text .download {
@@ -149,30 +190,60 @@ footer {
 .features {
 	position: relative;
 	padding-bottom: 30px;
-	background: #FFF;
+	background: #434f5c;
+	box-shadow: 0 -5px 10px 5px rgba(0, 0, 0, 0.25);
 	text-align: center;
 }
 
 	.features .column {
 		display: inline-block;
-		width: 30%;
-		padding-top: 150px;
+		width: 300px;
+		margin: 0 10px;
+		padding: 80px 0;
 		vertical-align: top;
 	}
 
+		.features .column img {
+			box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.25);
+		}
+
 		.features .column h1 {
 			margin-bottom: 10px;
-			color: #222;
+			color: #fff;
 			font-size: 20px;
 			font-weight: bold;
 		}
 
 		.features .column p {
-			color: #222;
+			color: #fff;
 			font-size: 14px;
 			line-height: 20px;
 		}
 
+.content_regular {
+	overflow: hidden;
+}
+
+	.content_regular > h1 {
+		display: block;
+		margin-top: 100px;
+		text-align: center;
+	}
+
+		.content_regular > h1 span {
+			display: inline-block;
+			padding: 5px 25px;
+			background: #091624;
+			color: #fff;
+			font-size: 48px;
+		}
+
+	.content_regular > .content {
+		max-width: 1200px;
+		margin: 100px auto 0 auto;
+		background: #fff;
+		box-shadow: 0 -2px 10px 2px rgba(0, 0, 0, 0.05);
+	}
 
 /* =======================================
    ---------------- MAP ------------------
@@ -317,28 +388,26 @@ footer {
 	padding-top: 10px;
 }
 
-	#panel > * {
+	#panel > a {
 		display: inline-block;
+		padding: 5px;
 		border: 1px #aaa solid;
-		background-color: #fed265;
+		background-color: #091624;
 		color: #fff;
 		font-size: 20px;
 		text-decoration: none;
 	}
 
-	#panel > a {
-		padding: 5px;
-	}
-
 	#panel > a:hover {
 		background-color: #fff;
-		color: #fed265;
+		color: #091624;
 	}
 
 	#panel > input[type="text"] {
 		width: 600px;
 		height: 36px;
 		padding: 0 5px;
+		border: 1px #aaa solid;
 		background-color: #fff;
 		color: #444;
 		opacity: 0.75;
@@ -426,10 +495,8 @@ footer {
 
 
 .default-form {
-	padding: 150px 0;
-	background: url('../img/super.jpg');
-	background-size: cover;
-	color: #fff;
+	padding: 50px 0 180px 0;
+	color: #091624;
 	text-align: center;
 }
 
@@ -440,23 +507,23 @@ footer {
 
 	.default-form h3 {
 		font-family: 'Cabin Condensed', sans-serif;
-		color: #ff2d00;
+		color: #091624;
 		font-size: 18px;
 	}
 
 	.default-form input {
 		display: inline-block;
-		width: 280px;
-		border: 1px #fff solid;
-		margin: 0 0 10px 0;
-		padding: 5px 10px;
-		background: transparent;
-		color: #fff;
+		width: 400px;
+		margin: 5px 0 10px 0;
+		padding: 12px 20px;
+		border: 1px #d3d3d3 solid;
+		background: #fafafa;
+		font-size: 18px;
 	}
 
 	.default-form input.invalid {
-		border: 1px #ff0000 solid;
-		color: #ff0000;
+		border: 1px #c15c5d solid;
+		color: #c15c5d;
 	}
 
 	.default-form input:first-child {
@@ -464,7 +531,7 @@ footer {
 	}
 
 	.default-form input[type=submit] {
-		width: 300px;
+		width: auto;
 		background: #fff;
 		color: #444;
 	}

@@ -1,6 +1,5 @@
 <div class="default-form">
 	<div class="c">
-		<h1 style="text-align: center">Registrácia</h1>
 		<?php if (!(empty($invalid_fields))) { echo '<h3>Registrácia neprebehla úspešne</h3>'; } ?>
 		<form  method="post" action="../register/">
 			<input type="text" name="email" value="E-mail"<?php if (array_search('email', $invalid_fields) !== false) { echo ' class = "invalid"'; } ?> onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'E-mail';}"><br>

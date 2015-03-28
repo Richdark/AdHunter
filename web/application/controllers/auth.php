@@ -7,7 +7,9 @@ class Auth extends MY_Controller
 	*/
 	public function login()
 	{
-		$vars['logged'] = $this->is_logged();
+		$vars['page_title'] = 'Prihlásenie';
+		$vars['logged']     = $this->is_logged();
+		
 		$this->load->template('login', $vars);
 	}
 
@@ -28,6 +30,7 @@ class Auth extends MY_Controller
 	{
 		$this->load->helper('auth');
 		
+		$vars['page_title']     = 'Registrácia';
 		$vars['invalid_fields'] = array();
 
 		if (isset($_POST['send']))

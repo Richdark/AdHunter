@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>AdHunter Landing Page</title>
+	<title>AdHunter<?php if (isset($page_title)){ echo ' - '. $page_title; } ?></title>
 
 	<link rel="stylesheet" href="<?php echo assets_url(); ?>css/normalize.css">
 	<link rel="stylesheet" href="<?php echo assets_url(); ?>css/style.css">
@@ -14,11 +14,11 @@
 
 	<script type="text/javascript" src="<?php echo assets_url(); ?>js/jquery-2.1.1.min.js"></script>
 </head>
-<body>
+<body<?php if ($layout_version == 'regular') { echo ' class="regular"'; } ?>>
 	<?php
 	if (uri_string() == '') { echo '<div class="app"><div class="fixed">'; }
 	?>
-	<header>
+	<header class="<?php if ($layout_version != 'landing') { echo 'regular'; } else { echo 'landing'; } ?>">
 		<div class="c">
 			<a href="<?php echo base_url(); ?>" id="logo"></a>
 			<a href="#" id="toggle">Menu</a>
@@ -42,3 +42,19 @@
 			</ul>
 		</div>
 	</header>
+
+	<?php
+
+	if ($layout_version == 'regular')
+    {
+        echo '<div class="content_regular">';
+
+        if (isset($page_title))
+        {
+            echo '<h1><span>'. $page_title. '</span></h1>';
+        }
+
+        echo '<div class="content">';
+    }
+
+	?>
