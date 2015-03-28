@@ -12,13 +12,12 @@ class Auth extends MY_Controller
 		$vars['page_title']     = 'Prihlásenie';
 		$vars['invalid_fields'] = array();
 
-		if (isset($_POST['send']))
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		{
 			$email          = $_POST['email'];
 			$typed_password = $_POST['password'];
-			$type           = parent::$type;
 
-			if ($type == 'w')
+			if (self::$type == 'w')
 			{
 				@session_start();
 				$uid = session_id();
@@ -55,11 +54,19 @@ class Auth extends MY_Controller
 
 				if ($db_password == $hashed_password)
 				{
-					$this->Online_user_model->login_user('DEFAULT',$user_id,$uid,$type);
+					$this->Online_user_model->login_user('DEFAULT', $user_id, $uid, self::$type);
+					
 					$vars['logged'] = $this->is_logged();
-					if ($type == 'w') {
+					
+					// show view for web version
+					if (self::$type == 'w')
+					{
 						$this->load->template('login_successful', $vars);
-					} else {
+					}
+
+					// return JSON for mobile version
+					else
+					{
 						echo "OK";
 					}
 				}
@@ -96,7 +103,7 @@ class Auth extends MY_Controller
 		$vars['page_title']     = 'Registrácia';
 		$vars['invalid_fields'] = array();
 
-		if (isset($_POST['send']))
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		{
 			// handle email
 			if (!(check_email($_POST['email'])))
