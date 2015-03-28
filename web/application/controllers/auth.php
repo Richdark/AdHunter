@@ -12,7 +12,7 @@ class Auth extends MY_Controller
 		$vars['page_title']     = 'Prihlásenie';
 		$vars['invalid_fields'] = array();
 
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			$email          = $_POST['email'];
 			$typed_password = $_POST['password'];
@@ -103,7 +103,7 @@ class Auth extends MY_Controller
 		$vars['page_title']     = 'Registrácia';
 		$vars['invalid_fields'] = array();
 
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			// handle email
 			if (!(check_email($_POST['email'])))
