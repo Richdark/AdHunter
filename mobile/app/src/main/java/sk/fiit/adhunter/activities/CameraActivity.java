@@ -64,7 +64,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private ImageButton mAddButton;
     private LinearLayout mAddressLayout, mLoadingGPSLayout;
     private TextView mAddressText, mLatitude, mLongitude, mRefreshInterval;
-    private Button mLogOutButton;
+    private Button mLogOutButton, mSettingsButton;
     private CurrentPhoto mCurrentPhoto;
 
     private SoundPool mSoundPool;
@@ -138,6 +138,8 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         mAddButton.setOnClickListener(this);
         mLogOutButton = (Button) findViewById(R.id.button_logout);
         mLogOutButton.setOnClickListener(this);
+        mSettingsButton = (Button) findViewById(R.id.button_settings);
+        mSettingsButton.setOnClickListener(this);
         mAddressLayout = (LinearLayout) findViewById(R.id.address_layout);
         mAddressText = (TextView) findViewById(R.id.address_text);
 
@@ -206,6 +208,9 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
             finish();
         } else if(view.getId() == R.id.button_logout) {
             logoutUser();
+        } else if(view.getId() == R.id.button_settings) {
+            log(TAG, "button_settings clicked");
+            startActivity(new Intent(CameraActivity.this, SettingsActivity.class));
         }
 
     }

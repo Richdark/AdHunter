@@ -11,4 +11,19 @@
     <string name="logout_failed">Odhlásenie neprebehlo úspešne. Uistite sa, že ste pripojený na internet a skúste to znova.</string>
     <string name="photo_upload_failed">Fotku sa nepodarilo odoslať. Skúste to znova!</string>
 
+    <!-- preferences -->
+    <string name="pref_upload_modes_title">Odosielanie úlovku</string>
+    <string name="pref_upload_modes_default">wifi</string>
+
+    <!-- arrays -->
+    <string-array name="pref_upload_modes">
+        <item>Iba WiFi</item>
+        <item>Wifi + mobilný internet</item>
+    </string-array>
+
+    <string-array name="pref_upload_modes_values">
+        <item>wifi</item>
+        <item>wifi_and_mobile</item>
+    </string-array>
+
 </resources>
