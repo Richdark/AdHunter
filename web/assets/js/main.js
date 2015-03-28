@@ -25,7 +25,8 @@ function addBillboard(billboard, open)
 		var width = $("#map").width() / 4;
 		var height = $("#map").height() - 150;
 
-		var owner_name = $.grep($("#map").data("owners"), function(o){ return o.id == marker.owner_id; })[0].name;
+		var owner = $.grep($("#map").data("owners"), function(o){ return o.id == marker.owner_id; });
+		var owner_name = owner.length ? owner[0].name : "";
 		// map.infoWindow.close();
 		// map.infoWindow.setContent(null);
 		$("#info-content").data("id", this.id);
