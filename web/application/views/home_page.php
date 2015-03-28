@@ -14,7 +14,7 @@
 	<div class="features">
 		<div class="c">
 			<span class="column">
-				<a href="<?php echo base_url(); ?>billboards/show/">
+				<a href="<?php echo root_url(); ?>billboards/show/">
 					<img src="<?php echo assets_url(); ?>img/buttons/img1.png">
 				</a>
 				<h1>Mapa vizuálneho smogu</h1>

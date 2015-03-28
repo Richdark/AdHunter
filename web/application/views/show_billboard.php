@@ -13,7 +13,7 @@
 <div id="edit-sidebar" class="sidebar">
 	<h2>Editácia billboardu</h2>
 
-	<form action="<?php echo base_url(); ?>billboards/update/" class="form" method="post" enctype="multipart/form-data">
+	<form action="<?php echo root_url(); ?>billboards/update/" class="form" method="post" enctype="multipart/form-data">
 		Vlastník:
 		<select name="owner_id">
 			<option value="0">Neznámy</option>
@@ -100,7 +100,7 @@
 	</table>
 </div>
 
-<form action="<?php echo base_url(); ?>billboards/add/" id="add-form" class="form" method="post" enctype="multipart/form-data">
+<form action="<?php echo root_url(); ?>billboards/add/" id="add-form" class="form" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="lat">
 	<input type="hidden" name="lng">
 

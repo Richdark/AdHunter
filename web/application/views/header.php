@@ -20,22 +20,22 @@
 	?>
 	<header>
 		<div class="c">
-			<a href="<?php echo base_url(); ?>" id="logo"></a>
+			<a href="<?php echo root_url(); ?>" id="logo"></a>
 			<a href="#" id="toggle">Menu</a>
 			<ul>
-				<li><a href="<?php echo base_url(); ?>">Domov</a></li>
-				<li><a href="<?php echo base_url(); ?>billboards/show/">Mapa billboardov</a></li>
+				<li><a href="<?php echo root_url(); ?>">Domov</a></li>
+				<li><a href="<?php echo root_url(); ?>billboards/show/">Mapa billboardov</a></li>
 				
 				<?php
 				// if ($this->session->userdata('email') != NULL)
 				if ($logged)
 				{
-					echo '<li><a href="'. base_url(). 'auth/logout/">Odhlásiť</a></li>';
+					echo '<li><a href="'. root_url(). 'auth/logout/">Odhlásiť</a></li>';
 				}
 				else
 				{
-					echo '<li><a href="'. base_url(). 'auth/login/">Prihlásenie</a></li>';
-					echo '<li><a href="'. base_url(). 'auth/register/">Registrácia</a></li>';
+					echo '<li><a href="'. root_url(). 'auth/login/">Prihlásenie</a></li>';
+					echo '<li><a href="'. root_url(). 'auth/register/">Registrácia</a></li>';
 				}
 
 				?>
