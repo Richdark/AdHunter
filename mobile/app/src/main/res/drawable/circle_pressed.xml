@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
 
-    <solid android:color="@color/adhunter_deep_purple_800"/>
+    <solid android:color="@color/adhunter_indigo_800_AA"/>
 
     <size
         android:width="96dp"

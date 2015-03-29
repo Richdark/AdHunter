@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/adhunter_deep_purple_500"
+    android:background="@color/adhunter_indigo_500"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/login_edittext"
-            android:textColor="@color/adhunter_deep_purple_800"
+            android:textColor="@color/adhunter_indigo_800"
             android:singleLine="true"
             android:inputType="textNoSuggestions|textEmailAddress"
             android:layout_marginLeft="16dp"
@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/login_edittext"
-            android:textColor="@color/adhunter_deep_purple_800"
+            android:textColor="@color/adhunter_indigo_800"
             android:singleLine="true"
             android:inputType="textNoSuggestions|textPassword"
             android:layout_marginLeft="16dp"

@@ -11,7 +11,7 @@
     </style>
 
     <style name="ActionBar.AdHunter" parent="android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">@color/adhunter_deep_purple_500</item>
+        <item name="android:background">@color/adhunter_indigo_500</item>
         <item name="android:titleTextStyle">@style/ActionBar.AdHunter.TextStyle</item>
     </style>
 

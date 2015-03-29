@@ -68,7 +68,7 @@
             android:background="@drawable/edittext_form"
             android:layout_marginTop="16dp"
             android:padding="12dp"
-            android:textColor="@color/adhunter_deep_purple_800"
+            android:textColor="@color/adhunter_indigo_800"
             android:singleLine="true"
             android:hint="Poznámka"/>
 
