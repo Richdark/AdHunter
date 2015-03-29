@@ -18,10 +18,9 @@ import sk.fiit.adhunter.abs.BaseActivity;
  */
 public class SelectBillboardActivity extends BaseActivity implements View.OnClickListener {
 
+    public static final String EXTRA_BILLBOARD_TYPE = "typeOfBillboard";
     private String mTypeOfBillboard;
-    private ImageView mLastSelected;
     private ImageView mBillboard, mCitylight, mHypercube, mMegaboard, mTrojnozka, mUnknown;
-    EditText mEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,6 @@ public class SelectBillboardActivity extends BaseActivity implements View.OnClic
 
     private void initListeners() {
 
-
         mBillboard = (ImageView) findViewById(R.id.imageView_billboard);
         mBillboard.setOnClickListener(this);
         mCitylight = (ImageView) findViewById(R.id.imageView_citylight);
@@ -55,64 +53,46 @@ public class SelectBillboardActivity extends BaseActivity implements View.OnClic
 
     }
 
-    public String getTypeOfBillboard() {
-        return mTypeOfBillboard;
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imageView_billboard:
 //                mTypeOfBillboard = "billboard";
                 mTypeOfBillboard = "1";
-//                setBillboardClicked(mBillboard);
-                setResult(1, new Intent().putExtra("typeOfBillboard", mTypeOfBillboard));
+                setResult(1, new Intent().putExtra(EXTRA_BILLBOARD_TYPE, mTypeOfBillboard));
                 finish();
                 break;
             case R.id.imageView_megaboard:
 //                mTypeOfBillboard = "megaboard";
                 mTypeOfBillboard = "2";
-//                setBillboardClicked(mMegaboard);
-                setResult(1, new Intent().putExtra("typeOfBillboard", mTypeOfBillboard));
+                setResult(1, new Intent().putExtra(EXTRA_BILLBOARD_TYPE, mTypeOfBillboard));
                 finish();
                 break;
             case R.id.imageView_citylight:
 //                mTypeOfBillboard = "citylight";
                 mTypeOfBillboard = "3";
-//                setBillboardClicked(mCitylight);
-                setResult(1, new Intent().putExtra("typeOfBillboard", mTypeOfBillboard));
+                setResult(1, new Intent().putExtra(EXTRA_BILLBOARD_TYPE, mTypeOfBillboard));
                 finish();
                 break;
             case R.id.imageView_hypercube:
 //                mTypeOfBillboard = "hypercube";
                 mTypeOfBillboard = "4";
-//                setBillboardClicked(mHypercube);
-                setResult(1, new Intent().putExtra("typeOfBillboard", mTypeOfBillboard));
+                setResult(1, new Intent().putExtra(EXTRA_BILLBOARD_TYPE, mTypeOfBillboard));
                 finish();
                 break;
             case R.id.imageView_trojnozka:
 //                mTypeOfBillboard = "trojnozka";
                 mTypeOfBillboard = "5";
-//                setBillboardClicked(mTrojnozka);
-                setResult(1, new Intent().putExtra("typeOfBillboard", mTypeOfBillboard));
+                setResult(1, new Intent().putExtra(EXTRA_BILLBOARD_TYPE, mTypeOfBillboard));
                 finish();
                 break;
             case R.id.imageView_unknown:
 //                mTypeOfBillboard = "unknown";
                 mTypeOfBillboard = "6";
-//                setBillboardClicked(mUnknown);
-                setResult(1, new Intent().putExtra("typeOfBillboard", mTypeOfBillboard));
+                setResult(1, new Intent().putExtra(EXTRA_BILLBOARD_TYPE, mTypeOfBillboard));
                 finish();
                 break;
         }
-    }
-
-    private void setBillboardClicked(ImageView imageView) {
-        if(mLastSelected != null) {
-            mLastSelected.setAlpha(1.0f);
-        }
-        imageView.setAlpha(0.5f);
-        mLastSelected = imageView;
     }
 
     @Override
@@ -128,7 +108,7 @@ public class SelectBillboardActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-        setResult(1, new Intent().putExtra("typeOfBillboard", "notChosen"));
+        setResult(1, new Intent().putExtra(EXTRA_BILLBOARD_TYPE, "notChosen"));
         finish();
     }
 }

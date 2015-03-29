@@ -47,8 +47,6 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_additional_info);
 
-        getServiceInterface().getOwnersList(ownersResponse);
-
         final ActionBar actionBar = getActionBar();
         if(actionBar != null) {
             actionBar.setTitle("Pridať informácie");
@@ -66,19 +64,25 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
 
         mCurrentPhoto = CurrentPhoto.getInstance();
 
-        // preventing string null case
+        // preventing String null case
         mComment.setText("");
         mTypeOfBillboard = "";
         mOwnerSelected = "";
 
         findViewById(R.id.addinfo_button_upload).setOnClickListener(this);
 
+        if (isWifiOrMobileConnected(this)) {
+            getServiceInterface().getOwnersList(ownersResponse);
+        } else {
+            createOfflineOwners();
+        }
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mTypeOfBillboard = data.getStringExtra("typeOfBillboard");
+        mTypeOfBillboard = data.getStringExtra(SelectBillboardActivity.EXTRA_BILLBOARD_TYPE);
 
         if(mTypeOfBillboard.equals("notChosen")) {
             return;
@@ -120,8 +124,8 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
         switch (id) {
             case R.id.addinfo_button_upload:
                 if(isWifiOrMobileConnected(this)) {
-                    mOwnerSelected = mOwnerList.get(mOwnerSpinner.getSelectedItemPosition()).id;
-                    log(TAG, "mOwnerSelected = " + mOwnerSelected);
+//                    mOwnerSelected = mOwnerList.get(mOwnerSpinner.getSelectedItemPosition()).id;
+//                    log(TAG, "mOwnerSelected = " + mOwnerSelected);
 
                     if(mCurrentPhoto != null) {
                         setPhotoAttributes();
@@ -186,18 +190,7 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
         @Override
         public void success(List<Owner> owners, Response response) {
             mOwnerList = new ArrayList<Owner>(owners);
-            mOwnerSpinner.setVisibility(View.VISIBLE);
-
-            List<String> ownerStringList = new ArrayList<String>();
-            for(Owner o : owners) {
-                ownerStringList.add(o.name);
-            }
-
-            mOwnerAdapter = new ArrayAdapter<String>
-                    (AdditionalInfoActivity.this, android.R.layout.simple_spinner_dropdown_item, ownerStringList);
-            if(mOwnerList != null) {
-                mOwnerSpinner.setAdapter(mOwnerAdapter);
-            }
+            initOwnersSpinner();
         }
 
         @Override
@@ -208,8 +201,43 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
 
     public void setPhotoAttributes() {
         mCurrentPhoto.setComment(mComment.getText().toString());
+
+        mOwnerSelected = mOwnerList.get(mOwnerSpinner.getSelectedItemPosition()).id;
         mCurrentPhoto.setOwner(mOwnerSelected);
+
         mCurrentPhoto.setBillboardType(mTypeOfBillboard);
+    }
+
+    private void createOfflineOwners() {
+        mOwnerList = new ArrayList<Owner>();
+        mOwnerList.add(new Owner("4", "Akzent Media"));
+        mOwnerList.add(new Owner("2", "Arton"));
+        mOwnerList.add(new Owner("7", "Bigboard"));
+        mOwnerList.add(new Owner("8", "Bigmedia"));
+        mOwnerList.add(new Owner("1", "euroAWK"));
+        mOwnerList.add(new Owner("5", "ISPA"));
+        mOwnerList.add(new Owner("6", "Nubium"));
+        mOwnerList.add(new Owner("9", "Present"));
+        mOwnerList.add(new Owner("10", "Recar"));
+        mOwnerList.add(new Owner("3", "XLMedia"));
+
+        initOwnersSpinner();
+
+    }
+
+    private void initOwnersSpinner() {
+        mOwnerSpinner.setVisibility(View.VISIBLE);
+        List<String> ownerStringList = new ArrayList<String>();
+        for(Owner o : mOwnerList) {
+            ownerStringList.add(o.name);
+            log(TAG, o.name);
+        }
+        mOwnerAdapter = new ArrayAdapter<String>
+                (AdditionalInfoActivity.this, android.R.layout.simple_spinner_dropdown_item, ownerStringList);
+
+        if(mOwnerList != null) {
+            mOwnerSpinner.setAdapter(mOwnerAdapter);
+        }
     }
 
     @Override

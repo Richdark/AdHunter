@@ -7,6 +7,13 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Owner {
 
+    public Owner() {}
+
+    public Owner(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @SerializedName("id")
     public String id;
 
