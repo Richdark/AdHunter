@@ -26,7 +26,8 @@
 
         </activity>
         <activity android:name="sk.fiit.adhunter.activities.AlreadyOnlineActivity" />
-        <activity android:name="sk.fiit.adhunter.activities.SettingsActivity" />
+        <activity android:name="sk.fiit.adhunter.activities.SettingsActivity"
+            android:icon="@drawable/login01" />
 
         <activity android:name=".activities.AdditionalInfoActivity"
             android:icon="@drawable/login01"

@@ -7,11 +7,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -22,10 +24,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -58,6 +58,10 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
         LocationListener, RequestInterceptor, ErrorHandler {
 
     private static final String TAG = "BaseActivity";
+
+    public static final String PREF_KEY_CONNECTION_TYPE = "pref_connectionType";
+    public static final String PREF_ENTRY_WIFI = "wifi";
+    public static final String PREF_ENTRY_WIFI_AND_MOBILE = "wifi_and_mobile";
 
     private LocationRequest mLocationRequest;
     protected LocationManager mLocationManager;
@@ -142,12 +146,27 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
         return super.onOptionsItemSelected(item);
     }
 
+    public boolean isConnected() {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.getString(PREF_KEY_CONNECTION_TYPE, "").equals(PREF_ENTRY_WIFI)) {
+            log(TAG, "only wifi is set");
+            return isWiFiConnected(this);
+        } else if (sharedPreferences.getString(PREF_KEY_CONNECTION_TYPE, "").equals(PREF_ENTRY_WIFI_AND_MOBILE)) {
+            log(TAG, "wifi+mobile is set");
+            return isWifiOrMobileConnected(this);
+        } else {
+            return false;
+        }
+
+    }
+
     /**
      *
      * @param context Context of calling activity.
      * @return true if WiFi is enabled and connected, otherwise false
      */
-    public static boolean isWiFiConnected(Context context) {
+    public boolean isWiFiConnected(Context context) {
         ConnectivityManager cm =
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 

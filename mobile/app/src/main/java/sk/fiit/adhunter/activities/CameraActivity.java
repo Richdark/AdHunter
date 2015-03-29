@@ -126,10 +126,11 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     }
 
     /**
-     * Initializes all the views used in this activity.
+     * Initializes all the views and listeners used in this activity.
      */
     private void initViews() {
         isPreviewStopped = false;
+
         mCaptureButton = (ImageButton) findViewById(R.id.button_capture);
         mCaptureButton.setOnClickListener(this);
         mUploadButton = (ImageButton) findViewById(R.id.button_upload);
@@ -154,63 +155,77 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View view) {
 
-        if(view.getId() == R.id.button_capture) {
-            if(isPreviewStopped) {
-                mCamera.startPreview();
+        int id = view.getId();
 
-                mCaptureButton.setBackgroundResource(R.drawable.circle_selector);
-                mCaptureButton.setImageResource(R.drawable.ic_image_camera_alt);
-                mUploadButton.setAnimation(createAnimation(android.R.anim.fade_out));
-                mUploadButton.setVisibility(View.GONE);
-                mAddButton.setAnimation(createAnimation(android.R.anim.fade_out));
-                mAddButton.setVisibility(View.GONE);
-                isPreviewStopped = false;
-            } else {
-                //get an image from the camera; here the user gets first time after taking photo
-                if(mLocation != null) {
-                    mCamera.takePicture(null, null, mPicture);
-                    isPreviewStopped = true;
-                    playCameraSound();
+        switch (id) {
+            case R.id.button_capture:
+                if(isPreviewStopped) {
+                    mCamera.startPreview();
 
                     mCaptureButton.setBackgroundResource(R.drawable.circle_selector);
-                    mCaptureButton.setImageResource(R.drawable.ic_av_replay);
-
-                    mUploadButton.setAnimation(createAnimation(android.R.anim.fade_in));
-                    mUploadButton.setVisibility(View.VISIBLE);
-                    mAddButton.setAnimation(createAnimation(android.R.anim.fade_in));
-                    mAddButton.setVisibility(View.VISIBLE);
+                    mCaptureButton.setImageResource(R.drawable.ic_image_camera_alt);
+                    mUploadButton.setAnimation(createAnimation(android.R.anim.fade_out));
+                    mUploadButton.setVisibility(View.GONE);
+                    mAddButton.setAnimation(createAnimation(android.R.anim.fade_out));
+                    mAddButton.setVisibility(View.GONE);
+                    isPreviewStopped = false;
 
                 } else {
-                    toastLong(getString(R.string.gps_not_found));
-                }
-            }
-        } else if(view.getId() == R.id.button_upload) {
-            if(isWifiOrMobileConnected(CameraActivity.this)) {
-                //photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
-//                new UploadPhotoTask(CameraActivity.this, new UploadPhotoCompleteListener()).execute(mCurrentPhoto);
-                getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mCurrentPhoto.getImageByteArray()),
-                        new TypedString(String.valueOf(mCurrentPhoto.getLatitude())),
-                        new TypedString(String.valueOf(mCurrentPhoto.getLongitude())),
-                        new TypedString(mCurrentPhoto.getComment()),
-                        new TypedString(mCurrentPhoto.getBillboardType()),
-                        new TypedString(mCurrentPhoto.getOwner()),
-                        uploadResponse);
-            } else {
-                //save photo to the ArrayList and notify user about uploading photo next time he connects to the internet
-                sPhotoList.add(mCurrentPhoto);
-                serializeList(sPhotoList);
-                toastLong(getString(R.string.not_connected));
-            }
+                    //get an image from the camera; here the user gets first time after taking photo
+                    if(mLocation != null) {
+                        mCamera.takePicture(null, null, mPicture);
+                        isPreviewStopped = true;
+                        playCameraSound();
 
-        } else if(view.getId() == R.id.button_add) {
-            Intent intent = new Intent(CameraActivity.this, AdditionalInfoActivity.class);
-            startActivity(intent);
-            finish();
-        } else if(view.getId() == R.id.button_logout) {
-            logoutUser();
-        } else if(view.getId() == R.id.button_settings) {
-            log(TAG, "button_settings clicked");
-            startActivity(new Intent(CameraActivity.this, SettingsActivity.class));
+                        mCaptureButton.setBackgroundResource(R.drawable.circle_selector);
+                        mCaptureButton.setImageResource(R.drawable.ic_av_replay);
+
+                        mUploadButton.setAnimation(createAnimation(android.R.anim.fade_in));
+                        mUploadButton.setVisibility(View.VISIBLE);
+                        mAddButton.setAnimation(createAnimation(android.R.anim.fade_in));
+                        mAddButton.setVisibility(View.VISIBLE);
+
+                    } else {
+                        toastLong(getString(R.string.gps_not_found));
+                    }
+                }
+                break;
+
+            case R.id.button_upload:
+                if(isConnected()) {
+                    //photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
+                    getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mCurrentPhoto.getImageByteArray()),
+                            new TypedString(String.valueOf(mCurrentPhoto.getLatitude())),
+                            new TypedString(String.valueOf(mCurrentPhoto.getLongitude())),
+                            new TypedString(mCurrentPhoto.getComment()),
+                            new TypedString(mCurrentPhoto.getBillboardType()),
+                            new TypedString(mCurrentPhoto.getOwner()),
+                            uploadResponse);
+                } else {
+                    //save photo to the ArrayList and notify user about uploading photo next time he connects to the internet
+                    sPhotoList.add(mCurrentPhoto);
+                    serializeList(sPhotoList);
+                    toastLong(getString(R.string.not_connected));
+                }
+                break;
+
+            case R.id.button_add:
+                Intent intent = new Intent(CameraActivity.this, AdditionalInfoActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+
+            case R.id.button_logout:
+                logoutUser();
+                break;
+
+            case R.id.button_settings:
+                startActivity(new Intent(CameraActivity.this, SettingsActivity.class));
+                break;
+
+            default:
+                break;
+
         }
 
     }
@@ -307,7 +322,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 return;
             }
 
-            //Fill the file with image/video bytes
+            // Fill the file with image/video bytes
             try {
                 //Transform to Base64 file
                 String imageDataString = Base64.encodeToString(bytes, Base64.DEFAULT);
@@ -335,13 +350,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         isWifiOrMobileOn = isWifiOrMobileConnected(this);
     }
 
-    private class UploadPhotoCompleteListener implements AsyncTaskCompleteListener {
-        @Override
-        public void onTaskComplete() {
-            Log.d(TAG, "onTaskComplete, mehehe");
-        }
-    }
-
     private Callback<Response> uploadResponse = new Callback<Response>() {
         @Override
         public void success(Response response, Response response2) {
@@ -352,18 +360,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void failure(RetrofitError error) {
             log(TAG, "failure = " + error.getMessage());
-        }
-    };
-
-    private Callback<Response> ownersResponse = new Callback<Response>() {
-        @Override
-        public void success(Response response, Response response2) {
-            toastShort("owners successfully loaded");
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            toastShort("loading owners failed");
         }
     };
 
@@ -385,7 +381,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
     public void playCameraSound() {
         mSoundPool.play(mSoundId, 1.0f, 1.0f, 1, 0, 1);
-
     }
 
     @Override
