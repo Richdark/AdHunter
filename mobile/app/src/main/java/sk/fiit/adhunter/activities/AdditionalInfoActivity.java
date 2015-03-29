@@ -124,8 +124,6 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
         switch (id) {
             case R.id.addinfo_button_upload:
                 if(isWifiOrMobileConnected(this)) {
-//                    mOwnerSelected = mOwnerList.get(mOwnerSpinner.getSelectedItemPosition()).id;
-//                    log(TAG, "mOwnerSelected = " + mOwnerSelected);
 
                     if(mCurrentPhoto != null) {
                         setPhotoAttributes();
@@ -230,7 +228,6 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
         List<String> ownerStringList = new ArrayList<String>();
         for(Owner o : mOwnerList) {
             ownerStringList.add(o.name);
-            log(TAG, o.name);
         }
         mOwnerAdapter = new ArrayAdapter<String>
                 (AdditionalInfoActivity.this, android.R.layout.simple_spinner_dropdown_item, ownerStringList);

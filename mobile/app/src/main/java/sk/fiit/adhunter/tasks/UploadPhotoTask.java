@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import sk.fiit.adhunter.AsyncTaskCompleteListener;
 import sk.fiit.adhunter.models.Photo;
+import sk.fiit.adhunter.utils.Config;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -24,7 +25,7 @@ import java.net.URL;
  */
 public class UploadPhotoTask extends AsyncTask<Photo, Integer, String> {
     private static final String TAG = "UploadPhotoTask";
-    private static final String URL = "http://team14-14.ucebne.fiit.stuba.sk/adhunter/billboards/add";
+    private static final String URL = Config.ENDPOINT_URL + "/billboards/add";
 
     private Context mContext;
     private Photo mPhoto;
