@@ -62,6 +62,7 @@ class Auth extends MY_Controller
 					// show view for web version
 					if ($this->user->device_type == 'w')
 					{
+						header('Location: '. root_url());
 						$this->load->template('login_successful', $vars);
 					}
 

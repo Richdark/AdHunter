@@ -24,7 +24,20 @@ class Online_user_model extends CI_Model
 		);
 
 		// insert into ...
-		$this->db->insert('online_users', $data);
+		$this->db->select('id')->from('online_users')->where('uid', $uid);
+		$query = $this->db->get()->result();
+		
+		// uid not found
+		if (count($query) == 0)
+		{
+			$this->db->insert('online_users', $data);
+		}
+
+		// uid already exists
+		else
+		{
+			//
+		}
 	}
 
 	function logout_user($uid, $type)
