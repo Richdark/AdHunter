@@ -3,6 +3,11 @@
 class MY_Loader extends CI_Loader
 {
     /**
+     * Reference to an user model helper class
+    */
+    public $user;
+
+    /**
      * Custom view loader
      *
      * Three versions of layout - 'regular', 'map' or 'landing'
@@ -15,6 +20,7 @@ class MY_Loader extends CI_Loader
             $vars['title'] = 'AdHunter';
         }
 
+        $vars['_user']          = $this->user;
         $vars['layout_version'] = (in_array($version, array('regular', 'map', 'landing'))? $version : 'regular');
 
         // load header

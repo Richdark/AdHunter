@@ -58,6 +58,21 @@ class Online_user_model extends CI_Model
 			return false;
 		}
 	}
+
+	function get_user_info($uid)
+	{
+		$this->db->select('user_id, email')->from('online_users')->join('users', 'online_users.user_id = users.id')->where('uid', $uid);
+		$query = $this->db->get()->result();
+
+		if (count($query) > 0)
+		{
+			return $query[0];
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 ?>

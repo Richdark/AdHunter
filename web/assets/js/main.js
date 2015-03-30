@@ -28,7 +28,6 @@ function change_slide(delay, transition_time)
 
 	// next slide
 	var next = (current < (slides.length - 1))? current + 1 : 0;
-	console.log(slides[current]);
 
 	slides[current].fadeOut(transition_time, function() { $(this).removeClass('current'); });
 	slides[next].fadeIn(transition_time, function() { $(this).addClass('current'); });

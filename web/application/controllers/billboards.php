@@ -5,13 +5,17 @@
 */
 class Billboards extends MY_Controller
 {
+	function __construct()
+	{
+		parent::__construct();
+	}
+
 	/**
 	 * funkcia zobrazi view s hlavnou ponukou
 	*/
 	public function index()
 	{
-		$vars['logged'] = $this->is_logged();
-		$this->load->template('home_page', $vars, 'landing');
+		$this->load->template('home_page', NULL, 'landing');
 	}
 
 	/**
@@ -21,17 +25,19 @@ class Billboards extends MY_Controller
 	*/
 	public function get_catches()
 	{
-		$user_id = $this->is_logged() ? $this->get_user_id() : -1;
+		header('Content-type: application/json');
+
+		$user_id = $this->user->logged ? $this->user->id : -1;
 		$this->load->model('Catch_model', 'model');
 		$result = $this->model->get_all($user_id);
 
 		$json = array();
+		
 		foreach ($result as $row)
 		{
 			$json[] = $row;
 		}
 
-		header('Content-type: application/json');
 		echo json_encode($json);
 	}
 
@@ -44,9 +50,9 @@ class Billboards extends MY_Controller
 		//    '0' => merged into different catch
 		//    '1' => default (not merged)
 		
-		if ($this->is_logged())
+		if ($this->user->logged)
 		{
-			$user_id = $this->get_user_id();
+			$user_id = $this->user->id;
 
 			$main   = (is_numeric($_GET['main']))? $_GET['main'] : -1;
 			$merged = $_GET['merged'];
@@ -166,7 +172,7 @@ class Billboards extends MY_Controller
 		$comment = !empty($_POST["comment"]) ? htmlspecialchars($_POST["comment"]) : null;
 		$backing_type = !empty($_POST["backing_type"]) ? $_POST["backing_type"] : null;
 		$owner_id = !empty($_POST["owner_id"]) ? $_POST["owner_id"] : null;
-		$user_id = $this->is_logged() ? $this->get_user_id() : null;
+		$user_id = $this->user->logged ? $this->user->id : null;
 
 		// vlozenie do databazy prostrednictvom modelu
 		$this->load->model('Catch_model', 'model');
@@ -187,7 +193,7 @@ class Billboards extends MY_Controller
 	 */
 	public function update()
 	{
-		if(empty($_POST["catch_id"]) || !$this->is_logged()) {
+		if(empty($_POST["catch_id"]) || !$this->user->logged) {
 			die("error");
 		}
 
@@ -207,7 +213,7 @@ class Billboards extends MY_Controller
 	 */
 	public function delete()
 	{
-		if(empty($_POST["catch_id"]) || !$this->is_logged()) {
+		if(empty($_POST["catch_id"]) || !$this->user->logged) {
 			die("error");
 		}
 
@@ -229,11 +235,11 @@ class Billboards extends MY_Controller
 	public function show()
 	{
 		$this->load->model('Owner_model', 'model');
+		
 		$owners = $this->model->get_all();
-		$vars = array(
-			'owners'  => $owners,
-			'logged'  => $this->is_logged(),
-			'user_id' => $this->get_user_id()
+		$vars   = array(
+			'page_title' => 'Mapa reklám',
+			'owners'     => $owners
 		);
 
 		$this->load->template('show_billboard', $vars, 'map');

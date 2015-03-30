@@ -2,6 +2,11 @@
 
 class Auth extends MY_Controller
 {
+	function __construct()
+	{
+		parent::__construct();
+	}
+
 	/**
 	 * Funckcia zobrazi view login s prihlasovacim formularom
 	*/
@@ -17,7 +22,7 @@ class Auth extends MY_Controller
 			$email          = $_POST['email'];
 			$typed_password = $_POST['password'];
 
-			if (self::$type == 'w')
+			if ($this->user->device_type == 'w')
 			{
 				@session_start();
 				$uid = session_id();
@@ -31,8 +36,6 @@ class Auth extends MY_Controller
 			
 			$result  = $this->model->get_user_by_login($email);
 			$row_cnt = sizeof($result);
-			
-			$vars['logged'] = $this->is_logged();
 			
 			// login not found
 			if ($row_cnt == 0)
@@ -54,12 +57,10 @@ class Auth extends MY_Controller
 
 				if ($db_password == $hashed_password)
 				{
-					$this->Online_user_model->login_user('DEFAULT', $user_id, $uid, self::$type);
-					
-					$vars['logged'] = $this->is_logged();
+					$this->Online_user_model->login_user('DEFAULT', $user_id, $uid, $this->user->device_type);
 					
 					// show view for web version
-					if (self::$type == 'w')
+					if ($this->user->device_type == 'w')
 					{
 						$this->load->template('login_successful', $vars);
 					}
@@ -78,7 +79,6 @@ class Auth extends MY_Controller
 		}
 		else
 		{
-			$vars['logged'] = $this->is_logged();
 			$this->load->template('login', $vars);
 		}
 	}
@@ -89,8 +89,7 @@ class Auth extends MY_Controller
 	public function logout()
 	{
 		$this->logout_user();
-		$vars['logged'] = $this->is_logged();
-		$this->load->template('logout', $vars);
+		$this->load->template('logout');
 	}
 
 	/**
@@ -127,32 +126,25 @@ class Auth extends MY_Controller
 			// all fields are valid
 			if (empty($vars['invalid_fields']))
 			{
-				$email    = $_POST['email'];
-				$password = $_POST['password'] ;
-				$name     = $_POST['name'];
-				$surname  = $_POST['surrname'];
-				$salt     = $this->generate_salt(32);
+				$email      = $_POST['email'];
+				$password   = $_POST['password'] ;
+				$name       = $_POST['name'];
+				$surname    = $_POST['surrname'];
+				$salt       = $this->generate_salt(32);
+				$h_password = $this->hash_password($password, $salt);
 
-				$hashed_password = $this->hash_password($password, $salt);
-
-				$this->model->save_user('DEFAULT', $name, $surname, $email, $hashed_password, $salt);
-				
-				$vars['logged'] = $this->is_logged();
+				$this->model->save_user('DEFAULT', $name, $surname, $email, $h_password, $salt);
 				$this->load->template('registration_successful', $vars);
 			}
 
 			// one or more fields are invalid
 			else
 			{
-				$vars['logged'] = $this->is_logged();
-
 				$this->load->template('register', $vars);
 			}
 		}
 		else
 		{
-			$vars['logged'] = $this->is_logged();
-			
 			$this->load->template('register', $vars);
 		}
 	}
@@ -208,71 +200,8 @@ class Auth extends MY_Controller
 
 		$this->load->model('user_model','model');
 		$this->model->save_user('DEFAULT',$name,$surname,$email,$hashed_password,$salt);
-		$vars['logged'] = $this->is_logged();
 		$this->load->template('registration_successful', $vars);
 	}
-
-	/**
-	 * Funkcia overujuca spravnost zadanych prihlasovacich udajov na zaklade udajov poskytnutych
-	 * v prihlasovacom formulari pokial su spravne zobrzi view o uspesnosti prihlasenia v opacnom pripade o neuspesnosti
-	*/
-	// POST http://adhunter.eu/auth/login_user/ email&password&uid
-	/*
-	public function login_user()
-	{
-		$email          = $_POST['email'];
-		$typed_password = $_POST['password'];
-		$type           = parent::$type;
-
-		if ($type == 'w')
-		{
-			@session_start();
-			$uid = session_id();
-		}
-		else
-		{
-			$uid = $_POST['uid'];
-		}
-
-		$this->load->model('user_model','model');
-		
-		$result  = $this->model->get_user_by_login($email);
-		$row_cnt = sizeof($result);
-		
-		$vars['logged'] = $this->is_logged();
-		
-		if ($row_cnt == 0)						// login not found
-		{
-			$this->load->template('login_failed', $vars);
-		}
-		else
-		{
-			foreach ($result as $row)
-			{
-				$user_id     = $row->id;
-				$db_password = $row->password;
-				$salt        = $row->salt;
-			}
-
-			$hashed_password = $this->hash_password($typed_password,$salt);
-
-			if ($db_password == $hashed_password)
-			{
-				$this->Online_user_model->login_user('DEFAULT',$user_id,$uid,$type);
-				$vars['logged'] = $this->is_logged();
-				if ($type == 'w') {
-					$this->load->template('login_successful', $vars);
-				} else {
-					echo "OK";
-				}
-			}
-			else
-			{
-				$this->load->template('login_failed', $vars);
-			}
-		}
-	}
-	*/
 
 	/**
 	 * Funkcia na odhlasenie pouzivatela
@@ -280,8 +209,7 @@ class Auth extends MY_Controller
 	// POST http://adhunter.eu/auth/logout_user/ uid
 	public function logout_user()
 	{
-		$type = parent::$type;
-		if ($type == 'w')
+		if ($this->user->device_type == 'w')
 		{
 			@session_start();
 			$uid = session_id();
@@ -290,8 +218,11 @@ class Auth extends MY_Controller
 		{
 			$uid = $_POST['uid'];
 		}
-		$this->Online_user_model->logout_user($uid,$type);
-		if ($type != 'w') {
+
+		$this->Online_user_model->logout_user($uid, $this->user->device_type);
+		
+		if ($this->user->device_type != 'w')
+		{
 			echo "OK";
 		}
 	}

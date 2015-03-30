@@ -21,7 +21,7 @@
 				?>
 			</span><br />
 			<span class="with_hint">
-				<input type="text" name="password" value="Heslo"<?php if (isset($invalid_fields['password'])) { echo ' class = "invalid"'; } ?> onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Heslo'}" onkeyup="this.type = (this.value == '') ? 'text' : 'password'">
+				<input type="password" name="password" value="Heslo"<?php if (isset($invalid_fields['password'])) { echo ' class = "invalid"'; } ?> onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Heslo'}">
 				<?php
 				if (isset($invalid_fields['password']) and ($invalid_fields['password'] == 'invform'))
 				{

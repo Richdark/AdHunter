@@ -85,7 +85,7 @@
 
 				<!-- OPTIONS -->
 				<?php
-				if ($logged)
+				if ($_user->logged)
 				{
 				?>
 				<div class="options">

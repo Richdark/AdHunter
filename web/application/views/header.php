@@ -8,8 +8,6 @@
 	<link rel="stylesheet" href="<?php echo assets_url(); ?>css/normalize.css">
 	<link rel="stylesheet" href="<?php echo assets_url(); ?>css/style.css">
 	<link rel="stylesheet" href="<?php echo assets_url(); ?>css/responsive.css">
-	<!-- <link href='http://fonts.googleapis.com/css?family=Noto+Sans:400,700' rel='stylesheet' type='text/css'> -->
-	<!-- <link href='http://fonts.googleapis.com/css?family=Cabin+Condensed:600' rel='stylesheet' type='text/css'> -->
 	<link rel='shortcut icon' type='image/x-icon' href='<?php echo assets_url(); ?>/img/favicon.ico'>
 
 	<script type="text/javascript" src="<?php echo assets_url(); ?>js/jquery-2.1.1.min.js"></script>
@@ -27,8 +25,7 @@
 				<li><a href="<?php echo root_url(); ?>billboards/show/">Mapa billboardov</a></li>
 				
 				<?php
-				// if ($this->session->userdata('email') != NULL)
-				if ($logged)
+				if ($_user->logged)
 				{
 					echo '<li><a href="'. root_url(). 'auth/logout/">Odhlásiť</a></li>';
 				}

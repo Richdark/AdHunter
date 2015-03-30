@@ -2,12 +2,16 @@
 
 class MY_Controller extends CI_Controller
 {
-    public static $type = 'w';
+    /**
+     * Current user
+    */
+    public $user;
 
     public function __construct()
     {
         parent::__construct();
 
+        $this->user = new UserModelHelper();
         $this->load->model('Online_user_model');
         
         if (array_key_exists('HTTP_USER_AGENT', $_SERVER))
@@ -16,19 +20,21 @@ class MY_Controller extends CI_Controller
             '|s(ymbian|eries60|amsung)|p(laybook|alm|rofile/midp|laystation portable)|nokia|fennec|htc[\-_]'.
             '|mobile|up\.browser|[1-4][0-9]{2}x[1-4][0-9]{2})\b#i', $_SERVER['HTTP_USER_AGENT']);
 
-            self::$type = $ret ? 'm' : 'w';
+            $this->user->device_type = $ret ? 'm' : 'w';
         }
         
         @session_start();
-    }
 
-    public function is_logged()
-    {
-        return $this->Online_user_model->is_logged(session_id(), self::$type);
-    }
+        // fill user model with data
+        $this->user->logged = $this->Online_user_model->is_logged(session_id(), $this->user->device_type);
+        $user_info          = $this->Online_user_model->get_user_info(session_id());
+        
+        if ($user_info)
+        {
+            $this->user->id    = $user_info->user_id;
+            $this->user->email = $user_info->email;
+        }
 
-    public function get_user_id()
-    {
-        return $this->Online_user_model->get_user_id(session_id());
+        $this->load->user = $this->user;
     }
 }

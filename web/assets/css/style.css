@@ -111,6 +111,15 @@ footer {
 	text-align: center;
 }
 
+	footer a {
+		color: #8a0202;
+		text-decoration: underline;
+	}
+
+	footer a:hover {
+		text-decoration: none;
+	}
+
 body.landing footer {
 	position: relative;
 	bottom: auto;
