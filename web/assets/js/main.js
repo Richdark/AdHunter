@@ -1,3 +1,41 @@
+// landing page app screens slideshow
+function init_slideshow(delay, transition_time)
+{
+	$(window).load(function()
+	{
+		setTimeout(function() { change_slide(delay, transition_time); }, delay - transition_time);
+	});
+}
+
+// change slideshow slide
+function change_slide(delay, transition_time)
+{
+	var slides  = [];
+	var current = -1;
+	var i       = -1;
+
+	// fill an array with slide references
+	$('.landing .slideshow img').each(function()
+	{
+		slides.push($(this));
+		i++;
+
+		if ($(this).hasClass('current'))
+		{
+			current = i;
+		}
+	});
+
+	// next slide
+	var next = (current < (slides.length - 1))? current + 1 : 0;
+	console.log(slides[current]);
+
+	slides[current].fadeOut(transition_time, function() { $(this).removeClass('current'); });
+	slides[next].fadeIn(transition_time, function() { $(this).addClass('current'); });
+
+	setTimeout(function() { change_slide(delay, transition_time); }, delay);
+}
+
 // render specific billboard and add click event, if fire is set to true, than infoWindow will open
 function addBillboard(billboard, open)
 {

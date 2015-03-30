@@ -144,7 +144,7 @@ body.landing footer {
 			text-align: center;
 		}
 
-			.app .image {
+			.app .slideshow {
 				position: absolute;
 				left: 10px;
 				bottom: 160px;
@@ -153,10 +153,15 @@ body.landing footer {
 				background: url('../img/hand.png') center no-repeat;
 			}
 
-				.app .image > img {
+				.app .slideshow > img {
+					display: none;
 					position: absolute;
 					left: 180px;
 					top: 61px;
+				}
+
+				.app .slideshow > img.current {
+					display: block;
 				}
 
 			.app .text {

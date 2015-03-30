@@ -4,8 +4,10 @@
 					<p>Bojuj proti vizuálnemu smogu, zlepši verejný priestor, skrášli svoje mesto.</p>
 					<a href="https://play.google.com/store/apps/details?id=sk.fiit.adhunter" class="download"></a>
 				</div>
-				<div class="image">
-					<img src="assets/img/screen1.png" />
+				<div class="slideshow">
+					<img src="assets/img/screen1.png" class="current" />
+					<img src="assets/img/screen2.png" />
+					<img src="assets/img/screen3.png" />
 				</div>
 			</div>
 		</div>
@@ -38,3 +40,6 @@
 	</div>
 
 	<script src="<?php echo assets_url(); ?>js/main.js"></script>
+	<script>
+	init_slideshow(6000, 2000);
+	</script>
