@@ -63,7 +63,6 @@ class Auth extends MY_Controller
 					if ($this->user->device_type == 'w')
 					{
 						header('Location: '. root_url());
-						$this->load->template('login_successful', $vars);
 					}
 
 					// return JSON for mobile version
@@ -74,7 +73,8 @@ class Auth extends MY_Controller
 				}
 				else
 				{
-					$this->load->template('login_failed', $vars);
+					array_push($vars['invalid_fields'], 'password');
+					$this->load->template('login', $vars);
 				}
 			}
 		}
@@ -90,7 +90,8 @@ class Auth extends MY_Controller
 	public function logout()
 	{
 		$this->logout_user();
-		$this->load->template('logout');
+		
+		header('Location: '. root_url());
 	}
 
 	/**
@@ -135,6 +136,8 @@ class Auth extends MY_Controller
 				$h_password = $this->hash_password($password, $salt);
 
 				$this->model->save_user('DEFAULT', $name, $surname, $email, $h_password, $salt);
+				
+				$vars['page_title'] = 'Registrácia úspešná';
 				$this->load->template('registration_successful', $vars);
 			}
 

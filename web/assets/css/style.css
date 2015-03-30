@@ -265,6 +265,20 @@ body.landing footer {
 		box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.05);
 	}
 
+		.content_regular > .content p {
+			padding: 20px;
+		}
+
+		.content_regular > .content a {
+			color: #8a0202;
+			text-decoration: underline;
+		}
+
+		.content_regular > .content a:hover {
+			text-decoration: none;
+		}
+
+
 /* =======================================
    ---------------- MAP ------------------
    ======================================= */
