@@ -265,6 +265,44 @@ body.landing footer {
 		box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.05);
 	}
 
+		.content_regular > .content nav.profile {
+			float: left;
+			width: 299px;
+			background: #fafafa;
+			border-right: 1px #c0c0c0 solid;
+		}
+
+			.content_regular > .content nav.profile ul {
+				display: block;
+				padding: 20px;
+				list-style: none;
+			}
+
+				.content_regular > .content nav.profile ul li a {
+					display: block;
+					padding: 10px;
+					text-decoration: none;
+					transition: background-color 0.2s;
+				}
+
+				.content_regular > .content nav.profile ul li a:hover,
+				.content_regular > .content nav.profile ul li a.current {
+					background: #8a0202;
+					color: #fff;
+				}
+
+		.content_regular > .content .profile_content {
+			float: left;
+			display: block;
+			max-width: 860px;
+			padding: 20px;
+		}
+
+		.content_regular > .content .clear {
+			display: block;
+			clear: left;
+		}
+
 		.content_regular > .content p {
 			padding: 20px;
 		}
