@@ -208,6 +208,7 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
 
     private void createOfflineOwners() {
         mOwnerList = new ArrayList<Owner>();
+        mOwnerList.add(new Owner("-1", "Vyberte vlastníka"));
         mOwnerList.add(new Owner("4", "Akzent Media"));
         mOwnerList.add(new Owner("2", "Arton"));
         mOwnerList.add(new Owner("7", "Bigboard"));
