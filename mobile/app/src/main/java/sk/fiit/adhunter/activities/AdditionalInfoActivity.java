@@ -25,6 +25,7 @@ import sk.fiit.adhunter.abs.BaseActivity;
 import sk.fiit.adhunter.models.CurrentPhoto;
 import sk.fiit.adhunter.models.Owner;
 import sk.fiit.adhunter.models.Photo;
+import sk.fiit.adhunter.services.io.GetUploadResponse;
 import sk.fiit.adhunter.utils.Strings;
 
 /**
@@ -173,18 +174,18 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    private Callback<Response> uploadResponse = new Callback<Response>() {
+    private Callback<GetUploadResponse> uploadResponse = new Callback<GetUploadResponse>() {
         @Override
-        public void success(Response response, Response response2) {
+        public void success(GetUploadResponse getUploadResponse, Response response) {
             dismissProgressDialog();
-            toastShort(Strings.parseHtmlResponse(response, "h1"));
+            toastShort(getUploadResponse.status);
             startActivity(new Intent(AdditionalInfoActivity.this, CameraActivity.class));
             finish();
         }
 
         @Override
         public void failure(RetrofitError error) {
-            log(TAG, "failure = " + error.getMessage());
+            toastLong(error.getMessage());
         }
     };
 

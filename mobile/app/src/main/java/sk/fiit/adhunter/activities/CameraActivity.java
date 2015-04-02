@@ -26,6 +26,7 @@ import sk.fiit.adhunter.AsyncTaskCompleteListener;
 import sk.fiit.adhunter.models.CurrentPhoto;
 import sk.fiit.adhunter.models.Photo;
 import sk.fiit.adhunter.models.User;
+import sk.fiit.adhunter.services.io.GetUploadResponse;
 import sk.fiit.adhunter.utils.Config;
 import sk.fiit.adhunter.utils.FileUtils;
 import sk.fiit.adhunter.utils.SerializationUtils;
@@ -351,17 +352,17 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         isWifiOrMobileOn = isWifiOrMobileConnected(this);
     }
 
-    private Callback<Response> uploadResponse = new Callback<Response>() {
+    private Callback<GetUploadResponse> uploadResponse = new Callback<GetUploadResponse>() {
         @Override
-        public void success(Response response, Response response2) {
+        public void success(GetUploadResponse getUploadResponse, Response response2) {
             dismissProgressDialog();
-            toastShort(Strings.parseHtmlResponse(response, "h1"));
+            toastShort(getUploadResponse.status);
             mCamera.startPreview();
         }
 
         @Override
         public void failure(RetrofitError error) {
-            log(TAG, "failure = " + error.getMessage());
+            toastLong(error.getMessage());
         }
     };
 
