@@ -71,10 +71,8 @@ function addBillboard(billboard, open)
 		$("#info-content").find(".uploaded").text(marker.uploaded);
 		$("#info-content").find(".comment").text(marker.comment ? marker.comment : "");
 		$("#info-content").find(".type img").hide();
-		if(marker.backing_type)
-		{
-			$("#info-content").find(".type img").eq(marker.backing_type-1).show();
-		}
+		$("#info-content").find(".type img").eq(marker.backing_type ? marker.backing_type-1 : 5).show();
+
 		var current = $("#info-content").find(".billboard").attr("src");
 		if (current == "../../assets/pics/" + marker.billboard) {
 			if (open) {
@@ -126,19 +124,23 @@ function handleAdd(billboard_img)
 {
 	var adding = false;
 	
-	$("#add").click(function()
-	{
-		alert("Kliknite na mapu pre vyznačenie pozície nájdeného billboardu.");
+	$("#add").click(function() {
+		$("#panel .right").toggle();
 		adding = true;
 		map.setOptions({ draggableCursor: "crosshair" });
 
 		return false;
 	});
 
-	$("#map").on("mousedown", function (e)
-	{
-		if (adding)
-		{
+	$("#add-form .close").click(function() {
+		$("#add-form").hide();
+		$("#panel .right").toggle();
+
+		return false;
+	});
+
+	$("#map").on("mousedown", function (e) {
+		if (adding) {
 			var w = $(this).width();
 			var h = $(this).height();
 
@@ -407,6 +409,11 @@ function initSidebar() {
 		return false;
 	}).on("click", "a.edit", function() {
 		map_sidebar_edit();
+		return false;
+	});
+
+	$(".sidebar .close").click(function() {
+		closeSidebar();
 		return false;
 	});
 

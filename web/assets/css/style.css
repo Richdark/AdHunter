@@ -372,6 +372,14 @@ body.landing footer {
 				display: none;
 			}
 
+a.close {
+	position: absolute;
+	right: 10px;
+	top: 5px;
+	text-decoration: none;
+	color: #000;
+}
+
 .sidebar {
 	display: none;
 	position: absolute;
@@ -462,29 +470,33 @@ body.landing footer {
 	width: 100%;
 }
 
-	#panel > a {
-		display: inline-block;
-		padding: 5px;
+	#panel .right {
 		border: 1px #aaa solid;
-		background-color: #091624;
-		color: #fff;
 		font-size: 20px;
 		text-decoration: none;
 		margin: 5px 15px;
-	}
-
-	#panel > a {
 		padding: 5px;
 		float: right;
 	}
 
-	#panel > a:hover {
+	#panel a.right {
+		background-color: #091624;
+		color: #fff;
+	}
+
+	#panel span.right {
+		font-size: 14px;
+		line-height: 20px;
+	}
+
+	#panel a.right:hover,
+	#panel span.right {
 		background-color: #fff;
 		color: #091624;
 	}
 
-	#panel > input[type="text"] {
-		width: 600px;
+	#panel input[type="text"] {
+		width: 480px;
 		height: 36px;
 		padding: 0 5px;
 		margin: 5px 0 0 10px;
@@ -494,8 +506,8 @@ body.landing footer {
 		opacity: 0.75;
 	}
 
-	#panel > input[type="text"]:hover,
-	#panel > input[type="text"]:focus {
+	#panel input[type="text"]:hover,
+	#panel input[type="text"]:focus {
 		opacity: 1.0;
 	}
 
@@ -505,8 +517,8 @@ body.landing footer {
 	top: 50%;
 	z-index: 1;
 	display: none;
-	width: 400px;
-	margin-left: -205px;
+	width: 350px;
+	margin-left: -175px;
 	margin-top: -100px;
 	padding: 5px;
 	border: 1px solid #aaa;
@@ -522,16 +534,15 @@ body.landing footer {
 	}
 	
 	.form .center {
-		display: inline-block;
 		width: 350px;
-		margin: 10px 0 0 20px;
+		margin-top: 10px;
 		text-align: center;
 	}
 
 		.form .center img,
 		.form .center [type="radio"] {
 			display: inline-block;
-			width: 64px;
+			width: 52px;
 			height: auto;
 		}
 
@@ -555,7 +566,7 @@ body.landing footer {
 	}
 
 	.form textarea {
-		width: 300px;
+		width: 328px;
 		margin-bottom: 15px;
 		padding: 5px 10px;
 	}

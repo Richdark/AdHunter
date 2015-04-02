@@ -1,18 +1,20 @@
 <div id="panel">
-	<a id="add" href="#">Pridať</a>
+	<a id="add" class="right" href="#">Pridať</a>
+	<span class="right" style="display: none">Kliknite na mapu pre vyznačenie pozície nájdeného billboardu.</span>
 	<input id="search" type="text" placeholder="Zadajte objekt alebo adresu">
 </div>
 
 <div id="map"></div>
 
 <div id="merge-sidebar" class="sidebar">
+	<a class="close" href="#" title="close">✖</a>
 	<h2>Billboardy na zlúčenie</h2>
 	<div class="billboards"></div>
 	<a href="#" class="merge">zlúčiť vybrané billboardy</a>
 </div>
 <div id="edit-sidebar" class="sidebar">
+	<a class="close" href="#" title="close">✖</a>
 	<h2>Editácia billboardu</h2>
-
 	<form action="<?php echo root_url(); ?>billboards/update/" class="form" method="post" enctype="multipart/form-data">
 		Vlastník:
 		<select name="owner_id">
@@ -25,19 +27,21 @@
 			?>
 		</select><br>
 		Typ nosiča:
-		<span class="center">
-			<img src="<?php echo assets_url(); ?>img/types/trojnozka.png">
-			<img src="<?php echo assets_url(); ?>img/types/citylight.png">
+		<div class="center">
 			<img src="<?php echo assets_url(); ?>img/types/standard.png">
 			<img src="<?php echo assets_url(); ?>img/types/megaboard.png">
+			<img src="<?php echo assets_url(); ?>img/types/citylight.png">
 			<img src="<?php echo assets_url(); ?>img/types/hypercube.png">
+			<img src="<?php echo assets_url(); ?>img/types/trojnozka.png">
+			<img src="<?php echo assets_url(); ?>img/types/other.png">
 			<br>
 			<input type="radio" name="backing_type" value="1">
 			<input type="radio" name="backing_type" value="2">
 			<input type="radio" name="backing_type" value="3">
 			<input type="radio" name="backing_type" value="4">
 			<input type="radio" name="backing_type" value="5">
-		</span>
+			<input type="radio" name="backing_type" value="6">
+		</div>
 		<br>
 		
 		<textarea name="comment" placeholder="Môžete nám k nemu niečo napísať."></textarea>
@@ -69,11 +73,12 @@
 					<tr>
 						<td>Typ nosiča:</td>
 						<td class="type">
-							<img src="<?php echo assets_url(); ?>img/types/trojnozka.png">
-							<img src="<?php echo assets_url(); ?>img/types/citylight.png">
 							<img src="<?php echo assets_url(); ?>img/types/standard.png">
 							<img src="<?php echo assets_url(); ?>img/types/megaboard.png">
+							<img src="<?php echo assets_url(); ?>img/types/citylight.png">
 							<img src="<?php echo assets_url(); ?>img/types/hypercube.png">
+							<img src="<?php echo assets_url(); ?>img/types/trojnozka.png">
+							<img src="<?php echo assets_url(); ?>img/types/other.png">
 						</td>
 					</tr>
 				</table>
@@ -101,27 +106,29 @@
 </div>
 
 <form action="<?php echo root_url(); ?>billboards/add/" id="add-form" class="form" method="post" enctype="multipart/form-data">
+	<a class="close" href="#" title="close">✖</a>
+
 	<input type="hidden" name="lat">
 	<input type="hidden" name="lng">
 
 	<input name="photo" type="file" value="Vložiť fotku billboardu" required="true" accept="image/jpeg"><br>
 
 	<h2>Vyberte typ billboardu:</h2>
-	<span class="center">
-		<img src="<?php echo assets_url(); ?>img/types/trojnozka.png">
-		<img src="<?php echo assets_url(); ?>img/types/citylight.png">
+	<div class="center">
 		<img src="<?php echo assets_url(); ?>img/types/standard.png">
 		<img src="<?php echo assets_url(); ?>img/types/megaboard.png">
+		<img src="<?php echo assets_url(); ?>img/types/citylight.png">
 		<img src="<?php echo assets_url(); ?>img/types/hypercube.png">
-	</span>
-
-	<span class="center">
+		<img src="<?php echo assets_url(); ?>img/types/trojnozka.png">
+		<img src="<?php echo assets_url(); ?>img/types/other.png">
+		<br>
 		<input type="radio" name="backing_type" value="1">
 		<input type="radio" name="backing_type" value="2">
 		<input type="radio" name="backing_type" value="3">
 		<input type="radio" name="backing_type" value="4">
 		<input type="radio" name="backing_type" value="5">
-	</span>
+		<input type="radio" name="backing_type" value="6">
+	</div>
 
 	<select name="owner_id">
 		<option value="0">Neznámy</option>

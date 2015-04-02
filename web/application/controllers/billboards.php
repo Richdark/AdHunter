@@ -82,10 +82,16 @@ class Billboards extends MY_Controller
 	 */
 	public function add()
 	{
+		header('Content-type: application/json');
+
+		$ret = array();
+		$ret["status"] = "error";
+		$ret["message"] = "";
+
 		if (empty($_FILES["photo"]))
 		{
-			echo "Chyba: Nebola prijata ziadna fotografia<br>";
-			die;
+			$ret["message"] = "Nebola prijata ziadna fotografia";
+			die(json_encode($ret));
 		}
 
 		// musi to byt realna cesta k suboru nie cez assets_url
@@ -100,15 +106,15 @@ class Billboards extends MY_Controller
 
 		if (!is_writable($folder))
 		{
-			echo "Chyba: Priecinok nieje zapisovatelny<br>";
-			die;
+			$ret["message"] = "Priecinok nieje zapisovatelny";
+			die(json_encode($ret));
 		}
 
 		$lat = &$_POST["lat"];
 		$lng = &$_POST["lng"];
 		if(empty($lat) || empty($lng)) {
-			echo "Chyba: Neboli zadané GPS suradnice<br>";
-			die;
+			$ret["message"] = "Neboli zadané GPS suradnice";
+			die(json_encode($ret));
 		}
 		$coordinates = "POINT($lat, $lng)";
 		
@@ -118,8 +124,8 @@ class Billboards extends MY_Controller
 		// move z tmp foldra
 		if (!move_uploaded_file($_FILES["photo"]["tmp_name"], $dest_name))
 		{
-			echo "Chyba: Nepodarilo sa uploadovať billboard na server<br>";
-			die;
+			$ret["message"] = "Nepodarilo sa uploadovať billboard na server";
+			die(json_encode($ret));
 		}
 
 		// rotate image if needed
@@ -178,14 +184,13 @@ class Billboards extends MY_Controller
 		$this->load->model('Catch_model', 'model');
 		$this->model->save_catch($user_id, null, $coordinates, $name, $model, $type, $comment, $backing_type, $owner_id);
 		
-		if ($type == 'm')
-		{
-			echo "OK";
+		if(!empty($_SERVER["HTTP_REFERER"])) {
+			header("Location: " . $_SERVER["HTTP_REFERER"]);
+			die;
 		}
-		else
-		{
-			$this->load->view('uploaded_billboard');
-		}
+
+		$ret["status"] = "ok";
+		die(json_encode($ret));
 	}
 
 	/*
