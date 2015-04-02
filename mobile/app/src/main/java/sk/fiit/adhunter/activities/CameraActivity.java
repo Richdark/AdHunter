@@ -193,6 +193,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
             case R.id.button_upload:
                 if(isConnected()) {
+                    showProgressDialog(this, "Vaša fotka sa práve odosiela na server...");
                     //photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
                     getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mCurrentPhoto.getImageByteArray()),
                             new TypedString(String.valueOf(mCurrentPhoto.getLatitude())),
@@ -353,6 +354,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private Callback<Response> uploadResponse = new Callback<Response>() {
         @Override
         public void success(Response response, Response response2) {
+            dismissProgressDialog();
             toastShort(Strings.parseHtmlResponse(response, "h1"));
             mCamera.startPreview();
         }
