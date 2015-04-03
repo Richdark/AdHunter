@@ -2,13 +2,20 @@ package sk.fiit.adhunter.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
+import retrofit.mime.TypedString;
 import sk.fiit.adhunter.AsyncTaskCompleteListener;
 import sk.fiit.adhunter.R;
 import sk.fiit.adhunter.abs.BaseActivity;
 import sk.fiit.adhunter.models.Photo;
+import sk.fiit.adhunter.services.io.GetUploadResponse;
 import sk.fiit.adhunter.tasks.UploadPhotoTask;
 import sk.fiit.adhunter.utils.FileUtils;
 import sk.fiit.adhunter.utils.SerializationUtils;
@@ -23,6 +30,9 @@ import java.util.List;
  */
 public class AlreadyOnlineActivity extends BaseActivity {
     private static final String TAG = AlreadyOnlineActivity.class.getSimpleName();
+
+    private List<Photo> mPhotoList;
+    private int currentPhotoBeingSent = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +51,8 @@ public class AlreadyOnlineActivity extends BaseActivity {
                 // User clicked OK button
                 Log.d(TAG, "YES");
                 dialog.dismiss();
-                List<Photo> photoList;
-                photoList = (ArrayList)deserializeList();
-                Log.d(TAG, "Pocet fotiek: " + photoList.size());
+                mPhotoList = (ArrayList)deserializeList();
+                Log.d(TAG, "Pocet fotiek: " + mPhotoList.size());
 
                 //move all the photos taken in offline mode to the main directory
                 if(!FileUtils.isUploadDirectoryEmpty()) {
@@ -56,9 +65,13 @@ public class AlreadyOnlineActivity extends BaseActivity {
                     log(TAG, "all the files have been successfully moved to the main directory");
                 }
                 //photos upload
-                new UploadPhotoTask(AlreadyOnlineActivity.this,
-                        new UploadPhotoCompleteListener())
-                        .execute(photoList.toArray(new Photo[photoList.size()]));
+                if (mPhotoList != null && mPhotoList.size() > 0) {
+                    uploadMultiplePhotos();
+                }
+
+//                new UploadPhotoTask(AlreadyOnlineActivity.this,
+//                        new UploadPhotoCompleteListener())
+//                        .execute(mPhotoList.toArray(new Photo[mPhotoList.size()]));
             }
         });
         builder.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
@@ -77,6 +90,67 @@ public class AlreadyOnlineActivity extends BaseActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    public void uploadMultiplePhotos() {
+
+        showProgressDialog(this, "Vaše úlovky sa práve odosielajú na server...", DIALOG_HORIZONTAL, mPhotoList.size());
+
+        getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mPhotoList.get(currentPhotoBeingSent).getImageByteArray()),
+                new TypedString(String.valueOf(mPhotoList.get(currentPhotoBeingSent).getLatitude())),
+                new TypedString(String.valueOf(mPhotoList.get(currentPhotoBeingSent).getLongitude())),
+                new TypedString(mPhotoList.get(currentPhotoBeingSent).getComment()),
+                new TypedString(mPhotoList.get(currentPhotoBeingSent).getBillboardType()),
+                new TypedString(mPhotoList.get(currentPhotoBeingSent).getOwner()),
+                uploadResponse);
+
+        log(TAG, "BILLBOARD-OWNER = " + mPhotoList.get(currentPhotoBeingSent).getOwner());
+        log(TAG, "LATITUDE = " + mPhotoList.get(currentPhotoBeingSent).getLatitude());
+
+    }
+
+    private Callback<GetUploadResponse> uploadResponse = new Callback<GetUploadResponse>() {
+        @Override
+        public void success(GetUploadResponse getUploadResponse, Response response) {
+
+            if (getUploadResponse.status.equals("ok")) {
+                try {
+                    log(TAG, (currentPhotoBeingSent + 1) + ". fotka OK");
+
+                    currentPhotoBeingSent++;
+                    if (currentPhotoBeingSent >= mPhotoList.size()) {
+                        deleteFile(Strings.SERIALIZED_LIST);
+                        dismissProgressDialog();
+                        toastLong("Na server bolo úspešne nahratých " + currentPhotoBeingSent + " fotiek!");
+                        finish();
+                        // avoiding index out of bounds, upload finished
+                        return;
+                    }
+                    log(TAG, "BILLBOARD-OWNER = " + mPhotoList.get(currentPhotoBeingSent).getOwner());
+                    log(TAG, "LATITUDE = " + mPhotoList.get(currentPhotoBeingSent).getLatitude());
+                    updateProgressDialog(currentPhotoBeingSent);
+
+                    Thread.sleep(100);
+                    getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mPhotoList.get(currentPhotoBeingSent).getImageByteArray()),
+                            new TypedString(String.valueOf(mPhotoList.get(currentPhotoBeingSent).getLatitude())),
+                            new TypedString(String.valueOf(mPhotoList.get(currentPhotoBeingSent).getLongitude())),
+                            new TypedString(mPhotoList.get(currentPhotoBeingSent).getComment()),
+                            new TypedString(mPhotoList.get(currentPhotoBeingSent).getBillboardType()),
+                            new TypedString(mPhotoList.get(currentPhotoBeingSent).getOwner()),
+                            uploadResponse);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    toastShort("Chyba pri posielani " + currentPhotoBeingSent + ". fotky!");
+                }
+            }
+
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            toastLong(error.getMessage());
+        }
+    };
 
     private class UploadPhotoCompleteListener implements AsyncTaskCompleteListener {
         @Override
