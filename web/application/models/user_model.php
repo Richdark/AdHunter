@@ -62,6 +62,18 @@ class User_model extends CI_Model
 
 		$this->db->insert('users', $data);
 	}
+
+	/**
+	 * Set optional user info
+	 * @param integer $id ID of user whose info is being modified
+	 * @param string $name User's first name
+	 * @param string $surname User's last name
+	 */
+	function set_user_info($id, $name, $surname)
+	{
+		$this->db->where('id', $id);
+		$this->db->update('users', array('name' => $name, 'surname' => $surname));
+	}
 }
 
 ?>

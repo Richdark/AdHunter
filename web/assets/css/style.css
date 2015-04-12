@@ -269,7 +269,6 @@ body.landing footer {
 			float: left;
 			width: 299px;
 			background: #fafafa;
-			border-right: 1px #c0c0c0 solid;
 		}
 
 			.content_regular > .content nav.profile ul {
@@ -296,7 +295,58 @@ body.landing footer {
 			display: block;
 			max-width: 860px;
 			padding: 20px;
+			border-left: 1px #c0c0c0 solid;
 		}
+
+			.content_regular > .content .profile_content .info {
+				display: block;
+				margin-bottom: 10px;
+				padding: 10px;
+				background: #daf3c5;
+				border: 1px solid #a0c97e;
+			}
+
+			.content_regular > .content .profile_content fieldset {
+				width: 835px;
+				padding: 10px;
+				border: 1px #d0d0d0 solid;
+			}
+
+			.content_regular > .content .profile_content .field_descr {
+				display: inline-block;
+				min-width: 150px;
+				margin: 5px;
+			}
+
+			.content_regular > .content .profile_content input {
+				display: inline-block;
+				width: 300px;
+				height: 20px;
+				margin: 5px 0;
+				padding: 5px;
+				border: 1px #d0d0d0 solid;
+			}
+
+			.content_regular > .content .profile_content input[type="submit"] {
+				width: auto;
+				height: 30px;
+				margin: 5px 0;
+				padding: 5px;
+			}
+
+			.content_regular > .content .profile_content table td {
+				/**/
+			}
+
+				.content_regular > .content .profile_content table td,
+				.content_regular > .content .profile_content table th {
+					border: 1px #d0d0d0 solid;
+					padding: 6px 10px;
+				}
+
+				.content_regular > .content .profile_content table th {
+					background: #f0f0f0;
+				}
 
 		.content_regular > .content .clear {
 			display: block;

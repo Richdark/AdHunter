@@ -13,6 +13,16 @@ class UserModelHelper
 	public $email = NULL;
 
 	/**
+	 * Logged user first name
+	*/
+	public $name = NULL;
+
+	/**
+	 * Logged user last name
+	*/
+	public $surname = NULL;
+
+	/**
 	 * Type of "device" user is logged from
 	 *
 	 * Can be:

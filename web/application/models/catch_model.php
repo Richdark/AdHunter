@@ -97,6 +97,22 @@ class Catch_model extends CI_Model
 		// insert into ...
 		$this->db->insert('catches', $data);
 	}
+
+	/**
+	 * Get catches list by user ID
+	 *
+	 * @param int $user_id ID of user
+	 *
+	 * @return array Array of all user catches
+	*/
+	function get_catches_by_user_id($user_id)
+	{
+		$this->db->select('X(coordinates) AS x, Y(coordinates) AS y, filename, uploaded, type, comment, title');
+		$this->db->from('catches')->join('backing_types', 'catches.backing_type_id = backing_types.id');
+		$this->db->where('catches.user_id', $user_id)->order_by('catches.id', 'DESC');
+
+		return $this->db->get();
+	}
 }
 
 ?>

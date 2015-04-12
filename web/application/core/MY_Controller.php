@@ -31,8 +31,10 @@ class MY_Controller extends CI_Controller
         
         if ($user_info)
         {
-            $this->user->id    = $user_info->user_id;
-            $this->user->email = $user_info->email;
+            $this->user->id      = $user_info->user_id;
+            $this->user->name    = $user_info->name;
+            $this->user->surname = $user_info->surname;
+            $this->user->email   = $user_info->email;
         }
 
         $this->load->user = $this->user;
