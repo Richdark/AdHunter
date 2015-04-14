@@ -44,7 +44,9 @@
             break;
     }
     
-    echo "Do ďalšieho levelu chýba " . $to_next_level . " úlovkov<br />";
+    if($b < 400 )echo 'Do ďalšieho levelu chýba' .((($to_next_level>4)||($to_next_level==1)) ? " " : "jú ") 
+            .  $to_next_level .($to_next_level>5 ? " úlovkov" : ($to_next_level==1 ? " úlovok": " úlovky")).'<br />';
+    else echo "Dosiahol si maximálneho levelu v aplikácii AdHunter, neprestávaj loviť!!!";
     
     echo "Typy úlovkov: ";
     foreach ($types as $statistic) {
@@ -66,16 +68,16 @@
         $t = $statistic->bilboards;
         echo '<h3 title="Odcenenia podľa počtu úlovkov typu '.$statistic->title .'">' . $statistic->title . ': </h3>';
         switch ($t) {
-            case ($t >= 5 && $t < 1): {//5
+            case ($t >= 5 && $t < 5): {//5
                     echo '<img src="' . assets_url() . 'img/badges/bronze.png" title="Bronzová medaila za počet úlovkov typu '.$statistic->title .'"/>';
                     break;
                 }
-            case ($t >= 5 && $t < 2): {//10
+            case ($t >= 10 && $t < 25): {//10
                     echo '<img src="' . assets_url() . 'img/badges/bronze.png" title="Bronzová medaila za počet úlovkov typu '.$statistic->title .'"/>';
                     echo '<img src="' . assets_url() . 'img/badges/silver.png" title="Strieborná medaila za počet úlovkov typu '.$statistic->title .'"/>';
                     break;
                 }
-            case ($t >= 2 && $t < 50): {//25
+            case ($t >= 25 && $t < 50): {//25
                     echo '<img src="' . assets_url() . 'img/badges/bronze.png" title="Bronzová medaila za počet úlovkov typu '.$statistic->title .'"/>';
                     echo '<img src="' . assets_url() . 'img/badges/silver.png" title="Strieborná medaila za počet úlovkov typu '.$statistic->title .'"/>';
                     echo '<img src="' . assets_url() . 'img/badges/gold.png" title="Zlatá medaila za počet úlovkov typu '.$statistic->title .'"/>';
@@ -93,26 +95,26 @@
                     break; 
             }
         }
-        echo '</br>';
+        echo '<br/>';
     }
-
-    echo '</br>';
-    echo '</hr>';
+    
+    echo '<br/><hr style="border-top:1px solid grey"/><br/>';
+    
     foreach ($sources as $statistic) {
         $t = $statistic->bilboards;
         $s = $statistic->source;
         echo '<h3 title="Odcenenia za počet úlovkov podľa zdroja">' . ($s == 'w' ? "Domáci AdHunter" : "Terénny AdHunter") . '</h3>';
         switch ($t) {
-            case ($t >= 0 && $t <1):{//20
+            case ($t >= 20 && $t <50):{//20
                     echo '<img src="' . assets_url() . 'img/badges/bronze.png" title="Bronzová medaila za počet úlovkov zo zdroja '.($s == "w" ? "web" : "mobilná aplikácia").'"/>';
                     break;
                 }
-            case ($t >= 1 && $t <2):{//50
+            case ($t >= 50 && $t <100):{//50
                     echo '<img src="' . assets_url() . 'img/badges/bronze.png" title="Bronzová medaila za počet úlovkov zo zdroja '.($s == "w" ? "web" : "mobilná aplikácia").'"/>';
                     echo '<img src="' . assets_url() . 'img/badges/silver.png" title="Strieborná medaila za počet úlovkov zo zdroja '.($s == "w" ? "web" : "mobilná aplikácia").'"/>';
                     break;
                 }
-            case ($t >= 2 && $t <200):{//100
+            case ($t >= 100 && $t <200):{//100
                     echo '<img src="' . assets_url() . 'img/badges/bronze.png" title="Bronzová medaila za počet úlovkov zo zdroja '.($s == "w" ? "web" : "mobilná aplikácia").'"/>';
                     echo '<img src="' . assets_url() . 'img/badges/silver.png" title="Strieborná medaila za počet úlovkov zo zdroja '.($s == "w" ? "web" : "mobilná aplikácia").'"/>';
                     echo '<img src="' . assets_url() . 'img/badges/gold.png" title="Zlatá medaila za počet úlovkov zo zdroja '.($s == "w" ? "web" : "mobilná aplikácia").'"/>';
@@ -132,29 +134,29 @@
         }
     }
     
-    echo '</br></br><hr>';
+    echo '<br/><br/><hr style="border-top:1px solid grey"/><br/>';
     
     foreach ($owners as $statistic) {
         $t = $statistic->bilboards;
         $s = $statistic->name;
         echo '<h3 title="Odcenenia za počet úlovkov podľa vlastníka reklamy">' . $s . '-Hunter</h3>';
         switch ($t) {
-            case ($t >= 0 && $t <1):{//20
+            case ($t >= 5 && $t <10):{//5
                     echo '<img src="' . assets_url() . 'img/badges/bronze.png" title="Bronzová medaila za počet úlovkov vlastníka '.$s.'"/>';
                     break;
                 }
-            case ($t >= 1 && $t <2):{//50
+            case ($t >= 10 && $t <20):{//10
                     echo '<img src="' . assets_url() . 'img/badges/bronze.png" title="Bronzová medaila za počet úlovkov vlastníka '.$s.'"/>';
                     echo '<img src="' . assets_url() . 'img/badges/silver.png" title="Strieborná medaila za počet úlovkov vlastníka '.$s.'"/>';
                     break;
                 }
-            case ($t >= 2 && $t <200):{//100
+            case ($t >= 20 && $t <50):{//20
                     echo '<img src="' . assets_url() . 'img/badges/bronze.png" title="Bronzová medaila za počet úlovkov vlastníka '.$s.'"/>';
                     echo '<img src="' . assets_url() . 'img/badges/silver.png" title="Strieborná medaila za počet úlovkov vlastníka '.$s.'"/>';
                     echo '<img src="' . assets_url() . 'img/badges/gold.png" title="Zlatá medaila za počet úlovkov vlastníka '.$s.'"/>';
                     break;
                 }
-            case ($t >= 200):{
+            case ($t >= 50):{
                     echo '<img src="' . assets_url() . 'img/badges/bronze.png" title="Bronzová medaila za počet úlovkov vlastníka '.$s.'"/>';
                     echo '<img src="' . assets_url() . 'img/badges/silver.png" title="Strieborná medaila za počet úlovkov vlastníka '.$s.'"/>';
                     echo '<img src="' . assets_url() . 'img/badges/gold.png" title="Zlatá medaila za počet úlovkov vlastníka '.$s.'"/>';
@@ -167,11 +169,6 @@
             }
         }
     }
-
-    /* foreach($test as $statistic)
-      {
-      echo  $statistic->owner.' .';
-      } */
     ?>
 
 </div>

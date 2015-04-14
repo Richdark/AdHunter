@@ -34,12 +34,7 @@ class Gamification_model extends CI_Model {
                 . 'WHERE u.id= ' . $id . ' GROUP BY c.owner_id ORDER BY bilboards DESC');
         return $query->result();
     }
-
-    function test() {
-        $query = $this->db->query('SELECT c.owner_id as owner from catches c');
-        return $query->result();
-    }
-
+    
 }
 
 ?>
