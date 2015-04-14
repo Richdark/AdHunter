@@ -3,7 +3,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:background="@android:color/holo_green_dark"
     android:layout_height="match_parent">
 
     <FrameLayout
@@ -52,7 +51,7 @@
 
     <ImageButton
         android:id="@+id/button_upload"
-        android:background="@drawable/circle_selector"
+        android:background="@drawable/circle_grey"
         android:src="@drawable/ic_file_file_upload"
         android:layout_width="72dp"
         android:layout_height="72dp"
@@ -74,7 +73,7 @@
 
     <ImageButton
         android:id="@+id/button_add"
-        android:background="@drawable/circle_selector"
+        android:background="@drawable/circle_grey"
         android:src="@drawable/ic_action_note_add"
         android:layout_width="72dp"
         android:layout_height="72dp"
