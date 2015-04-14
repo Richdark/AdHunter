@@ -192,7 +192,10 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
     private Callback<List<Owner>> ownersResponse = new Callback<List<Owner>>() {
         @Override
         public void success(List<Owner> owners, Response response) {
-            mOwnerList = new ArrayList<Owner>(owners);
+//            mOwnerList = new ArrayList<Owner>(owners);
+            mOwnerList = new ArrayList<Owner>();
+            mOwnerList.add(new Owner("-1", getString(R.string.choose_owner)));
+            mOwnerList.addAll(owners);
             initOwnersSpinner();
         }
 
@@ -213,7 +216,7 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
 
     private void createOfflineOwners() {
         mOwnerList = new ArrayList<Owner>();
-        mOwnerList.add(new Owner("-1", "Vyberte vlastníka"));
+        mOwnerList.add(new Owner("-1", getString(R.string.choose_owner)));
         mOwnerList.add(new Owner("4", "Akzent Media"));
         mOwnerList.add(new Owner("2", "Arton"));
         mOwnerList.add(new Owner("7", "Bigboard"));

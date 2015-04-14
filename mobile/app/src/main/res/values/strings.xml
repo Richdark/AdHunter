@@ -26,4 +26,6 @@
         <item>wifi_and_mobile</item>
     </string-array>
 
+    <string name="choose_owner">Vyberte vlastníka</string>
+
 </resources>
