@@ -22,10 +22,10 @@ import android.widget.TextView;
 
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedString;
-import sk.fiit.adhunter.AsyncTaskCompleteListener;
 import sk.fiit.adhunter.models.CurrentPhoto;
 import sk.fiit.adhunter.models.Photo;
 import sk.fiit.adhunter.models.User;
+import sk.fiit.adhunter.services.io.GetUploadResponse;
 import sk.fiit.adhunter.utils.Config;
 import sk.fiit.adhunter.utils.FileUtils;
 import sk.fiit.adhunter.utils.SerializationUtils;
@@ -173,6 +173,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 } else {
                     //get an image from the camera; here the user gets first time after taking photo
                     if(mLocation != null) {
+
                         mCamera.takePicture(null, null, mPicture);
                         isPreviewStopped = true;
                         playCameraSound();
@@ -193,6 +194,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
             case R.id.button_upload:
                 if(isConnected()) {
+                    showProgressDialog(this, "Vaša fotka sa práve odosiela na server...");
                     //photo uploads; button_upload is being showed ONLY after photo has been taken, so the photo surely exists
                     getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mCurrentPhoto.getImageByteArray()),
                             new TypedString(String.valueOf(mCurrentPhoto.getLatitude())),
@@ -202,6 +204,12 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                             new TypedString(mCurrentPhoto.getOwner()),
                             uploadResponse);
                 } else {
+
+                    if (isLocationTheSameAsPrevious(mCurrentPhoto.getLatitude(), mCurrentPhoto.getLongitude())) {
+                        toastShort("Chyba: Vaše súradnice sú zhodné so súradnicami poslednej fotky!");
+                        return;
+                    }
+
                     //save photo to the ArrayList and notify user about uploading photo next time he connects to the internet
                     sPhotoList.add(mCurrentPhoto);
                     serializeList(sPhotoList);
@@ -228,6 +236,12 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
         }
 
+    }
+
+    public boolean isLocationTheSameAsPrevious(double latitude, double longitude) {
+        int sizeOfList = sPhotoList.size();
+        return sizeOfList > 0 && sPhotoList.get(sizeOfList - 1).getLatitude() == latitude
+                && sPhotoList.get(sizeOfList - 1).getLongitude() == longitude;
     }
 
     private void logoutUser() {
@@ -333,9 +347,11 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 fos.write(imageByteArray);
                 fos.close();
 
+                CurrentPhoto.getInstance().clearInstance();
                 mCurrentPhoto = CurrentPhoto.getInstance();
                 mCurrentPhoto.setImageByteArray(imageByteArray);
                 mCurrentPhoto.setLatitude(mLocation.getLatitude());
+                log(TAG, "latitude right after = " + mLocation.getLatitude());
                 mCurrentPhoto.setLongitude(mLocation.getLongitude());
 
             } catch (FileNotFoundException e) {
@@ -350,16 +366,17 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         isWifiOrMobileOn = isWifiOrMobileConnected(this);
     }
 
-    private Callback<Response> uploadResponse = new Callback<Response>() {
+    private Callback<GetUploadResponse> uploadResponse = new Callback<GetUploadResponse>() {
         @Override
-        public void success(Response response, Response response2) {
-            toastShort(Strings.parseHtmlResponse(response, "h1"));
+        public void success(GetUploadResponse getUploadResponse, Response response2) {
+            dismissProgressDialog();
+            toastShort(getUploadResponse.status);
             mCamera.startPreview();
         }
 
         @Override
         public void failure(RetrofitError error) {
-            log(TAG, "failure = " + error.getMessage());
+            toastLong(error.getMessage());
         }
     };
 

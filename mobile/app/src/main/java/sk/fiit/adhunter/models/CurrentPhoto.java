@@ -15,4 +15,8 @@ public class CurrentPhoto extends Photo {
         return instance;
     }
 
+    public void clearInstance() {
+        instance = null;
+    }
+
 }

@@ -63,6 +63,9 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
     public static final String PREF_ENTRY_WIFI = "wifi";
     public static final String PREF_ENTRY_WIFI_AND_MOBILE = "wifi_and_mobile";
 
+    public static final int DIALOG_HORIZONTAL = ProgressDialog.STYLE_HORIZONTAL;
+    public static final int DIALOG_SPINNER = ProgressDialog.STYLE_SPINNER;
+
     private LocationRequest mLocationRequest;
     protected LocationManager mLocationManager;
     protected Location mLocation;
@@ -370,20 +373,30 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
         alertDialog.show();
     }
 
-    protected void showProgressDialog(Context context, String message) {
-        try {
+    protected void showProgressDialog(Context context, String message, int dialogStyle, int max) {
+        if (dialogStyle == DIALOG_HORIZONTAL) {
             mProgressDialog = new ProgressDialog(context);
             mProgressDialog.setMessage(message);
+            mProgressDialog.setProgressStyle(dialogStyle);
+            mProgressDialog.setMax(max);
             mProgressDialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+    }
+
+    protected void showProgressDialog(Context context, String message) {
+        mProgressDialog = new ProgressDialog(context);
+        mProgressDialog.setMessage(message);
+        mProgressDialog.show();
     }
 
     protected void dismissProgressDialog() {
         try{
             mProgressDialog.dismiss();
         }catch (Exception e){e.printStackTrace();}
+    }
+
+    protected void updateProgressDialog(int currentProgress) {
+        mProgressDialog.setProgress(currentProgress);
     }
 
 }

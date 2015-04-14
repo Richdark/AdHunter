@@ -24,6 +24,8 @@ import sk.fiit.adhunter.R;
 import sk.fiit.adhunter.abs.BaseActivity;
 import sk.fiit.adhunter.models.CurrentPhoto;
 import sk.fiit.adhunter.models.Owner;
+import sk.fiit.adhunter.models.Photo;
+import sk.fiit.adhunter.services.io.GetUploadResponse;
 import sk.fiit.adhunter.utils.Strings;
 
 /**
@@ -126,6 +128,7 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
                 if(isWifiOrMobileConnected(this)) {
 
                     if(mCurrentPhoto != null) {
+                        showProgressDialog(this, "Vaša fotka sa práve odosiela na server...");
                         setPhotoAttributes();
                         getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mCurrentPhoto.getImageByteArray()),
                                 new TypedString(String.valueOf(mCurrentPhoto.getLatitude())),
@@ -142,8 +145,9 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
                     setPhotoAttributes();
 
                     //save photo to the ArrayList and notify user about uploading photo next time he connects to the internet
-                    CameraActivity.sPhotoList.add(mCurrentPhoto);
-                    serializeList(CameraActivity.sPhotoList);
+                    List<Photo> photoList = (ArrayList)deserializeList();
+                    photoList.add(mCurrentPhoto);
+                    serializeList(photoList);
                     toastLong(getString(R.string.not_connected));
                     startActivity(new Intent(AdditionalInfoActivity.this, CameraActivity.class));
                     finish();
@@ -170,17 +174,18 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    private Callback<Response> uploadResponse = new Callback<Response>() {
+    private Callback<GetUploadResponse> uploadResponse = new Callback<GetUploadResponse>() {
         @Override
-        public void success(Response response, Response response2) {
-            toastShort(Strings.parseHtmlResponse(response, "h1"));
+        public void success(GetUploadResponse getUploadResponse, Response response) {
+            dismissProgressDialog();
+            toastShort(getUploadResponse.status);
             startActivity(new Intent(AdditionalInfoActivity.this, CameraActivity.class));
             finish();
         }
 
         @Override
         public void failure(RetrofitError error) {
-            log(TAG, "failure = " + error.getMessage());
+            toastLong(error.getMessage());
         }
     };
 
@@ -208,6 +213,7 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
 
     private void createOfflineOwners() {
         mOwnerList = new ArrayList<Owner>();
+        mOwnerList.add(new Owner("-1", "Vyberte vlastníka"));
         mOwnerList.add(new Owner("4", "Akzent Media"));
         mOwnerList.add(new Owner("2", "Arton"));
         mOwnerList.add(new Owner("7", "Bigboard"));

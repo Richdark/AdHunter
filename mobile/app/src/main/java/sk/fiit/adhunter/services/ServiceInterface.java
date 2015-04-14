@@ -14,6 +14,7 @@ import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedFile;
 import retrofit.mime.TypedString;
 import sk.fiit.adhunter.models.Owner;
+import sk.fiit.adhunter.services.io.GetUploadResponse;
 
 /**
  * Created by jerry on 17. 2. 2015.
@@ -36,7 +37,7 @@ public interface ServiceInterface {
                      @Part("comment") TypedString comment,
                      @Part("backing_type") TypedString billboardType,
                      @Part("owner_id") TypedString owner,
-                     Callback<Response> response);
+                     Callback<GetUploadResponse> response);
 
     @GET("/owners/current_list/")
     void getOwnersList(Callback<List<Owner>> response);
