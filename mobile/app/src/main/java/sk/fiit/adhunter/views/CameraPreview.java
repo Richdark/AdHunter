@@ -45,6 +45,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             return;
         }
 
+        Log.d(TAG, "CameraPreview constructor");
+
         if(mParameters.getSupportedPreviewSizes() != null) {
             mSupportedPreviewSizes = mParameters.getSupportedPreviewSizes();
         }
@@ -60,6 +62,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         //The Surface has been created, now tell the camera where to draw the preview
+        Log.d(TAG, "surfaceCreated");
 
     }
 
@@ -67,6 +70,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int w, int h) {
         // If your preview can change or rotate, take care of those events here.
         // Make sure to stop the preview before resizing or reformatting it.
+        Log.d(TAG, "surfaceChanged");
 
         if (mHolder.getSurface() == null){
             // preview surface does not exist
@@ -104,7 +108,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
                 params.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
                 params.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
-                params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
                 params.setJpegQuality(100);
                 params.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
                 params.setRotation(mRotate);
@@ -125,6 +129,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         // empty. Take care of releasing the Camera preview in your activity.
+        Log.d(TAG, "surfaceDestroyed");
         getHolder().removeCallback(this);
         mCamera.stopPreview();
         mCamera.release();

@@ -1,6 +1,5 @@
 package sk.fiit.adhunter.abs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -144,7 +143,7 @@ public class BaseActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_number_of_photos_not_sent) {
             return true;
         }
         return super.onOptionsItemSelected(item);

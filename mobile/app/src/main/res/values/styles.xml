@@ -10,10 +10,17 @@
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light">
-        <item name="android:windowNoTitle">true</item>
+        <!--
+
         <item name="windowActionBar">false</item>
+        <item name="android:windowContentOverlay">@null</item> -->
+
+        <item name="actionBarStyle">@style/ActionBar.AdHunterStyle</item>
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="colorPrimary">#22000000</item>
         <!-- Customize your theme here -->
     </style>
 

@@ -64,6 +64,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private ImageButton mAddButton;
     private LinearLayout mAddressLayout, mLoadingGPSLayout;
     private TextView mAddressText, mLatitude, mLongitude, mRefreshInterval;
+//    private TextView mLatitude, mLongitude;
     private Button mLogOutButton, mSettingsButton;
     private CurrentPhoto mCurrentPhoto;
 
@@ -137,17 +138,17 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         mUploadButton.setOnClickListener(this);
         mAddButton = (ImageButton) findViewById(R.id.button_add);
         mAddButton.setOnClickListener(this);
-        mLogOutButton = (Button) findViewById(R.id.button_logout);
-        mLogOutButton.setOnClickListener(this);
-        mSettingsButton = (Button) findViewById(R.id.button_settings);
-        mSettingsButton.setOnClickListener(this);
-        mAddressLayout = (LinearLayout) findViewById(R.id.address_layout);
-        mAddressText = (TextView) findViewById(R.id.address_text);
+//        mLogOutButton = (Button) findViewById(R.id.button_logout);
+//        mLogOutButton.setOnClickListener(this);
+//        mSettingsButton = (Button) findViewById(R.id.button_settings);
+//        mSettingsButton.setOnClickListener(this);
+//        mAddressLayout = (LinearLayout) findViewById(R.id.address_layout);
+//        mAddressText = (TextView) findViewById(R.id.address_text);
 
         mLatitude = (TextView) findViewById(R.id.Activity_Camera_latitude);
         mLongitude = (TextView) findViewById(R.id.Activity_Camera_longitude);
-        mRefreshInterval = (TextView) findViewById(R.id.Activity_Camera_refreshInterval);
-
+//        mRefreshInterval = (TextView) findViewById(R.id.Activity_Camera_refreshInterval);
+//
         mLoadingGPSLayout = (LinearLayout) findViewById(R.id.loading_gps_layout);
         mGPSProgressBar = (ProgressBar) findViewById(R.id.Activity_Camera_loadingGPSProgressBar);
     }
@@ -223,13 +224,13 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 finish();
                 break;
 
-            case R.id.button_logout:
-                logoutUser();
-                break;
-
-            case R.id.button_settings:
-                startActivity(new Intent(CameraActivity.this, SettingsActivity.class));
-                break;
+//            case R.id.button_logout:
+//                logoutUser();
+//                break;
+//
+//            case R.id.button_settings:
+//                startActivity(new Intent(CameraActivity.this, SettingsActivity.class));
+//                break;
 
             default:
                 break;
@@ -382,15 +383,25 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+//        return super.onCreateOptionsMenu(menu);
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.base, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch(id) {
-            case R.id.action_settings:
+            case R.id.action_number_of_photos_not_sent:
                 deserializeTest();
+                return true;
+            case R.id.action_settings:
+                startActivity(new Intent(CameraActivity.this, SettingsActivity.class));
+                return true;
+            case R.id.action_logout:
+                logoutUser();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -409,9 +420,18 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                 mGPSProgressBar.setVisibility(View.GONE);
                 mLoadingGPSLayout.setAnimation(createAnimation(android.R.anim.slide_out_right));
                 mLoadingGPSLayout.setVisibility(View.GONE);
+
+                mLatitude.setText("latitude: " + String.valueOf(mLocation.getLatitude()));
+                mLatitude.startAnimation(createAnimation(android.R.anim.slide_in_left));
+                mLatitude.setVisibility(View.VISIBLE);
+
+                mLongitude.setText("longitude: " + String.valueOf(mLocation.getLongitude()));
+                mLongitude.startAnimation(createAnimation(android.R.anim.slide_in_left));
+                mLongitude.setVisibility(View.VISIBLE);
+
             }
         }
-
+//
         if(mLatitude != null && mLongitude != null) { //  && mRefreshInterval != null
             if(mLocation != null) {
                 mLatitude.setText("latitude: " + String.valueOf(mLocation.getLatitude()));
