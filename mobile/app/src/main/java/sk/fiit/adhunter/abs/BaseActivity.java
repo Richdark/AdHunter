@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -53,7 +54,7 @@ import retrofit.client.Response;
  * Created by Jerry on 10. 10. 2014.
  * Activity that all the other activities inherit from.
  */
-public class BaseActivity extends Activity implements GoogleApiClient.ConnectionCallbacks,
+public class BaseActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, RequestInterceptor, ErrorHandler {
 
@@ -136,7 +137,7 @@ public class BaseActivity extends Activity implements GoogleApiClient.Connection
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.base, menu);
+//        getMenuInflater().inflate(R.menu.base, menu);
         return true;
     }
 

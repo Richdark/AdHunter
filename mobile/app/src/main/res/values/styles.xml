@@ -1,21 +1,32 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
-        <item name="android:actionBarStyle">@style/ActionBar.AdHunter</item>
+        <!-- <item name="android:actionBarStyle">@style/ActionBar.AdHunter</item> -->
+        <item name="actionBarTheme">@style/ActionBar.AdHunterTheme</item>
+        <item name="actionBarStyle">@style/ActionBar.AdHunterStyle</item>
+        <item name="colorPrimary">@color/adhunter_indigo_500</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="android:Theme.Holo.Light.NoActionBar.Fullscreen">
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
         <!-- Customize your theme here -->
     </style>
 
-    <style name="ActionBar.AdHunter" parent="android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">@color/adhunter_indigo_500</item>
-        <item name="android:titleTextStyle">@style/ActionBar.AdHunter.TextStyle</item>
+    <style name="ActionBar.AdHunterStyle" parent="@style/Widget.AppCompat.ActionBar.Solid">
+        <item name="titleTextStyle">@style/ActionBar.AdHunter.TextStyle</item>
     </style>
 
-    <style name="ActionBar.AdHunter.TextStyle" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+    <style name="ActionBar.AdHunterTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- THIS is where you can color the arrow! -->
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
+    <style name="ActionBar.AdHunter.TextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
     </style>
 

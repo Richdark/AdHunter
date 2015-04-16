@@ -1,7 +1,7 @@
 package sk.fiit.adhunter.activities;
 
-import android.app.ActionBar;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import sk.fiit.adhunter.abs.BaseActivity;
@@ -22,7 +22,7 @@ public class SettingsActivity extends BaseActivity {
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
 
-        final ActionBar actionBar = getActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
             actionBar.setTitle("Nastavenia");
             actionBar.setDisplayHomeAsUpEnabled(true);
