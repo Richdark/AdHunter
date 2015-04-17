@@ -25,11 +25,15 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name="sk.fiit.adhunter.activities.AlreadyOnlineActivity" />
+        
+        <activity android:name="sk.fiit.adhunter.activities.AlreadyOnlineActivity"
+            android:screenOrientation="portrait" />
+
         <activity android:name="sk.fiit.adhunter.activities.SettingsActivity"
             android:icon="@drawable/login01" />
 
         <activity android:name=".activities.AdditionalInfoActivity"
+            android:screenOrientation="portrait"
             android:icon="@drawable/login01"
             android:windowSoftInputMode="stateHidden"/>
 
