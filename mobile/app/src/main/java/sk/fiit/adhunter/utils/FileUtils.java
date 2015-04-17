@@ -15,7 +15,7 @@ import java.util.Date;
 public class FileUtils {
     private static final String TAG = "FileUtils";
 
-    public static final String DIRECTORY_MAIN = "MyCameraApp";
+    public static final String DIRECTORY_MAIN = "AdHunter";
     public static final String DIRECTORY_UPLOAD = "to_upload";
     public static final String JSON_FILE_NAME = "photos-to-upload.json";
     public static final int MEDIA_TYPE_IMAGE = 1;

@@ -108,7 +108,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 params.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
                 params.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
                 params.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_AUTO);
-                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
                 params.setJpegQuality(100);
                 params.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
                 params.setRotation(mRotate);

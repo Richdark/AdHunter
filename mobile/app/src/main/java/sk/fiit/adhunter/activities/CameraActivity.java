@@ -179,23 +179,21 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                         mCamera.autoFocus(new Camera.AutoFocusCallback() {
                             @Override
                             public void onAutoFocus(boolean b, Camera camera) {
-                                log(TAG, "onAutoFocus, boolean = " + b + "camera ? null = " + (camera == null));
-                                if (camera != null) {
-                                    mCamera.takePicture(null, null, mPicture);
-                                }
+                                log(TAG, "onAutoFocus, boolean = " + b + ", camera ? null = " + (camera == null));
+                                mCamera.takePicture(null, null, mPicture);
+
+                                isPreviewStopped = true;
+                                playCameraSound();
+
+                                mCaptureButton.setBackgroundResource(R.drawable.circle_selector);
+                                mCaptureButton.setImageResource(R.drawable.ic_av_replay);
+
+                                mUploadButton.setAnimation(createAnimation(android.R.anim.fade_in));
+                                mUploadButton.setVisibility(View.VISIBLE);
+                                mAddButton.setAnimation(createAnimation(android.R.anim.fade_in));
+                                mAddButton.setVisibility(View.VISIBLE);
                             }
                         });
-
-                        isPreviewStopped = true;
-                        playCameraSound();
-
-                        mCaptureButton.setBackgroundResource(R.drawable.circle_selector);
-                        mCaptureButton.setImageResource(R.drawable.ic_av_replay);
-
-                        mUploadButton.setAnimation(createAnimation(android.R.anim.fade_in));
-                        mUploadButton.setVisibility(View.VISIBLE);
-                        mAddButton.setAnimation(createAnimation(android.R.anim.fade_in));
-                        mAddButton.setVisibility(View.VISIBLE);
 
                     } else {
                         toastLong(getString(R.string.gps_not_found));
@@ -341,7 +339,6 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onPictureTaken(byte[] bytes, Camera camera) {
             log(TAG, "onPictureTaken");
-            mCamera.cancelAutoFocus();
             mCamera.stopPreview();
             File compressedFile = FileUtils.getOutputMediaFile(MEDIA_TYPE_COMPRESSED, isWifiOrMobileOn);
             if(compressedFile == null) {
