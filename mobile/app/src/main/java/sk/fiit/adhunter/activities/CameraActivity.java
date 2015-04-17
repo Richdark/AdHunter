@@ -62,6 +62,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private ImageButton mCaptureButton;
     private ImageButton mUploadButton;
     private ImageButton mAddButton;
+    private FrameLayout mFramePreview;
     private LinearLayout mAddressLayout, mLoadingGPSLayout;
     private TextView mAddressText, mLatitude, mLongitude, mRefreshInterval;
 //    private TextView mLatitude, mLongitude;
@@ -122,8 +123,8 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
     private void setPreviews() {
         //Create our Preview and set it as the content of our activity
         mPreview = new CameraPreview(this, mCamera);
-        FrameLayout framePreview = (FrameLayout) findViewById(R.id.camera_preview);
-        framePreview.addView(mPreview);
+        mFramePreview = (FrameLayout) findViewById(R.id.camera_preview);
+        mFramePreview.addView(mPreview);
     }
 
     /**
