@@ -176,7 +176,16 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                     //get an image from the camera; here the user gets first time after taking photo
                     if(mLocation != null) {
 
-                        mCamera.takePicture(null, null, mPicture);
+                        mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                            @Override
+                            public void onAutoFocus(boolean b, Camera camera) {
+                                log(TAG, "onAutoFocus, boolean = " + b + "camera ? null = " + (camera == null));
+                                if (camera != null) {
+                                    mCamera.takePicture(null, null, mPicture);
+                                }
+                            }
+                        });
+
                         isPreviewStopped = true;
                         playCameraSound();
 
@@ -331,6 +340,8 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public void onPictureTaken(byte[] bytes, Camera camera) {
+            log(TAG, "onPictureTaken");
+            mCamera.cancelAutoFocus();
             mCamera.stopPreview();
             File compressedFile = FileUtils.getOutputMediaFile(MEDIA_TYPE_COMPRESSED, isWifiOrMobileOn);
             if(compressedFile == null) {
