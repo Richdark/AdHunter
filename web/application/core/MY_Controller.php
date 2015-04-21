@@ -26,7 +26,7 @@ class MY_Controller extends CI_Controller
         @session_start();
 
         // fill user model with data
-        $this->user->logged = $this->Online_user_model->is_logged(session_id(), $this->user->device_type);
+        $this->user->logged = $this->Online_user_model->is_logged(session_id());
         $user_info          = $this->Online_user_model->get_user_info(session_id());
         
         if ($user_info)

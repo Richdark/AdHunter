@@ -22,14 +22,16 @@ class Auth extends MY_Controller
 			$email          = $_POST['email'];
 			$typed_password = $_POST['password'];
 
-			if ($this->user->device_type == 'w')
+			// login from mobile application
+			if (isset($_POST['uid']))
 			{
-				@session_start();
-				$uid = session_id();
+				$device = 'm';
+				$uid    = $_POST['uid'];
 			}
 			else
 			{
-				$uid = $_POST['uid'];
+				$device = 'w';
+				$uid    = session_id();
 			}
 
 			$this->load->model('user_model','model');
@@ -57,10 +59,10 @@ class Auth extends MY_Controller
 
 				if ($db_password == $hashed_password)
 				{
-					$this->Online_user_model->login_user('DEFAULT', $user_id, $uid, $this->user->device_type);
-					
+					$this->Online_user_model->login_user('DEFAULT', $user_id, $uid, $device);
+
 					// show view for web version
-					if ($this->user->device_type == 'w')
+					if ($device == 'w')
 					{
 						header('Location: '. root_url());
 					}
@@ -89,7 +91,24 @@ class Auth extends MY_Controller
 	*/
 	public function logout()
 	{
-		$this->logout_user();
+		// login from mobile application
+		if (isset($_POST['uid']))
+		{
+			$device = 'm';
+			$uid    = $_POST['uid'];
+		}
+		else
+		{
+			$device = 'w';
+			$uid    = session_id();
+		}
+
+		$this->Online_user_model->logout_user($uid);
+		
+		if ($device != 'w')
+		{
+			echo "OK";
+		}
 		
 		header('Location: '. root_url());
 	}
@@ -205,30 +224,6 @@ class Auth extends MY_Controller
 		$this->load->model('user_model','model');
 		$this->model->save_user('DEFAULT',$name,$surname,$email,$hashed_password,$salt);
 		$this->load->template('registration_successful', $vars);
-	}
-
-	/**
-	 * Funkcia na odhlasenie pouzivatela
-	*/
-	// POST http://adhunter.eu/auth/logout_user/ uid
-	public function logout_user()
-	{
-		if ($this->user->device_type == 'w')
-		{
-			@session_start();
-			$uid = session_id();
-		}
-		else
-		{
-			$uid = $_POST['uid'];
-		}
-
-		$this->Online_user_model->logout_user($uid, $this->user->device_type);
-		
-		if ($this->user->device_type != 'w')
-		{
-			echo "OK";
-		}
 	}
 }
 
