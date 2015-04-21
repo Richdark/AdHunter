@@ -19,8 +19,8 @@ class Auth extends MY_Controller
 
 		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
-			$email          = $_POST['email'];
-			$typed_password = $_POST['password'];
+			$email    = $_POST['email'];
+			$password = $_POST['password'];
 
 			// login from mobile application
 			if (isset($_POST['uid']))
@@ -55,7 +55,7 @@ class Auth extends MY_Controller
 					$salt        = $row->salt;
 				}
 
-				$hashed_password = $this->hash_password($typed_password,$salt);
+				$hashed_password = $this->hash_password($password, $salt);
 
 				if ($db_password == $hashed_password)
 				{

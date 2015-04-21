@@ -14,8 +14,8 @@ class User_model extends CI_Model
 	*/
 	function get_user_by_login($email)
 	{
-		$query = $this->db->query("SELECT id, password, salt FROM users WHERE users.email = '$email'");
-		
+		$query = $this->db->select('id, password, salt')->from('users')->where('email', $email)->get();
+
 		return $query->result();
 	}
 
