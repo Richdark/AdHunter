@@ -9,7 +9,7 @@
         <item name="colorPrimary">@color/adhunter_indigo_500</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light">
+    <style name="AppTheme.NoActionAndTitleBar" parent="Theme.AppCompat.Light">
         <!--
 
         <item name="windowActionBar">false</item>
@@ -22,6 +22,10 @@
         <item name="windowActionBarOverlay">true</item>
         <item name="colorPrimary">#22000000</item>
         <!-- Customize your theme here -->
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+
     </style>
 
     <style name="ActionBar.AdHunterStyle" parent="@style/Widget.AppCompat.ActionBar.Solid">
