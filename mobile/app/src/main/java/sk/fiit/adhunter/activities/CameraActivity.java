@@ -381,6 +381,10 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
         public void success(GetUploadResponse getUploadResponse, Response response2) {
             dismissProgressDialog();
             toastShort(getUploadResponse.status);
+            mUploadButton.setVisibility(View.GONE);
+            mAddButton.setVisibility(View.GONE);
+            mCaptureButton.setImageResource(R.drawable.ic_image_camera_alt);
+            isPreviewStopped = false;
             mCamera.startPreview();
         }
 
