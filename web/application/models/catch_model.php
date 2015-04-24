@@ -9,7 +9,10 @@ class Catch_model extends CI_Model
 	}
 
 	function get_all($user_id) {
-		$query = $this->db->query('SELECT id, (user_id='.$user_id.') AS privileged, filename, uploaded, phone_model, type, comment, X(coordinates) AS x, Y(coordinates) AS y, state, backing_type_id, owner_id FROM catches');
+		$this->db->select('id, (user_id='. $this->db->escape($user_id). ') AS privileged, filename, uploaded, phone_model, type, comment, X(coordinates) AS x, Y(coordinates) AS y, state, backing_type_id, owner_id');
+		$this->db->from('catches');
+		$query = $this->db->get();
+
 		return $query->result();
 	}
 
