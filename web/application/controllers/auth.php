@@ -109,8 +109,11 @@ class Auth extends MY_Controller
 		{
 			echo "OK";
 		}
+		else
+		{
+			header('Location: '. root_url());
+		}
 		
-		header('Location: '. root_url());
 	}
 
 	/**
