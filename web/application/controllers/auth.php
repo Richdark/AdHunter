@@ -42,9 +42,20 @@ class Auth extends MY_Controller
 			// login not found
 			if ($row_cnt == 0)
 			{
-				array_push($vars['invalid_fields'], 'email');
-				array_push($vars['invalid_fields'], 'password');
-				$this->load->template('login', $vars);
+				// show view for web version
+				if ($device == 'w')
+				{
+					array_push($vars['invalid_fields'], 'email');
+					array_push($vars['invalid_fields'], 'password');
+					$this->load->template('login', $vars);
+				}
+
+				// return JSON for mobile version
+				else
+				{
+					header('Content-Type: application/json');
+					echo json_encode(array('status' => 2, 'message' => 'Uvedený účet (email) nebol nájdený.'));
+				}
 			}
 			else
 			{
@@ -70,13 +81,25 @@ class Auth extends MY_Controller
 					// return JSON for mobile version
 					else
 					{
-						echo "OK";
+						header('Content-Type: application/json');
+						echo json_encode(array('status' => 1, 'message' => 'Prihlásenie úspešné.'));
 					}
 				}
 				else
 				{
-					array_push($vars['invalid_fields'], 'password');
-					$this->load->template('login', $vars);
+					// show view for web version
+					if ($device == 'w')
+					{
+						array_push($vars['invalid_fields'], 'password');
+						$this->load->template('login', $vars);
+					}
+
+					// return JSON for mobile version
+					else
+					{
+						header('Content-Type: application/json');
+						echo json_encode(array('status' => 3, 'message' => 'Nesprávne heslo.'));
+					}
 				}
 			}
 		}
@@ -105,9 +128,10 @@ class Auth extends MY_Controller
 
 		$this->Online_user_model->logout_user($uid);
 		
-		if ($device != 'w')
+		if ($device == 'm')
 		{
-			echo "OK";
+			header('Content-Type: application/json');
+			echo json_encode(array('status' => 1, 'message' => 'Odhlásenie úspešné.'));
 		}
 		else
 		{
