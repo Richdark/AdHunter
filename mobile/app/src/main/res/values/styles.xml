@@ -15,13 +15,11 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item> -->
 
-        <item name="actionBarStyle">@style/ActionBar.AdHunterStyle</item>
+        <item name="actionBarStyle">@style/ActionBar.AdHunterStyle.Transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
-        <item name="colorPrimary">#22000000</item>
-        <!-- Customize your theme here -->
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -29,7 +27,14 @@
     </style>
 
     <style name="ActionBar.AdHunterStyle" parent="@style/Widget.AppCompat.ActionBar.Solid">
+        <item name="android:titleTextStyle">@style/ActionBar.AdHunter.TextStyle</item>
+        <!-- support library compatibility -->
         <item name="titleTextStyle">@style/ActionBar.AdHunter.TextStyle</item>
+    </style>
+
+    <style name="ActionBar.AdHunterStyle.Transparent">
+        <item name="android:background">@color/adhunter_transparent</item>
+        <item name="background">@color/adhunter_transparent</item>
     </style>
 
     <style name="ActionBar.AdHunterTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">

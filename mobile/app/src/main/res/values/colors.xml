@@ -8,5 +8,6 @@
     <color name="adhunter_green_a400">#00E676</color>
     <color name="adhunter_green_a700">#00C853</color>
     <color name="adhunter_grey_500">#9E9E9E</color>
+    <color name="adhunter_transparent">#22000000</color>
     <color name="hint_color">#808080</color>
 </resources>
