@@ -214,6 +214,26 @@ class Billboards extends MY_Controller
 	}
 
 	/*
+	 * premiestnenie billboardu
+	 */
+	public function move()
+	{
+		if(empty($_POST["catch_id"]) || !$this->user->logged) {
+			die("error");
+		}
+
+		$catch_id = $_POST["catch_id"];
+		$lat = &$_POST["lat"];
+		$lng = &$_POST["lng"];
+		$coordinates = "POINT($lat, $lng)";
+
+		$this->load->model('Catch_model', 'model');
+		$this->model->move_catch($catch_id, $coordinates);
+
+		echo "OK";
+	}
+
+	/*
 	 * zmazanie billboardu
 	 */
 	public function delete()

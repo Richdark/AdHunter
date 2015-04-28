@@ -45,9 +45,11 @@ function addBillboard(billboard, open)
 	{
 		position:     p,
 		map:          map,
+		draggable:    false,
+		icon:         billboard_img,
+
 		id:           billboard.id,
 		title:        billboard.filename,
-		icon:         billboard_img,
 		billboard:    billboard.filename,
 		uploaded:     billboard.uploaded,
 		comment:      billboard.comment,
@@ -107,6 +109,16 @@ function addBillboard(billboard, open)
 		new google.maps.event.trigger(marker, "click");
 	}
 
+	google.maps.event.addListener(marker, "dragend", function (e) {
+		var id = $("#info-content").data("id");
+		$.post("../move/", { catch_id: id, lat: e.latLng.lat(), lng: e.latLng.lng() }, function (ret) {
+			if(ret != "OK") {
+				alert(ret);
+				console.log(ret);
+			}
+		});
+	});
+
 	map.markers.push(marker);
 }
 
@@ -132,6 +144,15 @@ function handleAdd(billboard_img)
 		return false;
 	});
 
+	$("#mine").click(function() {
+		$(this).toggleClass("clicked").find("span").toggle();
+		for(var i=0; i<map.markers.length; i++) {
+			if(!map.markers[i].privileged) {
+				$(this).is(".clicked") ? map.markers[i].setMap(null) : map.markers[i].setMap(map);
+			}
+		}
+	});
+
 	$("#add-form .close").click(function() {
 		$("#add-form").hide();
 		$("#panel .right").toggle();
@@ -139,7 +160,29 @@ function handleAdd(billboard_img)
 		return false;
 	});
 
-	$("#map").on("mousedown", function (e) {
+	google.maps.event.addListener(map, "mousedown", function (e) {
+		if (adding) {
+			var p = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
+			new google.maps.Marker({ position: p, map: map, icon: billboard_img });
+			map.setOptions({ draggableCursor: "" });
+			$("#add-form").find("[name='lat']").val(e.latLng.lat());
+			$("#add-form").find("[name='lng']").val(e.latLng.lng());
+		}
+
+		return false;
+	});
+
+	// musim odchytit mouseup na celej mape vratane markerov
+	$("#map").on("mouseup", function () {
+		if (adding) {
+			adding = false;
+			$("#add-form").show();
+		}
+
+		return false;
+	});
+
+	/*$("#map").on("mousedown", function (e) {
 		if (adding) {
 			var w = $(this).width();
 			var h = $(this).height();
@@ -151,18 +194,8 @@ function handleAdd(billboard_img)
 			$("#add-form").find("[name='lat']").val(p.k);
 			$("#add-form").find("[name='lng']").val(p.D);
 		}
-
 		return false;
-	}).on("mouseup", function ()
-	{
-		if (adding)
-		{
-			adding = false;
-			$("#add-form").show();
-		}
-
-		return false;
-	});
+	})*/
 }
 
 function handleSearch(searchBox, markers) {
@@ -469,6 +502,20 @@ function initSidebar() {
 		}
 		return false;
 	});
+
+	$("#edit-sidebar #move").click(function() {
+		var id = $("#info-content").data("id");
+		map.infoWindow.close();
+		closeSidebar();
+		for(var i=0; i<map.markers.length; i++) {
+			if(map.markers[i].id == id) {
+				var marker = map.markers.splice(i, 1)[0];
+				marker.setOptions({draggable: true});
+			}
+		}
+	});
+
+
 }
 
 function initMenu() {
