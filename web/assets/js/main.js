@@ -478,6 +478,31 @@ function initMenu() {
 	});
 }
 
+function resolve_merge_candidates(verdict)
+{
+	c1 = $('#compare .left').data('id');
+	c2 = $('#compare .right').data('id');
+
+	$('#compare .verdicts').slideUp();
+
+	$('#compare').animate({	opacity: 0.5 }, 500, 'swing', function()
+	{
+		$.getJSON('../resolve_merge_candidates/' + c1 + '/' + c2 + '/' + verdict + '/', function(data)
+		{
+			var img1 = $('#compare .left img');
+			var img2 = $('#compare .right img');
+
+			img1.attr('src', img1.attr('src').substring(0, img1.attr('src').lastIndexOf('/')) + '/' + data[0]['filename']);
+			img2.attr('src', img2.attr('src').substring(0, img2.attr('src').lastIndexOf('/')) + '/' + data[1]['filename']);
+			$('#compare .left').data('id', data[0]['id']);
+			$('#compare .right').data('id', data[1]['id']);
+
+			$('#compare').animate({	opacity: 1 }, 500);
+			$('#compare .verdicts').slideDown();
+		});
+	});
+}
+
 var map = null;
 
 $(function() {

@@ -2,6 +2,11 @@
 
 class Catch_model extends CI_Model
 {
+	/**
+	 * @var float $max_distance Maximum distance of possibly same catches in metres
+	 */
+	private $max_distance = 100;
+
 	// toto je povinna "sablona" konstruktora modelu
 	function __construct()
 	{
@@ -26,8 +31,8 @@ class Catch_model extends CI_Model
 	function merge_catches($user_id, $main, $merged_arr)
 	{
 		// merge_state:
-		//    '0' => not approved
-		//    '1' => approved
+		//    '0' => not approved merge
+		//    '1' => approved merge
 
 		$updated = 0;
 
@@ -116,6 +121,71 @@ class Catch_model extends CI_Model
 
 		return $this->db->get();
 	}
+
+	/**
+	 * Get possible catch duplicates by their mutual distance
+	 *
+	 * @return array Array of possible duplicates
+	*/
+	function get_merge_candidates()
+	{
+		// 1°    ~= 111.325km
+		// 1km   ~= 1 / 111.325° = 0.008982708°
+		// 100m  ~= 0.000898271°
+		
+		// get number of catches
+		$count = $this->db->select('COUNT(*) AS total')->from('catches')->get()->result()[0]->total;
+
+		do
+		{
+			$candidate_id = rand(1, $count);
+			$query        = $this->db->query("SELECT id, user_id, owner_id, backing_type_id, filename FROM catches WHERE id = ". $candidate_id. " UNION SELECT c2.id, c2.user_id, c2.owner_id, c2.backing_type_id, c2.filename FROM catches AS c1, catches AS c2 WHERE GLength(LineString(c1.coordinates, c2.coordinates)) < ". $this->max_distance_degrees(). " AND c1.id = ". $candidate_id. " AND c2.id != ". $candidate_id);
+			$candidates   = $query->result();
+		}
+		while (count($candidates) <= 1);
+
+		return $candidates;
+	}
+
+	 /**
+     * Resolve merge suggestions
+     *
+     * @param integer $user_id ID of user who resolved this merge suggestion
+     * @param integer $c1 ID of first merge candidate
+     * @param integer $c2 ID of second merge candidate
+     * @param string $verdict 1 if images are the same, 0 otherwise
+     */
+    public function resolve_merge_candidates($user_id, $c1, $c2, $verdict)
+    {
+    	$c1 = (is_numeric($c1))? $c1 : -1;
+    	$c2 = (is_numeric($c2))? $c2 : -1;
+
+    	// same or not same - no other option possible :)
+    	if ($verdict == '0' or $verdict == '1')
+    	{
+    		// are they close enough?
+	        $distance = $this->db->query("SELECT GLength(LineString(c1.coordinates, c2.coordinates)) AS distance FROM catches AS c1, catches AS c2 WHERE c1.id = ". $c1. " AND c2.id = ". $c2)->result();
+	        
+	        if (count($distance) == 1)
+	        {
+	        	$distance = $distance[0]->distance;
+
+		        // save verdict
+		        if ($distance < $this->max_distance_degrees())
+		        {
+		        	$this->db->query("INSERT INTO merge_suggestions VALUES(NULL, $user_id, $c1, $c2, '$verdict', NOW())");
+		        }
+	        }
+    	}
+    }
+
+    /**
+     * Return maximum distance in degrees
+     */
+    private function max_distance_degrees()
+    {
+    	return (1 / 111325) * $this->max_distance;
+    }
 }
 
 ?>
