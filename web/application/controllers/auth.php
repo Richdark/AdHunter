@@ -19,17 +19,19 @@ class Auth extends MY_Controller
 
 		if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
-			$email          = $_POST['email'];
-			$typed_password = $_POST['password'];
+			$email    = $_POST['email'];
+			$password = $_POST['password'];
 
-			if ($this->user->device_type == 'w')
+			// login from mobile application
+			if (isset($_POST['uid']))
 			{
-				@session_start();
-				$uid = session_id();
+				$device = 'm';
+				$uid    = $_POST['uid'];
 			}
 			else
 			{
-				$uid = $_POST['uid'];
+				$device = 'w';
+				$uid    = session_id();
 			}
 
 			$this->load->model('user_model','model');
@@ -40,9 +42,20 @@ class Auth extends MY_Controller
 			// login not found
 			if ($row_cnt == 0)
 			{
-				array_push($vars['invalid_fields'], 'email');
-				array_push($vars['invalid_fields'], 'password');
-				$this->load->template('login', $vars);
+				// show view for web version
+				if ($device == 'w')
+				{
+					array_push($vars['invalid_fields'], 'email');
+					array_push($vars['invalid_fields'], 'password');
+					$this->load->template('login', $vars);
+				}
+
+				// return JSON for mobile version
+				else
+				{
+					header('Content-Type: application/json');
+					echo json_encode(array('status' => 2, 'message' => 'Uvedený účet (email) nebol nájdený.'));
+				}
 			}
 			else
 			{
@@ -53,14 +66,14 @@ class Auth extends MY_Controller
 					$salt        = $row->salt;
 				}
 
-				$hashed_password = $this->hash_password($typed_password,$salt);
+				$hashed_password = $this->hash_password($password, $salt);
 
 				if ($db_password == $hashed_password)
 				{
-					$this->Online_user_model->login_user('DEFAULT', $user_id, $uid, $this->user->device_type);
-					
+					$this->Online_user_model->login_user('DEFAULT', $user_id, $uid, $device);
+
 					// show view for web version
-					if ($this->user->device_type == 'w')
+					if ($device == 'w')
 					{
 						header('Location: '. root_url());
 					}
@@ -68,13 +81,25 @@ class Auth extends MY_Controller
 					// return JSON for mobile version
 					else
 					{
-						echo "OK";
+						header('Content-Type: application/json');
+						echo json_encode(array('status' => 1, 'message' => 'Prihlásenie úspešné.'));
 					}
 				}
 				else
 				{
-					array_push($vars['invalid_fields'], 'password');
-					$this->load->template('login', $vars);
+					// show view for web version
+					if ($device == 'w')
+					{
+						array_push($vars['invalid_fields'], 'password');
+						$this->load->template('login', $vars);
+					}
+
+					// return JSON for mobile version
+					else
+					{
+						header('Content-Type: application/json');
+						echo json_encode(array('status' => 3, 'message' => 'Nesprávne heslo.'));
+					}
 				}
 			}
 		}
@@ -89,9 +114,30 @@ class Auth extends MY_Controller
 	*/
 	public function logout()
 	{
-		$this->logout_user();
+		// login from mobile application
+		if (isset($_POST['uid']))
+		{
+			$device = 'm';
+			$uid    = $_POST['uid'];
+		}
+		else
+		{
+			$device = 'w';
+			$uid    = session_id();
+		}
+
+		$this->Online_user_model->logout_user($uid);
 		
-		header('Location: '. root_url());
+		if ($device == 'm')
+		{
+			header('Content-Type: application/json');
+			echo json_encode(array('status' => 1, 'message' => 'Odhlásenie úspešné.'));
+		}
+		else
+		{
+			header('Location: '. root_url());
+		}
+		
 	}
 
 	/**
@@ -205,30 +251,6 @@ class Auth extends MY_Controller
 		$this->load->model('user_model','model');
 		$this->model->save_user('DEFAULT',$name,$surname,$email,$hashed_password,$salt);
 		$this->load->template('registration_successful', $vars);
-	}
-
-	/**
-	 * Funkcia na odhlasenie pouzivatela
-	*/
-	// POST http://adhunter.eu/auth/logout_user/ uid
-	public function logout_user()
-	{
-		if ($this->user->device_type == 'w')
-		{
-			@session_start();
-			$uid = session_id();
-		}
-		else
-		{
-			$uid = $_POST['uid'];
-		}
-
-		$this->Online_user_model->logout_user($uid, $this->user->device_type);
-		
-		if ($this->user->device_type != 'w')
-		{
-			echo "OK";
-		}
 	}
 }
 

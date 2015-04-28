@@ -40,19 +40,17 @@ class Online_user_model extends CI_Model
 		}
 	}
 
-	function logout_user($uid, $type)
+	function logout_user($uid)
 	{
 		$this->db->where('uid', $uid);
-		$this->db->where('type', $type);
 
 		// delete from ...
 		$this->db->delete('online_users');
 	}
 
-	function is_logged($uid, $type)
+	function is_logged($uid)
 	{
 		$this->db->where('uid', $uid);
-		$this->db->where('type', $type);
 		$query = $this->db->get('online_users');
 
 		return $query->num_rows() > 0 ? true : false;
