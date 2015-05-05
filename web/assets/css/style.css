@@ -426,11 +426,62 @@ body.landing footer {
    ---------------- MAP ------------------
    ======================================= */
 
+#panel {
+	background: rgba(255,255,255,.6);
+	position: absolute;
+	left: 0;
+	top: 80px;
+	z-index: 1;
+	padding: 5px 0;
+	width: 100%;
+}
+
+	#panel .right {
+		border: 1px #aaa solid;
+		font-size: 20px;
+		text-decoration: none;
+		margin: 5px 15px 5px 0;
+		padding: 5px;
+		float: right;
+	}
+
+	#panel a.right {
+		background-color: #091624;
+		color: #fff;
+	}
+
+	#panel span.right {
+		font-size: 14px;
+		line-height: 20px;
+	}
+
+	#panel #add:hover,
+	#panel #mine.clicked,
+	#panel span.right {
+		background-color: #fff;
+		color: #091624;
+	}
+
+	#panel input[type="text"] {
+		width: 480px;
+		height: 36px;
+		padding: 0 5px;
+		margin: 5px 0 0 10px;
+		border: 1px #aaa solid;
+		background-color: #fff;
+		color: #444;
+		opacity: 0.75;
+	}
+
+	#panel input[type="text"]:hover,
+	#panel input[type="text"]:focus {
+		opacity: 1.0;
+	}
 
 #map {
 	position: absolute;
 	width: 100%;
-	top: 80px;
+	top: 135px;
 	bottom: 0;
 }
 
@@ -565,57 +616,6 @@ a.close {
 			background: #f5f5f5;
 		}
 
-#panel {
-	background: rgba(255,255,255,.6);
-	position: absolute;
-	left: 0;
-	top: 80px;
-	z-index: 1;
-	padding: 10px 0;
-	width: 100%;
-}
-
-	#panel .right {
-		border: 1px #aaa solid;
-		font-size: 20px;
-		text-decoration: none;
-		margin: 5px 15px;
-		padding: 5px;
-		float: right;
-	}
-
-	#panel a.right {
-		background-color: #091624;
-		color: #fff;
-	}
-
-	#panel span.right {
-		font-size: 14px;
-		line-height: 20px;
-	}
-
-	#panel a.right:hover,
-	#panel span.right {
-		background-color: #fff;
-		color: #091624;
-	}
-
-	#panel input[type="text"] {
-		width: 480px;
-		height: 36px;
-		padding: 0 5px;
-		margin: 5px 0 0 10px;
-		border: 1px #aaa solid;
-		background-color: #fff;
-		color: #444;
-		opacity: 0.75;
-	}
-
-	#panel input[type="text"]:hover,
-	#panel input[type="text"]:focus {
-		opacity: 1.0;
-	}
-
 #add-form {
 	position: absolute;
 	left: 50%;
@@ -657,6 +657,7 @@ a.close {
 
 	.form select,
 	.form textarea,
+	.form input[type="button"],
 	.form input[type="submit"] {
 		border: 1px #bbb solid;
 		background: #eee;
@@ -676,6 +677,7 @@ a.close {
 		padding: 5px 10px;
 	}
 
+	.form input[type="button"],
 	.form input[type="submit"] {
 		width: auto;
 		padding: 5px 10px;

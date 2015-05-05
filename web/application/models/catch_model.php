@@ -70,12 +70,19 @@ class Catch_model extends CI_Model
 	{
 		$data = array(
 			'comment'         => $comment,
-			'owner_id' => $owner_id,
+			'owner_id'        => $owner_id,
 			'backing_type_id' => $backing_type
 		);
 
 		$this->db->where('id', $catch_id);
 		$this->db->update('catches', $data); 
+	}
+
+	function move_catch($catch_id, $coordinates)
+	{
+		$this->db->where('id', $catch_id);
+		$this->db->set('coordinates', $coordinates, false);
+		$this->db->update('catches');
 	}
 
 	function delete_catch($catch_id)
