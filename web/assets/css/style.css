@@ -311,11 +311,10 @@ body.landing footer {
 
 					.content_regular > .content .profile_content #compare .verdicts a {
 						display: inline-block;
-						margin: 20px 10px 0;
+						margin: 20px 5px 0;
 						padding: 10px 20px;
 						color: #fff;
 						text-decoration: none;
-						text-transform: uppercase;
 						background-color: #eaeaea;
 						color: #000;
 					}
@@ -330,6 +329,17 @@ body.landing footer {
 						color: #fff;
 					}
 
+					.content_regular > .content .profile_content #compare .verdicts a.n:hover {
+						background-color: #d0d0d0;
+					}
+
+				.content_regular > .content .profile_content #compare .note {
+					display: block;
+					border-top: 1px #e0e0e0 solid;
+					margin-top: 20px;
+					padding-top: 10px;
+				}
+				
 				.content_regular > .content .profile_content #compare .left,
 				.content_regular > .content .profile_content #compare .right {
 					max-width: 410px;

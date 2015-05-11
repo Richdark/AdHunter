@@ -168,7 +168,7 @@ class Catch_model extends CI_Model
     	$c2 = (is_numeric($c2))? $c2 : -1;
 
     	// same or not same - no other option possible :)
-    	if ($verdict == '0' or $verdict == '1')
+    	if (in_array($verdict, array('1', '2', '3', '4', '5')))
     	{
     		// are they close enough?
 	        $distance = $this->db->query("SELECT GLength(LineString(c1.coordinates, c2.coordinates)) AS distance FROM catches AS c1, catches AS c2 WHERE c1.id = ". $c1. " AND c2.id = ". $c2)->result();
