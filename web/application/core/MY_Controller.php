@@ -14,14 +14,25 @@ class MY_Controller extends CI_Controller
         $this->user = new UserModelHelper();
         $this->load->model('Online_user_model');
         
-        if (array_key_exists('HTTP_USER_AGENT', $_SERVER))
+        if (!empty($_POST["uid"]))      // mobil device
+        {
+            $this->user->device_type = 'm';
+            $this->user->session_id = $_POST["uid"];
+        }
+        else                            // web user
+        {
+            $this->user->device_type = 'w';
+            $this->user->session_id = session_id();
+        }
+
+        /*if (array_key_exists('HTTP_USER_AGENT', $_SERVER))
         {
             $ret = (bool)preg_match('#\b(ip(hone|od|ad)|android|opera m(ob|in)i|windows (phone|ce)|blackberry|tablet'.
             '|s(ymbian|eries60|amsung)|p(laybook|alm|rofile/midp|laystation portable)|nokia|fennec|htc[\-_]'.
             '|mobile|up\.browser|[1-4][0-9]{2}x[1-4][0-9]{2})\b#i', $_SERVER['HTTP_USER_AGENT']);
 
             $this->user->device_type = $ret ? 'm' : 'w';
-        }
+        }*/
         
         @session_start();
 
