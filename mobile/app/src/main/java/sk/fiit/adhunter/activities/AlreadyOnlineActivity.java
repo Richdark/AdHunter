@@ -3,6 +3,7 @@ package sk.fiit.adhunter.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -17,6 +18,7 @@ import sk.fiit.adhunter.abs.BaseActivity;
 import sk.fiit.adhunter.models.Photo;
 import sk.fiit.adhunter.services.io.GetUploadResponse;
 import sk.fiit.adhunter.tasks.UploadPhotoTask;
+import sk.fiit.adhunter.utils.Config;
 import sk.fiit.adhunter.utils.FileUtils;
 import sk.fiit.adhunter.utils.SerializationUtils;
 import sk.fiit.adhunter.utils.Strings;
@@ -98,9 +100,11 @@ public class AlreadyOnlineActivity extends BaseActivity {
         getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mPhotoList.get(currentPhotoBeingSent).getImageByteArray()),
                 new TypedString(String.valueOf(mPhotoList.get(currentPhotoBeingSent).getLatitude())),
                 new TypedString(String.valueOf(mPhotoList.get(currentPhotoBeingSent).getLongitude())),
+                new TypedString(Config.DEVICE_ID),
                 new TypedString(mPhotoList.get(currentPhotoBeingSent).getComment()),
                 new TypedString(mPhotoList.get(currentPhotoBeingSent).getBillboardType()),
                 new TypedString(mPhotoList.get(currentPhotoBeingSent).getOwner()),
+                new TypedString(Build.MODEL),
                 uploadResponse);
 
         log(TAG, "BILLBOARD-OWNER = " + mPhotoList.get(currentPhotoBeingSent).getOwner());
@@ -133,9 +137,11 @@ public class AlreadyOnlineActivity extends BaseActivity {
                     getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mPhotoList.get(currentPhotoBeingSent).getImageByteArray()),
                             new TypedString(String.valueOf(mPhotoList.get(currentPhotoBeingSent).getLatitude())),
                             new TypedString(String.valueOf(mPhotoList.get(currentPhotoBeingSent).getLongitude())),
+                            new TypedString(Config.DEVICE_ID),
                             new TypedString(mPhotoList.get(currentPhotoBeingSent).getComment()),
                             new TypedString(mPhotoList.get(currentPhotoBeingSent).getBillboardType()),
                             new TypedString(mPhotoList.get(currentPhotoBeingSent).getOwner()),
+                            new TypedString(Build.MODEL),
                             uploadResponse);
 
                 } catch (InterruptedException e) {

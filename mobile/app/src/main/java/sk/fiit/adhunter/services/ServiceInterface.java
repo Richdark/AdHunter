@@ -14,6 +14,7 @@ import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedFile;
 import retrofit.mime.TypedString;
 import sk.fiit.adhunter.models.Owner;
+import sk.fiit.adhunter.services.io.GetLoginResponse;
 import sk.fiit.adhunter.services.io.GetUploadResponse;
 
 /**
@@ -23,7 +24,7 @@ public interface ServiceInterface {
 
     @FormUrlEncoded
     @POST("/auth/login/")
-    void loginUser(@Field("email") String email, @Field("password") String password, @Field("uid") String uid, @Field("send") String send, Callback<Response> response);
+    void loginUser(@Field("email") String email, @Field("password") String password, @Field("uid") String uid, @Field("send") String send, Callback<GetLoginResponse> response);
 
     @FormUrlEncoded
     @POST("/auth/logout/")
@@ -34,9 +35,11 @@ public interface ServiceInterface {
     void uploadPhoto(@Part("photo\"; filename=\"photo.jpg") TypedByteArray photo,
                      @Part("lat") TypedString latitude,
                      @Part("lng") TypedString longitude,
+                     @Part("uid") TypedString uid,
                      @Part("comment") TypedString comment,
                      @Part("backing_type") TypedString billboardType,
                      @Part("owner_id") TypedString owner,
+                     @Part("model") TypedString model,
                      Callback<GetUploadResponse> response);
 
     @GET("/owners/current_list/")

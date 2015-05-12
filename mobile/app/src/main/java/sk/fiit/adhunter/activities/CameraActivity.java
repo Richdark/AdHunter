@@ -7,6 +7,7 @@ import android.hardware.Camera.PictureCallback;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -208,9 +209,11 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                     getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mCurrentPhoto.getImageByteArray()),
                             new TypedString(String.valueOf(mCurrentPhoto.getLatitude())),
                             new TypedString(String.valueOf(mCurrentPhoto.getLongitude())),
+                            new TypedString(Config.DEVICE_ID),
                             new TypedString(mCurrentPhoto.getComment()),
                             new TypedString(mCurrentPhoto.getBillboardType()),
                             new TypedString(mCurrentPhoto.getOwner()),
+                            new TypedString(Build.MODEL),
                             uploadResponse);
                 } else {
 

@@ -1,6 +1,7 @@
 package sk.fiit.adhunter.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import sk.fiit.adhunter.models.CurrentPhoto;
 import sk.fiit.adhunter.models.Owner;
 import sk.fiit.adhunter.models.Photo;
 import sk.fiit.adhunter.services.io.GetUploadResponse;
+import sk.fiit.adhunter.utils.Config;
 import sk.fiit.adhunter.utils.Strings;
 
 /**
@@ -133,9 +135,11 @@ public class AdditionalInfoActivity extends BaseActivity implements View.OnClick
                         getServiceInterface().uploadPhoto(new TypedByteArray("image/jpeg", mCurrentPhoto.getImageByteArray()),
                                 new TypedString(String.valueOf(mCurrentPhoto.getLatitude())),
                                 new TypedString(String.valueOf(mCurrentPhoto.getLongitude())),
+                                new TypedString(Config.DEVICE_ID),
                                 new TypedString(mCurrentPhoto.getComment()),
                                 new TypedString(mCurrentPhoto.getBillboardType()),
                                 new TypedString(mCurrentPhoto.getOwner()),
+                                new TypedString(Build.MODEL),
                                 uploadResponse);
                     } else {
                         toastShort(getResources().getString(R.string.photo_upload_failed));
