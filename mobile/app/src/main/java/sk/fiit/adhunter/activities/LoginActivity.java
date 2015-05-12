@@ -11,7 +11,6 @@ import sk.fiit.adhunter.abs.BaseActivity;
 import sk.fiit.adhunter.models.User;
 import sk.fiit.adhunter.services.io.GetLoginResponse;
 import sk.fiit.adhunter.utils.Config;
-import sk.fiit.adhunter.utils.Strings;
 
 import java.util.Random;
 

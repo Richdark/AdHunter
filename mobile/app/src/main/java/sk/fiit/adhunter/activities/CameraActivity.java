@@ -213,7 +213,7 @@ public class CameraActivity extends BaseActivity implements View.OnClickListener
                             new TypedString(mCurrentPhoto.getComment()),
                             new TypedString(mCurrentPhoto.getBillboardType()),
                             new TypedString(mCurrentPhoto.getOwner()),
-                            new TypedString(Build.MODEL),
+                            new TypedString(Build.MANUFACTURER + " " + Build.MODEL),
                             uploadResponse);
                 } else {
 

@@ -104,7 +104,7 @@ public class AlreadyOnlineActivity extends BaseActivity {
                 new TypedString(mPhotoList.get(currentPhotoBeingSent).getComment()),
                 new TypedString(mPhotoList.get(currentPhotoBeingSent).getBillboardType()),
                 new TypedString(mPhotoList.get(currentPhotoBeingSent).getOwner()),
-                new TypedString(Build.MODEL),
+                new TypedString(Build.MANUFACTURER + " " + Build.MODEL),
                 uploadResponse);
 
         log(TAG, "BILLBOARD-OWNER = " + mPhotoList.get(currentPhotoBeingSent).getOwner());
@@ -141,7 +141,7 @@ public class AlreadyOnlineActivity extends BaseActivity {
                             new TypedString(mPhotoList.get(currentPhotoBeingSent).getComment()),
                             new TypedString(mPhotoList.get(currentPhotoBeingSent).getBillboardType()),
                             new TypedString(mPhotoList.get(currentPhotoBeingSent).getOwner()),
-                            new TypedString(Build.MODEL),
+                            new TypedString(Build.MANUFACTURER + " " + Build.MODEL),
                             uploadResponse);
 
                 } catch (InterruptedException e) {
