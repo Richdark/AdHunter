@@ -1,5 +1,16 @@
 <div id="panel">
 	<a id="add" class="right" href="#">Pridať</a>
+	<?php
+	if ($_user->logged)
+	{
+	?>
+		<a id="mine" class="right" href="#">
+			<span>Zobraziť iba moje billboardy</span>
+			<span style="display:none">Zobraziť všetky billboardy</span>
+		</a>
+	<?php
+	}
+	?>
 	<span class="right" style="display: none">Kliknite na mapu pre vyznačenie pozície nájdeného billboardu.</span>
 	<input id="search" type="text" placeholder="Zadajte objekt alebo adresu">
 </div>
@@ -47,7 +58,8 @@
 		<textarea name="comment" placeholder="Môžete nám k nemu niečo napísať."></textarea>
 		<br>
 
-		<input name="edit" type="submit" value="Odoslať">
+		<input id="move" type="button" value="Premiestniť">
+		<input name="edit" type="submit" value="Uložiť">
 		<input name="delete" type="submit" value="Zmazať">
 	</form>
 </div>

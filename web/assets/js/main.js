@@ -45,15 +45,17 @@ function addBillboard(billboard, open)
 	{
 		position:     p,
 		map:          map,
-		id:           billboard.id,
-		title:        billboard.filename,
+		draggable:    false,
 		icon:         billboard_img,
-		billboard:    billboard.filename,
-		uploaded:     billboard.uploaded,
-		comment:      billboard.comment,
-		backing_type: billboard.backing_type_id,
-		owner_id:     billboard.owner_id,
-		state:        billboard.state,
+
+		id:           billboard.id,					// id billboardu
+		title:        billboard.filename,			// title viditelny pri mouseoveri
+		billboard:    billboard.filename,			// urcuje nazov ulovku
+		uploaded:     billboard.uploaded,			// datum uploadovania
+		comment:      billboard.comment,			// komentar k billboardu
+		backing_type: billboard.backing_type_id,	// id typu nosica
+		owner_id:     billboard.owner_id,			// id vlastnika
+		state:        billboard.state,				// 1, ak je aktivny, inak je zmergovany
 		privileged:   billboard.privileged
 	});
 
@@ -64,8 +66,7 @@ function addBillboard(billboard, open)
 
 		var owner = $.grep($("#map").data("owners"), function(o){ return o.id == marker.owner_id; });
 		var owner_name = owner.length ? owner[0].name : "";
-		// map.infoWindow.close();
-		// map.infoWindow.setContent(null);
+
 		$("#info-content").data("id", this.id);
 		$("#info-content").find(".owner").text(owner_name);
 		$("#info-content").find(".uploaded").text(marker.uploaded);
@@ -107,6 +108,16 @@ function addBillboard(billboard, open)
 		new google.maps.event.trigger(marker, "click");
 	}
 
+	google.maps.event.addListener(marker, "dragend", function (e) {
+		var id = $("#info-content").data("id");
+		$.post("../move/", { catch_id: id, lat: e.latLng.lat(), lng: e.latLng.lng() }, function (ret) {
+			if(ret != "OK") {
+				alert(ret);
+				console.log(ret);
+			}
+		});
+	});
+
 	map.markers.push(marker);
 }
 
@@ -120,16 +131,28 @@ function addBillboards()
 	}
 }
 
+// funkcia zabezpecujuca pridanie ulovku, zobrazenie iba mojich ulovkov
 function handleAdd(billboard_img)
 {
 	var adding = false;
 	
+	// pridaj ulovok
 	$("#add").click(function() {
 		$("#panel .right").toggle();
 		adding = true;
 		map.setOptions({ draggableCursor: "crosshair" });
 
 		return false;
+	});
+
+	// zobraz iba moje ulovky / zobraz vsetky
+	$("#mine").click(function() {
+		$(this).toggleClass("clicked").find("span").toggle();
+		for(var i=0; i<map.markers.length; i++) {
+			if(!map.markers[i].privileged) {
+				$(this).is(".clicked") ? map.markers[i].setMap(null) : map.markers[i].setMap(map);
+			}
+		}
 	});
 
 	$("#add-form .close").click(function() {
@@ -139,24 +162,21 @@ function handleAdd(billboard_img)
 		return false;
 	});
 
-	$("#map").on("mousedown", function (e) {
+	google.maps.event.addListener(map, "mousedown", function (e) {
 		if (adding) {
-			var w = $(this).width();
-			var h = $(this).height();
-
-			map.panBy(e.clientX - (w / 2), e.clientY - $("#map").offset().top - (h / 2));
-			var p = map.getCenter();
+			var p = new google.maps.LatLng(e.latLng.lat(), e.latLng.lng());
 			new google.maps.Marker({ position: p, map: map, icon: billboard_img });
 			map.setOptions({ draggableCursor: "" });
-			$("#add-form").find("[name='lat']").val(p.k);
-			$("#add-form").find("[name='lng']").val(p.D);
+			$("#add-form").find("[name='lat']").val(e.latLng.lat());
+			$("#add-form").find("[name='lng']").val(e.latLng.lng());
 		}
 
 		return false;
-	}).on("mouseup", function ()
-	{
-		if (adding)
-		{
+	});
+
+	// musim odchytit mouseup na celej mape vratane markerov, preto to nemozem robit cez google.maps.event.addListener
+	$("#map").on("mouseup", function () {
+		if (adding) {
 			adding = false;
 			$("#add-form").show();
 		}
@@ -165,6 +185,7 @@ function handleAdd(billboard_img)
 	});
 }
 
+// zabezpecuje vyhladavanie na mape pomocou search panela
 function handleSearch(searchBox, markers) {
 	var places = searchBox.getPlaces();
 
@@ -177,7 +198,7 @@ function handleSearch(searchBox, markers) {
 		marker.setMap(null);
 	}
 
-	markers = [];
+	markers = [];			// pole najdenych pozicii
 	var bounds = new google.maps.LatLngBounds();
 	for (var i = 0, place; place = places[i]; i++)
 	{
@@ -190,6 +211,7 @@ function handleSearch(searchBox, markers) {
 	return markers;
 }
 
+// callback po nacitani kniznice pre google maps API
 function initMap()
 {
 	var point = new google.maps.LatLng(48.1475259,17.1073104);
@@ -197,36 +219,37 @@ function initMap()
 	{
 		center: point,
 		zoom: 16,
-		mapTypeId: "roadmap",
+		mapTypeId: "roadmap",		// typ mapy
 		// mapTypeControlOptions: { mapTypeIds: ["roadmap", "satellite" ] },
-		// scrollwheel: false,
 		// draggable: false,
-		streetViewControl: false,
+		streetViewControl: false,	// nechceme street view
 
-		panControlOptions:
+		panControlOptions:			// pozicia ovladacich prvkov pre pohyb na mape
 		{
 			position: google.maps.ControlPosition.LEFT_BOTTOM
 		},
-		zoomControlOptions:
+		zoomControlOptions:			// pozicia ovladacich prvkov pre zoomovanie
 		{
 			style: google.maps.ZoomControlStyle.LARGE,
 			position: google.maps.ControlPosition.LEFT_BOTTOM
 		},
-		mapTypeControl: false
+		mapTypeControl: false		// nechceme, aby pouzivatel mohol menit typ mapy
 	});
 
-	var mcOptions = {gridSize: 50, maxZoom: 15};
+	// clustrovanie
+	//var mcOptions = {gridSize: 50, maxZoom: 15};
 	// var mc = new MarkerClusterer(map, [], mcOptions);
 	// console.log(mc);
 
-	var markers = [];		// search red markers
+	// pridame panel na vyhladavanie
+	var markers = [];		// cervene znacky pri vyhladavani
 	var searchBox = new google.maps.places.SearchBox($("#search").get(0));
 	google.maps.event.addListener(searchBox, "places_changed", function()
 	{
-		markers = handleSearch(searchBox, markers);
+		markers = handleSearch(searchBox, markers);		// po stlaceni tlacitka vyhladaj
 	});
-	// map.controls[google.maps.ControlPosition.TOP_LEFT].push($("#search").get(0));
 	
+	// po nacitani mapy pridame ulovky
 	var billboard_img = "../../assets/img/billboard_32.png";
 	google.maps.event.addListenerOnce(map, "idle", function()
 	{
@@ -235,12 +258,14 @@ function initMap()
 		addBillboards();
 	});
 
+	// ak je mapa zobrazena a mame moznost pridavat ulovky
 	if ($("#add-form").length)
 	{
 		handleAdd(billboard_img);
 	}
 }
 
+// oprav fixed position na mobilnych zariadeniach (starsie androidy niesu kompatibilne s position:fixed)
 function fixMobile() {
 	if($(window).height() < parseInt($(".app").css("min-height"))
 	|| $(window).width() < 840
@@ -252,6 +277,7 @@ function fixMobile() {
 	}
 }
 
+// bocny panel pre upravovaie ulovkov
 function map_sidebar_edit()
 {
 	if ($('.sidebar:visible').length)
@@ -274,25 +300,6 @@ function map_sidebar_edit()
 	$("#edit-sidebar [name='owner_id']").val(owner.id);
 	$("#edit-sidebar [name='backing_type'][value='"+billboard.backing_type_id+"']").prop("checked", true);
 	$("#edit-sidebar [name='comment']").text(billboard.comment);
-}
-
-// store hash url into "associative array"
-function hash_options(source)
-{
-	// use hash from url address if source is not provided
-	var hash = (typeof source !== 'undefined') ? source : window.location.hash;
-	hash     = hash.substring(2);		
-	var options_ord = hash.split(';');
-	var options     = [];
-
-	for (var i = options_ord.length - 1; i >= 0; i--)
-	{
-		var option = options_ord[i].split(':');
-		// #/option:value ==> [option] = value
-		options[option[0]] = option[1];
-	}
-
-	return options;
 }
 
 // merge selected billboards
@@ -395,12 +402,14 @@ function map_sidebar_merge(billboard)
 	}
 }
 
+// funkcia na skrytie bocneho panela
 function closeSidebar() {
 	$('.sidebar').fadeOut(function () {
 		$('#map,#panel').animate({ width: '100%' }, 500);
 	});
 }
 
+// inicializuj bocny panel (pre mergovanie aj editovanie)
 function initSidebar() {
 	$("#map").on("click", "a.merge", function() {
 		var id = $("#info-content").data("id");
@@ -469,8 +478,22 @@ function initSidebar() {
 		}
 		return false;
 	});
+
+	// premiestnenie ulovku
+	$("#edit-sidebar #move").click(function() {
+		var id = $("#info-content").data("id");
+		map.infoWindow.close();
+		closeSidebar();
+		for(var i=0; i<map.markers.length; i++) {
+			if(map.markers[i].id == id) {
+				var marker = map.markers.splice(i, 1)[0];
+				marker.setOptions({draggable: true});
+			}
+		}
+	});
 }
 
+// responsive menu
 function initMenu() {
 	$("header").on("click", "#toggle", function() {
 		$("header ul").toggle();
@@ -478,13 +501,38 @@ function initMenu() {
 	});
 }
 
+function resolve_merge_candidates(verdict)
+{
+	c1 = $('#compare .left').data('id');
+	c2 = $('#compare .right').data('id');
+
+	$('#compare .verdicts').slideUp();
+
+	$('#compare').animate({	opacity: 0.5 }, 500, 'swing', function()
+	{
+		$.getJSON('../resolve_merge_candidates/' + c1 + '/' + c2 + '/' + verdict + '/', function(data)
+		{
+			var img1 = $('#compare .left img');
+			var img2 = $('#compare .right img');
+
+			img1.attr('src', img1.attr('src').substring(0, img1.attr('src').lastIndexOf('/')) + '/' + data[0]['filename']);
+			img2.attr('src', img2.attr('src').substring(0, img2.attr('src').lastIndexOf('/')) + '/' + data[1]['filename']);
+			$('#compare .left').data('id', data[0]['id']);
+			$('#compare .right').data('id', data[1]['id']);
+
+			$('#compare').animate({	opacity: 1 }, 500);
+			$('#compare .verdicts').slideDown();
+		});
+	});
+}
+
 var map = null;
 
 $(function() {
 	if ($('#map').length > 0) {
-		$.get("../get_catches/", function(billboards) {
+		$.get("../get_catches/", function(billboards) {		// nacitaj ulovky
 			$("#map").data("billboards", billboards);
-			$.get("../../owners/current_list/", function(ret) {
+			$.get("../../owners/current_list/", function(ret) {		// nacitaj zoznam vlastnikov
 				try {
 					var owners = $.parseJSON(ret);
 					$("#map").data("owners", owners);
@@ -498,17 +546,10 @@ $(function() {
 		initSidebar();
 	}
 
+	// pri resize uprav zobrazenie na mobile (ak na mobile prejde z landscape do portrait modu)
 	$(window).resize(function()	{
 		fixMobile();
 	}).trigger("resize");
 
 	initMenu();
-
-	// handle hash links
-	/*if (window.location.hash)
-	{
-		
-	}
-
-	$(window).bind('hashchange');*/
 });

@@ -298,6 +298,71 @@ body.landing footer {
 			border-left: 1px #c0c0c0 solid;
 		}
 
+			.content_regular > .content .profile_content #compare {
+				width: 100%;
+				margin-top: 20px;
+			}
+
+				.content_regular > .content .profile_content #compare .verdicts {
+					margin-top: 20px;
+					border-top: 1px #e0e0e0 solid;
+					text-align: center;
+				}
+
+					.content_regular > .content .profile_content #compare .verdicts a {
+						display: inline-block;
+						margin: 20px 5px 0;
+						padding: 10px 20px;
+						color: #fff;
+						text-decoration: none;
+						background-color: #eaeaea;
+						color: #000;
+					}
+
+					.content_regular > .content .profile_content #compare .verdicts a.t:hover {
+						background-color: #007C00;
+						color: #fff;
+					}
+
+					.content_regular > .content .profile_content #compare .verdicts a.f:hover {
+						background-color: #8A0202;
+						color: #fff;
+					}
+
+					.content_regular > .content .profile_content #compare .verdicts a.n:hover {
+						background-color: #d0d0d0;
+					}
+
+				.content_regular > .content .profile_content #compare .note {
+					display: block;
+					border-top: 1px #e0e0e0 solid;
+					margin-top: 20px;
+					padding-top: 10px;
+				}
+				
+				.content_regular > .content .profile_content #compare .left,
+				.content_regular > .content .profile_content #compare .right {
+					max-width: 410px;
+					margin: 10px;
+					text-align: center;
+					background: #fff;
+					box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+				}
+
+					.content_regular > .content .profile_content #compare .left img,
+					.content_regular > .content .profile_content #compare .right img {
+						display: block;
+						width: 100%;
+					}
+
+				.content_regular > .content .profile_content #compare .left {
+					float: left;
+				}
+
+				.content_regular > .content .profile_content #compare .right {
+					float: right;
+				}
+
 			.content_regular > .content .profile_content .info {
 				display: block;
 				margin-bottom: 10px;
@@ -371,11 +436,62 @@ body.landing footer {
    ---------------- MAP ------------------
    ======================================= */
 
+#panel {
+	background: rgba(255,255,255,.6);
+	position: absolute;
+	left: 0;
+	top: 80px;
+	z-index: 1;
+	padding: 5px 0;
+	width: 100%;
+}
+
+	#panel .right {
+		border: 1px #aaa solid;
+		font-size: 20px;
+		text-decoration: none;
+		margin: 5px 15px 5px 0;
+		padding: 5px;
+		float: right;
+	}
+
+	#panel a.right {
+		background-color: #091624;
+		color: #fff;
+	}
+
+	#panel span.right {
+		font-size: 14px;
+		line-height: 20px;
+	}
+
+	#panel #add:hover,
+	#panel #mine.clicked,
+	#panel span.right {
+		background-color: #fff;
+		color: #091624;
+	}
+
+	#panel input[type="text"] {
+		width: 480px;
+		height: 36px;
+		padding: 0 5px;
+		margin: 5px 0 0 10px;
+		border: 1px #aaa solid;
+		background-color: #fff;
+		color: #444;
+		opacity: 0.75;
+	}
+
+	#panel input[type="text"]:hover,
+	#panel input[type="text"]:focus {
+		opacity: 1.0;
+	}
 
 #map {
 	position: absolute;
 	width: 100%;
-	top: 80px;
+	top: 135px;
 	bottom: 0;
 }
 
@@ -510,57 +626,6 @@ a.close {
 			background: #f5f5f5;
 		}
 
-#panel {
-	background: rgba(255,255,255,.6);
-	position: absolute;
-	left: 0;
-	top: 80px;
-	z-index: 1;
-	padding: 10px 0;
-	width: 100%;
-}
-
-	#panel .right {
-		border: 1px #aaa solid;
-		font-size: 20px;
-		text-decoration: none;
-		margin: 5px 15px;
-		padding: 5px;
-		float: right;
-	}
-
-	#panel a.right {
-		background-color: #091624;
-		color: #fff;
-	}
-
-	#panel span.right {
-		font-size: 14px;
-		line-height: 20px;
-	}
-
-	#panel a.right:hover,
-	#panel span.right {
-		background-color: #fff;
-		color: #091624;
-	}
-
-	#panel input[type="text"] {
-		width: 480px;
-		height: 36px;
-		padding: 0 5px;
-		margin: 5px 0 0 10px;
-		border: 1px #aaa solid;
-		background-color: #fff;
-		color: #444;
-		opacity: 0.75;
-	}
-
-	#panel input[type="text"]:hover,
-	#panel input[type="text"]:focus {
-		opacity: 1.0;
-	}
-
 #add-form {
 	position: absolute;
 	left: 50%;
@@ -602,6 +667,7 @@ a.close {
 
 	.form select,
 	.form textarea,
+	.form input[type="button"],
 	.form input[type="submit"] {
 		border: 1px #bbb solid;
 		background: #eee;
@@ -621,6 +687,7 @@ a.close {
 		padding: 5px 10px;
 	}
 
+	.form input[type="button"],
 	.form input[type="submit"] {
 		width: auto;
 		padding: 5px 10px;

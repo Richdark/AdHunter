@@ -164,7 +164,7 @@ class Billboards extends MY_Controller
 		}
 
 		// ulovok prisiel z mobilneho zariadenia
-		if (!empty($_POST["model"]))
+		/*if (!empty($_POST["model"]))
 		{
 			$model = $_POST["model"];
 			$type = 'm';
@@ -173,8 +173,9 @@ class Billboards extends MY_Controller
 		{
 			$model = null;
 			$type = 'w';
-		}
-
+		}*/
+		$model = !empty($_POST["model"]) ? $_POST["model"] : null;
+		$device_type = $this->user->device_type;
 		$comment = !empty($_POST["comment"]) ? htmlspecialchars($_POST["comment"]) : null;
 		$backing_type = !empty($_POST["backing_type"]) ? $_POST["backing_type"] : null;
 		$owner_id = !empty($_POST["owner_id"]) ? $_POST["owner_id"] : null;
@@ -182,7 +183,7 @@ class Billboards extends MY_Controller
 
 		// vlozenie do databazy prostrednictvom modelu
 		$this->load->model('Catch_model', 'model');
-		$this->model->save_catch($user_id, null, $coordinates, $name, $model, $type, $comment, $backing_type, $owner_id);
+		$this->model->save_catch($user_id, null, $coordinates, $name, $model, $device_type, $comment, $backing_type, $owner_id);
 		
 		if(!empty($_SERVER["HTTP_REFERER"])) {
 			header("Location: " . $_SERVER["HTTP_REFERER"]);
@@ -209,6 +210,26 @@ class Billboards extends MY_Controller
 
 		$this->load->model('Catch_model', 'model');
 		$this->model->update_catch($catch_id, $comment, $owner_id, $backing_type);
+
+		echo "OK";
+	}
+
+	/*
+	 * premiestnenie billboardu
+	 */
+	public function move()
+	{
+		if(empty($_POST["catch_id"]) || !$this->user->logged) {
+			die("error");
+		}
+
+		$catch_id = $_POST["catch_id"];
+		$lat = &$_POST["lat"];
+		$lng = &$_POST["lng"];
+		$coordinates = "POINT($lat, $lng)";
+
+		$this->load->model('Catch_model', 'model');
+		$this->model->move_catch($catch_id, $coordinates);
 
 		echo "OK";
 	}
