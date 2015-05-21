@@ -8,7 +8,7 @@ class Auth extends MY_Controller
 	}
 
 	/**
-	 * Funckcia zobrazi view login s prihlasovacim formularom
+	 * Show login form
 	*/
 	public function login()
 	{
@@ -110,7 +110,7 @@ class Auth extends MY_Controller
 	}
 
 	/**
-	 * Funckcia zobrazi view logout
+	 * Process logout
 	*/
 	public function logout()
 	{
@@ -141,7 +141,7 @@ class Auth extends MY_Controller
 	}
 
 	/**
-	 * Funkcia zobrazi view register s registracnym formularom
+	 * Show register form
 	*/
 	public function register()
 	{

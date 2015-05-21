@@ -1,8 +1,5 @@
 <?php
 
-/**
- * obsahuje funkcie pre pracu s billboardami
-*/
 class Billboards extends MY_Controller
 {
 	function __construct()
@@ -11,7 +8,7 @@ class Billboards extends MY_Controller
 	}
 
 	/**
-	 * funkcia zobrazi view s hlavnou ponukou
+	 * Billboards map
 	*/
 	public function index()
 	{
@@ -19,9 +16,9 @@ class Billboards extends MY_Controller
 	}
 
 	/**
-	 * funkcia vracia zoznam vsetkych ulovkov
+	 * Return list of all catches
 	 *
-	 * @return object $json funkcia vracia zoznam vsetkych ulovkov aj s dodatocnymi informaciami
+	 * @return string JSON encoded string containing all catches
 	*/
 	public function get_catches()
 	{
@@ -42,7 +39,7 @@ class Billboards extends MY_Controller
 	}
 
 	/**
-	 * zluci ulovky
+	 * Process catches merge
 	*/
 	public function merge_catches()
 	{
@@ -78,7 +75,7 @@ class Billboards extends MY_Controller
 	}
 
 	/*
-	 * pridanie billboardu
+	 * Process adding of a new catch
 	 */
 	public function add()
 	{
@@ -195,7 +192,7 @@ class Billboards extends MY_Controller
 	}
 
 	/*
-	 * update billboardu
+	 * Process catch info update
 	 */
 	public function update()
 	{
@@ -215,7 +212,7 @@ class Billboards extends MY_Controller
 	}
 
 	/*
-	 * premiestnenie billboardu
+	 * Process catch move
 	 */
 	public function move()
 	{
@@ -235,7 +232,7 @@ class Billboards extends MY_Controller
 	}
 
 	/*
-	 * zmazanie billboardu
+	 * Process catch delete
 	 */
 	public function delete()
 	{
