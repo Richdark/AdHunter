@@ -42,7 +42,7 @@ class Profile extends MY_Controller {
     }
 
     public function badges() {
-        $vars['page_title'] = 'Moje Odznaky';
+        $vars['page_title'] = 'Moje ocenenia';
         $vars['profile_menu'] = $this->load->view('profile_menu', NULL, true);
         
         $this->load->model('Gamification_model', 'model');
@@ -54,6 +54,23 @@ class Profile extends MY_Controller {
     
         $this->load->template('profile_badges', $vars);
     }
+    
+    
+    public function statistics() {
+        $vars['page_title'] = 'Štatistiky';
+        $vars['profile_menu'] = $this->load->view('profile_menu', NULL, true);
+        
+        $this->load->model('Gamification_model', 'model');
+        $user_id = $this->user->id;
+        $vars['activity'] = $this->model->get_activity_by_id($user_id);
+        $vars['top_ten'] = $this->model->get_top_10($user_id);
+        $vars['record'] = $this->model->get_best_activity_by_id($user_id);
+        $vars['order'] = $this->model->get_order_by_id($user_id);
+        
+        $this->load->template('profile_statistics', $vars);
+    }
+    
+    
 
     public function merges()
     {

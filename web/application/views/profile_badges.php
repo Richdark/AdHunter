@@ -1,16 +1,16 @@
 <?php echo $profile_menu; ?>
 
-<div class="profile_content" charset="utf-8">
+<div align="center" class="profile_content" charset="utf-8">
     <?php
     
-    echo '<br/><h1 align="center">Štatistika</h1>';
+    echo '<br/><h1 align="center">Sumár</h1>';
     foreach ($statistic as $statistic) {
         echo "Počet úlovkov: " . $statistic->bilboards . "<br />";
     }
 
     $b = $statistic->bilboards;
 
-    switch ($b) {
+    switch ($b) { /*podla poctu zachytenych billboardov sa stanovi level usera*/
         case ($b >= 0 && $b < 10):
             echo "Level: Nováčik<br />";
             $to_next_level = 10 - $b;
@@ -55,20 +55,20 @@
 
     echo '<br/>Zdroj úlovkov: ';
 
-    foreach ($sources as $statistic) {
+    foreach ($sources as $statistic) { /*statistika odkial pochadzaju billboardy web/mobil*/
         if ($statistic->source == 'w')
             echo 'web: ' . $statistic->bilboards;
         if ($statistic->source == 'm')
             echo ', mobilná aplikácia: ' . $statistic->bilboards . ' ';
     }
-    echo '<br/><h1 align="center">Odcenenia</h1>';
+    echo '<br/><h1 align="center">Ocenenia</h1>';
     echo '</hr>';
     
-    foreach ($types as $statistic) {
+    foreach ($types as $statistic) { /*statistika typov billboardov, pridelia sa odznaky za stanovene pocty jednotlivyh typov billboardov*/
         $t = $statistic->bilboards;
         echo '<h3 title="Odcenenia podľa počtu úlovkov typu '.$statistic->title .'">' . $statistic->title . ': </h3>';
         switch ($t) {
-            case ($t >= 5 && $t < 5): {//5
+            case ($t >= 5 && $t < 10): {//5
                     echo '<img src="' . assets_url() . 'img/badges/bronze.png" title="Bronzová medaila za počet úlovkov typu '.$statistic->title .'"/>';
                     break;
                 }
@@ -100,7 +100,7 @@
     
     echo '<br/><hr style="border-top:1px solid grey"/><br/>';
     
-    foreach ($sources as $statistic) {
+    foreach ($sources as $statistic) { /*statistika zdrojov billboardov, pridelia sa odznaky za stanovene pocty billboardov podla zdroja*/
         $t = $statistic->bilboards;
         $s = $statistic->source;
         echo '<h3 title="Odcenenia za počet úlovkov podľa zdroja">' . ($s == 'w' ? "Domáci AdHunter" : "Terénny AdHunter") . '</h3>';
@@ -136,7 +136,7 @@
     
     echo '<br/><br/><hr style="border-top:1px solid grey"/><br/>';
     
-    foreach ($owners as $statistic) {
+    foreach ($owners as $statistic) { /*statistika vlastnikov billboardov, pridelia sa odznaky podla poctu ulovenych billboardov od jednotlivych vlastnikov*/
         $t = $statistic->bilboards;
         $s = $statistic->name;
         echo '<h3 title="Odcenenia za počet úlovkov podľa vlastníka reklamy">' . $s . '-Hunter</h3>';

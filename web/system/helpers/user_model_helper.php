@@ -22,7 +22,13 @@ class UserModelHelper
 	*/
 	public $surname = NULL;
 
-	/**
+        /**
+         *
+         * Number of logged users catched billboards
+         */
+        public $billboards = NULL;
+	
+        /**
 	 * Type of "device" user is logged from
 	 *
 	 * Can be:
@@ -43,4 +49,5 @@ class UserModelHelper
 	{
 		//
 	}
+        
 }

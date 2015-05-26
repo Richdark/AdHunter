@@ -29,6 +29,7 @@
 				{
 					echo '<li><a href="'. root_url(). 'profile/">Profil</a></li>';
 					echo '<li><a href="'. root_url(). 'auth/logout/">Odhlásiť</a></li>';
+					echo '<li><a href="'. root_url(). 'profile/badges/">'. $this->user->billboards. '</a></li>';
 				}
 				else
 				{
