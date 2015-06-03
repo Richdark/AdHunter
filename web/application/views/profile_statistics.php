@@ -6,13 +6,14 @@
     <?php
     $result = urlencode(json_encode($activity));
     
-    /**
-     * @todo toto treba spraviť krajšie
-     */
+    
     if (array_key_exists(0, $record))
     {
         $best = $record[0]->catch_date;
         echo '<img src="'.assets_url().'php/drawBarChart.php?&value='.$result.'&value2='.$best.'"/>';
+    }
+    else {
+        echo "<br/>Za uplynulý mesiac nebola zaznamenaná žiadna aktivita.";
     }
     
     foreach ($record as $statistic) {
