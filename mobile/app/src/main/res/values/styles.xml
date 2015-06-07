@@ -1,12 +1,78 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme.NoActionBar" parent="android:Theme.Holo.NoActionBar.Fullscreen">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
+        <!-- <item name="android:actionBarStyle">@style/ActionBar.AdHunter</item> -->
+        <item name="actionBarTheme">@style/ActionBar.AdHunterTheme</item>
+        <item name="actionBarStyle">@style/ActionBar.AdHunterStyle</item>
+        <item name="colorPrimary">@color/adhunter_indigo_500</item>
     </style>
 
-    <style name="AppTheme" parent="android:Theme.Holo">
+    <style name="AppTheme.NoActionAndTitleBar" parent="Theme.AppCompat.Light">
+        <!--
 
+        <item name="windowActionBar">false</item>
+        <item name="android:windowContentOverlay">@null</item> -->
+
+        <item name="actionBarStyle">@style/ActionBar.AdHunterStyle.Transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+
+    </style>
+
+    <style name="ActionBar.AdHunterStyle" parent="@style/Widget.AppCompat.ActionBar.Solid">
+        <item name="android:titleTextStyle">@style/ActionBar.AdHunter.TextStyle</item>
+        <!-- support library compatibility -->
+        <item name="titleTextStyle">@style/ActionBar.AdHunter.TextStyle</item>
+    </style>
+
+    <style name="ActionBar.AdHunterStyle.Transparent">
+        <item name="android:background">@color/adhunter_transparent</item>
+        <item name="background">@color/adhunter_transparent</item>
+    </style>
+
+    <style name="ActionBar.AdHunterTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- THIS is where you can color the arrow! -->
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
+    <style name="ActionBar.AdHunter.TextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="FrameLayout" parent="AppTheme">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">0.5</item>
+    </style>
+
+    <style name="FrameLayout.Category">
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+
+    <style name="ImageView" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="ImageView.Category">
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+
+    <style name="TextView" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TextView.CategoryTitle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 </resources>
