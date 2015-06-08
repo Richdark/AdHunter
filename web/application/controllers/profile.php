@@ -5,7 +5,13 @@ class Profile extends MY_Controller {
     /**
      * User account settings
      */
-    public function index() {
+    public function index()
+    {
+        if (!($this->user->logged))
+        {
+            header('Location: '. root_url());
+        }
+
         $vars['page_title'] = 'Nastavenia účtu';
         $vars['profile_menu'] = $this->load->view('profile_menu', NULL, true);
 
@@ -31,7 +37,13 @@ class Profile extends MY_Controller {
     /**
      * User added catches list
      */
-    public function catches() {
+    public function catches()
+    {
+        if (!($this->user->logged))
+        {
+            header('Location: '. root_url());
+        }
+
         $vars['page_title'] = 'Moje úlovky';
         $vars['profile_menu'] = $this->load->view('profile_menu', NULL, true);
 
@@ -41,7 +53,13 @@ class Profile extends MY_Controller {
         $this->load->template('profile_catches', $vars);
     }
 
-    public function badges() {
+    public function badges()
+    {
+        if (!($this->user->logged))
+        {
+            header('Location: '. root_url());
+        }
+
         $vars['page_title'] = 'Moje ocenenia';
         $vars['profile_menu'] = $this->load->view('profile_menu', NULL, true);
         
@@ -56,7 +74,13 @@ class Profile extends MY_Controller {
     }
     
     
-    public function statistics() {
+    public function statistics()
+    {
+        if (!($this->user->logged))
+        {
+            header('Location: '. root_url());
+        }
+
         $vars['page_title'] = 'Štatistiky';
         $vars['profile_menu'] = $this->load->view('profile_menu', NULL, true);
         
@@ -74,6 +98,11 @@ class Profile extends MY_Controller {
 
     public function merges()
     {
+        if (!($this->user->logged))
+        {
+            header('Location: '. root_url());
+        }
+
         $vars['page_title']   = 'Zlučovanie úlovkov';
         $vars['profile_menu'] = $this->load->view('profile_menu', NULL, true);
 
@@ -95,6 +124,11 @@ class Profile extends MY_Controller {
      */
     public function resolve_merge_candidates($c1, $c2, $verdict)
     {
+        if (!($this->user->logged))
+        {
+            header('Location: '. root_url());
+        }
+
         $this->load->model('Catch_model');
         $this->Catch_model->resolve_merge_candidates($this->user->id, $c1, $c2, $verdict);
 
@@ -112,7 +146,7 @@ class Profile extends MY_Controller {
      *
      * @return array Array containing final two merge candidates
      */
-    public function filter_merge_candidates($candidates)
+    private function filter_merge_candidates($candidates)
     {
         $probabilities = array();
         $prob_vector   = 0;

@@ -8,6 +8,11 @@ class UserModelHelper
 	public $id = NULL;
 
 	/**
+	 * Session ID / device ID
+	*/
+	public $session_id = NULL;
+
+	/**
 	 * Logged user email
 	*/
 	public $email = NULL;
