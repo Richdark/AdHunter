@@ -82,7 +82,7 @@ class Gamification_model extends CI_Model {
         $query = $this->db->query('SELECT count(c.id) as bilboards, Cast(c.created as date) as catch_date '
                 . 'FROM catches c JOIN users u on c.user_id=u.id WHERE u.id= "' . $id
                 . '" and Cast(c.created as date)>DATE_SUB(Cast(CURDATE() as date),INTERVAL 30 DAY)'
-                . ' GROUP BY catch_date ORDER BY catch_date ASC LIMIT 7');
+                . ' GROUP BY catch_date ORDER BY catch_date ASC LIMIT 5');
         return $query->result();
     }
     
@@ -96,7 +96,7 @@ class Gamification_model extends CI_Model {
     function get_top_10($id) {
         $query = $this->db->query('SELECT count(c.id) as bilboards, u.name as user '
                 . 'FROM catches c JOIN users u on c.user_id=u.id '
-                . ' GROUP BY user ORDER BY bilboards DESC LIMIT 10');
+                . ' GROUP BY user ORDER BY bilboards DESC LIMIT 3');
         return $query->result();
     }
 

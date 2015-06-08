@@ -66,6 +66,8 @@
     
     foreach ($types as $statistic) { /*statistika typov billboardov, pridelia sa odznaky za stanovene pocty jednotlivyh typov billboardov*/
         $t = $statistic->bilboards;
+        if ($statistic->title != 'other')
+        {
         echo '<h3 title="Odcenenia podľa počtu úlovkov typu '.$statistic->title .'">' . $statistic->title . ': </h3>';
         switch ($t) {
             case ($t >= 5 && $t < 10): {//5
@@ -96,6 +98,7 @@
             }
         }
         echo '<br/>';
+        }
     }
     
     echo '<br/><hr style="border-top:1px solid grey"/><br/>';

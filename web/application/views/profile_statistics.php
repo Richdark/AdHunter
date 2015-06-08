@@ -17,10 +17,10 @@
     }
     
     foreach ($record as $statistic) {
-        echo "<br/><br/>Rekord: " . $statistic->catch_date . " - " . $statistic->bilboards . " billboardy !!!<br/>";
+        echo "<br/><br/>Rekord: " . $statistic->catch_date . " - " . $statistic->bilboards . " billboardov !<br/>";
     }
     ?>
-    <br/><h1>Top 10</h1>
+    <br/><h1>Top 3</h1>
     
     <table>
         <tr>
