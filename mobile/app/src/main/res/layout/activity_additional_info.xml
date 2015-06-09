@@ -1,86 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Typ nosiča:" />
+        <FrameLayout
+            android:id="@+id/Activity_Additional_Info.layoutPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:background="@drawable/edittext_form">
 
-        <Button
-            android:id="@+id/addinfo_select_button"
+            <ImageView
+                android:id="@+id/Activity_Additional_Info.imagePlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ActivityAdditional_Info.textPlus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="28sp"
+                    android:textColor="@color/adhunter_green_a400"
+                    android:text="+"/>
+
+                <TextView
+                    android:id="@+id/ActivityAdditional_Info.textSelectBillboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:text="VYBERTE TYP BILLBOARDU"
+                    android:textColor="@color/hint_color"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <Spinner
+            android:id="@+id/Activity_Additional_Info.spinnerOwners"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Vybrať"/>
+            android:visibility="gone"
+            android:layout_marginTop="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:text="Vlastník nosiča:" />
-
-        <EditText
-            android:id="@+id/addinfo_owner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:capitalize="sentences"
-            android:layout_margin="8dp"
-            android:hint="Zadajte vlastníka nosiča"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="Poznámka:"/>
+        </Spinner>
 
         <EditText
             android:id="@+id/addinfo_comment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:capitalize="sentences"
-            android:gravity="top|left"
-            android:layout_margin="8dp"
-            android:background="#323232"/>
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_form"
+            android:layout_marginTop="16dp"
+            android:padding="12dp"
+            android:textColor="@color/adhunter_indigo_800"
+            android:singleLine="true"
+            android:hint="Poznámka"/>
 
         <Button
             android:id="@+id/addinfo_button_upload"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/upload_selector"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="16dp"
+            android:background="@drawable/button_upload_selector"
+            android:textColor="@android:color/white"
+            android:text="ODOSLAŤ"/>
 
-        <Button
-            android:id="@+id/addinfo_button_repeat"
-            android:background="@drawable/refresh_selector"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_centerVertical="true" />
+    </LinearLayout>
+</ScrollView>
 
-        <Button
-            android:id="@+id/addinfo_button_minus"
-            android:background="@drawable/lessinfo_selector"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginBottom="24dp"
-            android:layout_alignParentBottom="true" />
+<!--
 
-    </RelativeLayout>
+<EditText
+            android:id="@+id/addinfo_owner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/adhunter_deep_purple_800"
+            android:background="@drawable/edittext_form"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:singleLine="true"
+            android:layout_marginTop="16dp"
+            android:hint="Vlastník nosiča"/>
 
-</LinearLayout>
+-->

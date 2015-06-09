@@ -149,7 +149,7 @@ function handleAdd(billboard_img)
 	$("#mine").click(function() {
 		$(this).toggleClass("clicked").find("span").toggle();
 		for(var i=0; i<map.markers.length; i++) {
-			if(!map.markers[i].privileged) {
+			if(map.markers[i].privileged != 1) {
 				$(this).is(".clicked") ? map.markers[i].setMap(null) : map.markers[i].setMap(map);
 			}
 		}
