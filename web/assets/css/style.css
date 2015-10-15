@@ -99,6 +99,14 @@ body.landing header {
 				padding: 15px;
 			}
 
+			header ul li.logout a {
+				color: #8a0202;
+			}
+
+			.landing header ul li.logout a {
+				color: #e10000;
+			}
+
 footer {
 	position: absolute;
 	bottom: 0;

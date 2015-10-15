@@ -65,11 +65,15 @@ class Profile extends MY_Controller {
         
         $this->load->model('Gamification_model', 'model');
         $user_id = $this->user->id;
+        
+        $vars['medals'] = $this->model->get_medals_by_user($user_id);
+        /*
         $vars['statistic'] = $this->model->get_all_by_id($user_id);
         $vars['types'] = $this->model->get_types_by_id($user_id);
         $vars['sources'] = $this->model->get_sources_by_id($user_id);
         $vars['owners'] = $this->model->get_owners_by_id($user_id);
-    
+        */
+
         $this->load->template('profile_badges', $vars);
     }
     

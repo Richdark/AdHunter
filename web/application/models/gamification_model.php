@@ -7,75 +7,39 @@ class Gamification_model extends CI_Model {
         parent::__construct();
     }
 
-    function get_all_by_id($id) {
-        $query = $this->db->query('SELECT count(c.id) as bilboards,u.name as name, 
-            u.surname as surname,u.id as uid,c.type as source, c.backing_type_id as type 
-            FROM catches c JOIN users u on c.user_id=u.id WHERE u.id= "' . $id.'"');
-        return $query->result();
-    }
+    /**
+     * Get user's medals
+     *
+     * @param int $user_id ID of user
+     *
+     * @return array Array of all user's medals
+    */
+    function get_medals_by_user($user_id)
+    {
+        $medals = array('regular' => array(), 'owner' => array(), 'backing' => array());
 
-    function get_level_by_id($id) {
-        $query = $this->db->query('SELECT count(c.id) as bilboards,u.name as name, 
-            u.surname as surname,u.id as uid,c.type as source, c.backing_type_id as type 
-            FROM catches c JOIN users u on c.user_id=u.id WHERE u.id= "' . $id.'"');
+        $query = $this->db->query("SELECT type, level FROM medals WHERE user_id = $user_id AND type IN('adhunter', 'web', 'mobile')");
 
-        $b = $query->result()[0]->bilboards;
-
-        switch ($b) {
-            case ($b >= 0 && $b < 10):
-                $level= "Level: Nováčik<br />";
-                $to_next_level = 10 - $b;
-                break;
-            case ($b >= 10 && $b < 20):
-                $level= "Level: Začiatočník<br />";
-                $to_next_level = 20 - $b;
-                break;
-            case ($b >= 20 && $b < 35):
-                $level= "Level: Špión<br />";
-                $to_next_level = 35 - $b;
-                break;
-            case ($b >= 35 && $b < 60):
-                $level= "Level: Lovec<br />";
-                $to_next_level = 60 - $b;
-                break;
-            case ($b >= 60 && $b < 100):
-                $level= "Level: Reformátor<br />";
-                $to_next_level = 100 - $b;
-                break;
-            case ($b >= 100 && $b < 200):
-                $level= "Level: Batman<br />";
-                $to_next_level = 200 - $b;
-                break;
-            case ($b >= 200 && $b < 400):
-                $level= "Level: Záchranca svojho okolia<br />";
-                $to_next_level = 400 - $b;
-                break;
-            case ($b >= 400):
-                $level= "Level: PROFESIONÁLNY ADHUNTER<br />";
-                break;
+        foreach ($query->result() as $row)
+        {
+            $medals['regular'][$row->type] = $row->level;
         }
-        return $level;
-    }
 
-    function get_types_by_id($id) {
-        $query = $this->db->query('SELECT count(c.id) as bilboards,c.backing_type_id as type, 
-            bt.title as title FROM catches c JOIN users u on c.user_id=u.id 
-            JOIN backing_types bt on bt.id=c.backing_type_id WHERE u.id= "' . $id . '" 
-            GROUP BY c.backing_type_id ORDER BY bilboards DESC');
-        return $query->result();
-    }
+        $query = $this->db->query("SELECT name, level FROM medals LEFT JOIN owners ON type_id = owners.id WHERE user_id = $user_id AND type = 'owner'");
 
-    function get_sources_by_id($id) {
-        $query = $this->db->query('SELECT count(c.id) as bilboards,c.type as source FROM catches c '
-                . 'JOIN users u on c.user_id=u.id WHERE u.id= "' . $id . '" GROUP BY c.type ORDER BY bilboards DESC');
-        return $query->result();
-    }
+        foreach ($query->result() as $row)
+        {
+            array_push($medals['owner'], array('name' => $row->name, 'level' => $row->level));
+        }
 
-    function get_owners_by_id($id) {
-        $query = $this->db->query('SELECT count(c.id) as bilboards, c.owner_id as owner, o.name as name '
-                . 'FROM catches c JOIN users u on c.user_id=u.id JOIN owners o ON c.owner_id=o.id '
-                . 'WHERE u.id= "' . $id . '" GROUP BY c.owner_id ORDER BY bilboards DESC');
-        return $query->result();
+        $query = $this->db->query("SELECT title, level FROM medals LEFT JOIN backing_types ON type_id = backing_types.id WHERE user_id = $user_id AND type = 'backing'");
+
+        foreach ($query->result() as $row)
+        {
+            array_push($medals['backing'], array('title' => $row->title, 'level' => $row->level));
+        }
+
+        return $medals;
     }
 
     function get_activity_by_id($id) {

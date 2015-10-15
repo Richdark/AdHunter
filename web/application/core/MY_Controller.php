@@ -51,7 +51,6 @@ class MY_Controller extends CI_Controller
         if ($this->user->logged)
         {
             $this->load->model('Gamification_model');
-            $this->user->billboards = $this->Gamification_model->get_level_by_id($this->user->id);
         }
 
         $this->load->user = $this->user;
