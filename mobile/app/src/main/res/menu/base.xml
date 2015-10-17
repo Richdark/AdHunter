@@ -2,8 +2,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".BaseActivity" >
-    <item android:id="@+id/action_settings"
-        android:title="Deserialize"
+    <item android:id="@+id/action_number_of_photos_not_sent"
+        android:title="Počet neodoslaných fotiek"
         android:orderInCategory="100"
-        app:showAsAction="always" />
+        app:showAsAction="collapseActionView" />
+
+    <item android:id="@+id/action_settings"
+        android:title="Nastavenia"
+        android:icon="@drawable/button_settings_selector"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_logout"
+        android:title="Odhlásiť sa"
+        android:icon="@drawable/button_logout_selector"
+        app:showAsAction="ifRoom" />
+
 </menu>

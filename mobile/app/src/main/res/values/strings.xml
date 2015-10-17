@@ -5,9 +5,27 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- errors -->
     <string name="gps_not_found">Zatiaľ sa nepodarilo získať Vaše GPS súradnice. Skúste to opäť o chvíľu, prípadne zapnite GPS vo Vašom telefóne.</string>
     <string name="not_connected">Momentálne nie ste pripojený. Vaša fotka sa uložila a odoslať ju budete môcť pri najbližšom pripojení na internet.</string>
-    <string name="send_photos">Odoslať fotky</string>
-    <string name="not_yet_send">Niekoľko Vami odfotených reklám zatiaľ nebolo odoslaných z dôvodu chýbajúceho pripojenia na internet. Chcete ich teraz odoslať?</string>
+    <string name="logout_failed">Odhlásenie neprebehlo úspešne. Uistite sa, že ste pripojený na internet a skúste to znova.</string>
+    <string name="photo_upload_failed">Fotku sa nepodarilo odoslať. Skúste to znova!</string>
+
+    <!-- preferences -->
+    <string name="pref_upload_modes_title">Odosielanie úlovku</string>
+    <string name="pref_upload_modes_default">wifi</string>
+
+    <!-- arrays -->
+    <string-array name="pref_upload_modes">
+        <item>Iba WiFi</item>
+        <item>Wifi + mobilný internet</item>
+    </string-array>
+
+    <string-array name="pref_upload_modes_values">
+        <item>wifi</item>
+        <item>wifi_and_mobile</item>
+    </string-array>
+
+    <string name="choose_owner">Vyberte vlastníka</string>
 
 </resources>

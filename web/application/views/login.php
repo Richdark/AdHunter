@@ -2,8 +2,8 @@
 	<div class="c">
 		<?php if (!(empty($invalid_fields))) { echo '<h3>Prihlásenie neprebehlo úspešne</h3>'; } ?>
 		<form  method="post" action="">
-			<input type="text" name="email" value="E-mail"<?php if (array_search('email', $invalid_fields) !== false) { echo ' class = "invalid"'; } ?> onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'E-mail';}"><br>
-			<input type="password" name="password" value="Heslo"<?php if (array_search('password', $invalid_fields) !== false) { echo ' class = "invalid"'; } ?> onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Heslo'}"><br>
+			<input type="text" name="email" placeholder="E-mail" value=""<?php if (array_search('email', $invalid_fields) !== false) { echo ' class = "invalid"'; } ?>><br>
+			<input type="password" name="password" placeholder="Heslo" value=""<?php if (array_search('password', $invalid_fields) !== false) { echo ' class = "invalid"'; } ?>><br>
 			<input type="submit" name="send" value="Prihlásiť" />
 		</form>
 	</div>

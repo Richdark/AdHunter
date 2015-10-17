@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="pref_connectionType"
+        android:title="@string/pref_upload_modes_title"
+        android:entries="@array/pref_upload_modes"
+        android:entryValues="@array/pref_upload_modes_values"
+        android:summary="Zvoľte typ pripojenia, pri ktorom je povolené odosielať úlovky."
+        android:defaultValue="@string/pref_upload_modes_default" />
+
+</PreferenceScreen>

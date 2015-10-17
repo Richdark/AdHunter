@@ -111,6 +111,141 @@ class Catch_model extends CI_Model
 
 		// insert into ...
 		$this->db->insert('catches', $data);
+
+		$this->add_or_update_medal($user_id, 'adhunter');
+		
+		if (!(empty($owner_id)))
+			$this->add_or_update_medal($user_id, 'owner', $owner_id);
+		
+		if (!(empty($backing_type)))
+			$this->add_or_update_medal($user_id, 'backing', $backing_type);
+
+		if ($type == 'w')
+		{
+			$this->add_or_update_medal($user_id, 'web');
+		}
+		else
+		{
+			$this->add_or_update_medal($user_id, 'mobile');
+		}
+	}
+
+	/**
+	 * Add new or update already existing medal reference
+	 *
+	 * @param int $user_id ID of user
+	 * @param string $type Medal type
+	 * @param int $type_id ID of "type" (owner ID or backing type ID or ...)
+	*/
+	function add_or_update_medal($user_id, $type, $type_id = 0)
+	{
+		$this->db->select('id')->from('medals')->where('user_id', $user_id)->where('type', $type)->where('type_id', $type_id);
+		
+		$query = $this->db->query("SELECT id FROM medals WHERE user_id = $user_id AND type = '$type' AND type_id = $type_id");
+		$row = $query->row();
+		$medal_exists = (gettype($row) == 'array')? false : true;
+
+		if ($type == 'adhunter')
+		{
+			$query = $this->db->query("SELECT COUNT(*) AS count FROM catches WHERE user_id = $user_id");
+			$row = $query->row();
+			$level = $this->get_medal_level('adhunter', $row->count);
+			
+			if ($medal_exists)
+			{
+				$final_query = "UPDATE medals SET level = $level WHERE user_id = $user_id AND type = 'adhunter'";
+			}
+			else
+			{
+				$final_query = "INSERT INTO medals VALUES(NULL, $user_id, 'adhunter', 0, $level)";
+			}
+		}
+		elseif ($type == 'web' or $type == 'mobile')
+		{
+			$catch_type = ($type == 'web')? 'w' : 'm';
+
+			$query = $this->db->query("SELECT COUNT(*) AS count FROM catches WHERE user_id = $user_id AND type = '$catch_type'");
+			$row = $query->row();
+			$level = $this->get_medal_level($type, $row->count);
+
+			if ($medal_exists)
+			{
+				$final_query = "UPDATE medals SET level = $level WHERE user_id = $user_id AND type = '$type'";
+			}
+			else
+			{
+				$final_query = "INSERT INTO medals VALUES(NULL, $user_id, '$type', 0, $level)";
+			}
+		}
+		elseif ($type == 'owner')
+		{
+			$query = $this->db->query("SELECT COUNT(*) AS count FROM catches WHERE user_id = $user_id AND owner_id = $type_id");
+			$row = $query->row();
+			$level = $this->get_medal_level('owner', $row->count);
+			
+			if ($medal_exists)
+			{
+				$final_query = "UPDATE medals SET level = $level WHERE user_id = $user_id AND type = 'owner' AND type_id = $type_id";
+			}
+			else
+			{
+				$final_query = "INSERT INTO medals VALUES(NULL, $user_id, 'owner', $type_id, $level)";
+			}
+		}
+		elseif ($type == 'backing')
+		{
+			$query = $this->db->query("SELECT COUNT(*) AS count FROM catches WHERE user_id = $user_id AND backing_type_id = $type_id");
+			$row = $query->row();
+			$level = $this->get_medal_level('backing', $row->count);
+			
+			if ($medal_exists)
+			{
+				$final_query = "UPDATE medals SET level = $level WHERE user_id = $user_id AND type = 'backing' AND type_id = $type_id";
+			}
+			else
+			{
+				$final_query = "INSERT INTO medals VALUES(NULL, $user_id, 'backing', $type_id, $level)";
+			}
+		}
+
+		// add or update medal
+		$query = $this->db->query($final_query);
+	}
+
+	/**
+	 * Get level for particular medal type and number of catches
+	 *
+	 * @param string $type Medal type
+	 * @param int $count Number of added catches of specified type
+	 *
+	 * @return int Medal level
+	*/
+	function get_medal_level($type, $count)
+	{
+		$level_counts = array(
+			'adhunter' => array(10, 20, 35, 60, 100, 200, 400),
+			'web'      => array(20, 50, 100, 200),
+			'mobile'   => array(20, 50, 100, 200),
+			'owner'    => array(10, 20, 50),
+			'backing'  => array(10, 20, 50)
+		);
+
+		$level = 0;
+		$level_set = false;
+
+		for ($i = 0; $i < count($level_counts[$type]); $i++)
+		{
+			$level++;
+
+			if ($count < $level_counts[$type][$i])
+			{
+				$level_set = true;
+
+				break;
+			}
+		}
+
+		return ($level_set)? $level : ($level + 1);
 	}
 
 	/**

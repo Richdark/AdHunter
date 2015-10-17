@@ -11,6 +11,8 @@ class MY_Controller extends CI_Controller
     {
         parent::__construct();
 
+        @session_start();
+
         $this->user = new UserModelHelper();
         $this->load->model('Online_user_model');
         
@@ -33,12 +35,10 @@ class MY_Controller extends CI_Controller
 
             $this->user->device_type = $ret ? 'm' : 'w';
         }*/
-        
-        @session_start();
 
         // fill user model with data
-        $this->user->logged = $this->Online_user_model->is_logged(session_id());
-        $user_info          = $this->Online_user_model->get_user_info(session_id());
+        $this->user->logged = $this->Online_user_model->is_logged($this->user->session_id);
+        $user_info          = $this->Online_user_model->get_user_info($this->user->session_id);
         
         if ($user_info)
         {
@@ -51,7 +51,6 @@ class MY_Controller extends CI_Controller
         if ($this->user->logged)
         {
             $this->load->model('Gamification_model');
-            $this->user->billboards = $this->Gamification_model->get_level_by_id($this->user->id);
         }
 
         $this->load->user = $this->user;
