@@ -149,7 +149,7 @@ function handleAdd(billboard_img)
 	$("#mine").click(function() {
 		$(this).toggleClass("clicked").find("span").toggle();
 		for(var i=0; i<map.markers.length; i++) {
-			if(!map.markers[i].privileged) {
+			if(map.markers[i].privileged == 1) {
 				$(this).is(".clicked") ? map.markers[i].setMap(null) : map.markers[i].setMap(map);
 			}
 		}
@@ -236,11 +236,6 @@ function initMap()
 		mapTypeControl: false		// nechceme, aby pouzivatel mohol menit typ mapy
 	});
 
-	// clustrovanie
-	//var mcOptions = {gridSize: 50, maxZoom: 15};
-	// var mc = new MarkerClusterer(map, [], mcOptions);
-	// console.log(mc);
-
 	// pridame panel na vyhladavanie
 	var markers = [];		// cervene znacky pri vyhladavani
 	var searchBox = new google.maps.places.SearchBox($("#search").get(0));
@@ -256,6 +251,10 @@ function initMap()
 		map.markers = [];
 		map.infoWindow = new google.maps.InfoWindow();
 		addBillboards();
+
+		var mc = new MarkerClusterer(map, [], { gridSize: 50, maxZoom: 16 });
+		mc.addMarkers(map.markers);
+		// console.log(mc.getTotalMarkers());
 	});
 
 	// ak je mapa zobrazena a mame moznost pridavat ulovky
@@ -536,8 +535,9 @@ $(function() {
 				try {
 					var owners = $.parseJSON(ret);
 					$("#map").data("owners", owners);
-					// $.getScript("http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclustererplus/src/markerclusterer_packed.js");
-					$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&callback=initMap");
+					$.getScript("http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclustererplus/src/markerclusterer_packed.js", function () {
+						$.getScript("https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&callback=initMap");
+					});
 				}
 				catch(e){ console.log("invalid JSON " + e); }
 			});
