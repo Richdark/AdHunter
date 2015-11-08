@@ -27,11 +27,16 @@ class UserModelHelper
 	*/
 	public $surname = NULL;
 
-        /**
-         *
-         * Number of logged users catched billboards
-         */
-        public $billboards = NULL;
+	/**
+	 * Is user admin?
+	 */
+	public $admin = false;
+
+    /**
+     *
+     * Number of logged users catched billboards
+     */
+    public $billboards = NULL;
 	
         /**
 	 * Type of "device" user is logged from

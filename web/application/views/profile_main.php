@@ -13,6 +13,7 @@
 			<span class="field_descr">Email</span><input type="text" value="<?php echo $_user->email; ?>" disabled /><br />
 			<span class="field_descr">Meno</span><input type="text" name="name" value="<?php echo $name; ?>" /><br />
 			<span class="field_descr">Priezvisko</span><input type="text" name="surname" value="<?php echo $surname; ?>" /><br />
+			<!--<span class="field_descr">Obrázok</span><input type="file" name="picture" /><br />-->
 		</fieldset>
 		<input type="submit" name="send" value="Odoslať" />
 	</form>

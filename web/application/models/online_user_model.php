@@ -72,7 +72,7 @@ class Online_user_model extends CI_Model
 
 	function get_user_info($uid)
 	{
-		$this->db->select('user_id, name, surname, email')->from('online_users')->join('users', 'online_users.user_id = users.id')->where('uid', $uid);
+		$this->db->select('user_id, name, surname, email, admin')->from('online_users')->join('users', 'online_users.user_id = users.id')->where('uid', $uid);
 		$query = $this->db->get()->result();
 
 		if (count($query) > 0)

@@ -18,6 +18,15 @@ class Owner_model extends CI_Model
 
 		return $query->result();
 	}
+
+	function add_owner($name)
+	{
+		$data = array(
+			'name'     => $name
+		);
+
+		$this->db->insert('owners', $data);
+	}
 }
 
 ?>

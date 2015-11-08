@@ -282,7 +282,13 @@ body.landing footer {
 			.content_regular > .content nav.profile ul {
 				display: block;
 				padding: 20px;
+				padding-bottom: 0;
 				list-style: none;
+			}
+
+			.content_regular > .content nav.profile ul.admin {
+				padding-top: 10px;
+				padding-bottom: 20px;
 			}
 
 				.content_regular > .content nav.profile ul li a {
@@ -292,9 +298,19 @@ body.landing footer {
 					transition: background-color 0.2s;
 				}
 
+				.content_regular > .content nav.profile ul.admin li a {
+					color: #025F8A;
+				}
+
 				.content_regular > .content nav.profile ul li a:hover,
 				.content_regular > .content nav.profile ul li a.current {
 					background: #8a0202;
+					color: #fff;
+				}
+
+				.content_regular > .content nav.profile ul.admin li a:hover,
+				.content_regular > .content nav.profile ul.admin li a.current {
+					background: #025F8A;
 					color: #fff;
 				}
 
@@ -390,6 +406,11 @@ body.landing footer {
 				min-width: 150px;
 				margin: 5px;
 			}
+
+				.content_regular > .content .profile_content .field_descr .error {
+					font-weight: bold;
+					color: #FF0000;
+				}
 
 			.content_regular > .content .profile_content input {
 				display: inline-block;

@@ -209,6 +209,48 @@ class Profile extends MY_Controller {
 
         return array(array('id' => $candidates[0]->id, 'filename' => $candidates[0]->filename), array('id' => $candidates[$final_candidate]->id, 'filename' => $candidates[$final_candidate]->filename));
     }
+
+    /**
+     * Manage owners
+     *
+     * @param string $method Whether app should add new, edit existing or list all current owners
+     */
+    public function owners($method)
+    {
+        $vars['profile_menu'] = $this->load->view('profile_menu', NULL, true);
+
+        if ($method == 'add')
+        {
+            $vars['page_title'] = 'Pridať nového vlastníka';
+
+            // form sent
+            if (isset($_POST['send']))
+            {
+                $vars['invalid_fields'] = array();
+
+                if ($_POST['name'] != NULL)
+                {
+                    $name = $_POST['name'];
+                }
+                else
+                {
+                    $vars['invalid_fields']['name'] = 'empty';
+                }
+
+                // all fields are valid
+                if (empty($vars['invalid_fields']))
+                {
+                    $this->load->model('Owner_model');
+                    $this->Owner_model->add_owner($name);
+
+                    $vars['success'] = true;
+                }
+
+            }
+            
+            $this->load->template('add_owner', $vars);
+        }
+    }
 }
 
 ?>

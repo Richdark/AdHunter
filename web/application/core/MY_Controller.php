@@ -46,6 +46,7 @@ class MY_Controller extends CI_Controller
             $this->user->name    = $user_info->name;
             $this->user->surname = $user_info->surname;
             $this->user->email   = $user_info->email;
+            $this->user->admin   = ($user_info->admin == '1')? true : false;
         }
         
         if ($this->user->logged)
