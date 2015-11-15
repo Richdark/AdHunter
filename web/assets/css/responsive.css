@@ -2,7 +2,7 @@
 	.app .text {
 		width: 35%;
 		font-size: 22px;
-		padding-left: 20px;
+		padding: 0 20px;
 	}
 	.app .text h1 {
 		font-size: 56px;
@@ -20,18 +20,40 @@
 		text-align: left;
 		display: none;
 	}
+	body.landing header ul {
+		background-color: #091624;
+	}
 
 	.app {
 		height: auto;
 	}
-	.app .text {
-		width: auto;
-		padding: 130px 50px 50px;
+	.app .fixed > .c {
+		padding-bottom: 100px;
 	}
-	.app .image {
-		display: block;
+	.app .text {
+		position: static;
+		margin: 0 auto;
 		width: auto;
-		background-position: center;
+		max-width: 450px;
+	}
+
+	.app .slideshow {
+		position: relative;
+		bottom: auto;
+		top: 20px;
+	}
+
+	#panel input[type="text"] {
+		display: block;
+		width: 100%;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	#panel .right {
+		margin: 5px 0;
+		display: inline-block;
+		float: none;
 	}
 
 	.features .column p {
@@ -40,13 +62,33 @@
 }
 
 @media screen and (max-width: 640px) {
-	.features .column {
+	/*.features .column {
 		width: auto;
 		display: block;
 		padding: 20px 50px 0;
+	}*/
+}
+
+@media screen and (max-width: 540px) {
+	.app .slideshow {
+		-webkit-background-size: 100%;
+		-moz-background-size: 100%;
+		-o-background-size: 100%;
+		background-size: 100%;
+		width: 294px;
+		height: 348px;
 	}
 
-	.app .image {
-		background-position: right;
+	.app .slideshow img {
+		left: 108px;
+		top: 37px;
+		width: 141px;
+	}
+
+	.content_regular > .content .profile_content fieldset {
+		font-size: 12px;
+	}
+	.content_regular > .content .profile_content input {
+		width: 240px;
 	}
 }

@@ -396,7 +396,7 @@ body.landing footer {
 			}
 
 			.content_regular > .content .profile_content fieldset {
-				width: 835px;
+				max-width: 835px;
 				padding: 10px;
 				border: 1px #d0d0d0 solid;
 			}
@@ -466,20 +466,35 @@ body.landing footer {
    ======================================= */
 
 #panel {
-	background: rgba(255,255,255,.6);
+	background: #fff;
+	/*background: rgba(255,255,255,.6);*/
 	position: absolute;
 	left: 0;
+	right: 0;
 	top: 80px;
 	z-index: 1;
-	padding: 5px 0;
-	width: 100%;
+	padding: 5px 10px;
 }
+
+	#panel input[type="text"] {
+		width: 440px;
+		height: 36px;
+		padding: 0 5px;
+		border: 1px #aaa solid;
+		background-color: #fff;
+		color: #444;
+		opacity: 0.75;
+	}
+
+	#panel input[type="text"]:hover,
+	#panel input[type="text"]:focus {
+		opacity: 1.0;
+	}
 
 	#panel .right {
 		border: 1px #aaa solid;
 		font-size: 20px;
 		text-decoration: none;
-		margin: 5px 15px 5px 0;
 		padding: 5px;
 		float: right;
 	}
@@ -490,8 +505,12 @@ body.landing footer {
 	}
 
 	#panel span.right {
-		font-size: 14px;
-		line-height: 20px;
+		font-size: 12px;
+		line-height: 26px;
+	}
+
+	#panel #mine {
+		margin-right: 5px;
 	}
 
 	#panel #add:hover,
@@ -499,22 +518,6 @@ body.landing footer {
 	#panel span.right {
 		background-color: #fff;
 		color: #091624;
-	}
-
-	#panel input[type="text"] {
-		width: 480px;
-		height: 36px;
-		padding: 0 5px;
-		margin: 5px 0 0 10px;
-		border: 1px #aaa solid;
-		background-color: #fff;
-		color: #444;
-		opacity: 0.75;
-	}
-
-	#panel input[type="text"]:hover,
-	#panel input[type="text"]:focus {
-		opacity: 1.0;
 	}
 
 #map {
