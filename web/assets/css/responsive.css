@@ -61,14 +61,6 @@
 	}
 }
 
-@media screen and (max-width: 640px) {
-	/*.features .column {
-		width: auto;
-		display: block;
-		padding: 20px 50px 0;
-	}*/
-}
-
 @media screen and (max-width: 540px) {
 	.app .slideshow {
 		-webkit-background-size: 100%;
