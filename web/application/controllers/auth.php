@@ -200,13 +200,145 @@ class Auth extends MY_Controller
 	}
 
 	/**
+	 * Reset user password
+	*/
+	public function password($code = null)
+	{
+		$this->load->helper('auth');
+
+		$vars['page_title'] = 'Obnova hesla';
+		$vars['invalid_fields'] = array();
+
+		if (($code == null) and ($_SERVER['REQUEST_METHOD'] == 'POST'))
+		{
+			$this->load->model('user_model','model');
+
+			// handle email
+			if (!(check_email($_POST['email'])))
+			{
+				$vars['invalid_fields']['email'] = 'invform';
+			}
+			
+			if (!($this->model->email_exists($_POST['email'])))
+			{
+				$vars['invalid_fields']['email'] = 'notfound';
+			}
+
+			// email address is valid
+			if (empty($vars['invalid_fields']))
+			{
+				$email = $_POST['email'];
+				$resetcode = $this->model->set_resetcode($email);
+
+				$this->load->library('LibPHPMailer');
+
+				$mail = new PHPMailer();
+
+				// use SMTP protocol
+				$mail->IsSMTP();
+				$mail->SMTPAuth = true;
+				$mail->SMTPSecure = 'ssl';
+				$mail->Host = 'smtp-90181.m81.wedos.net';
+				$mail->Port = 465;
+				$mail->isHTML(true);
+
+				$mail->Username = 'password@adhunter.eu';
+				$mail->Password = '6aqshE_XpqwB!68K';
+
+				$mail->setFrom('password@adhunter.eu', 'AdHunter.eu');
+				$mail->addAddress($email);
+
+				$mail->Subject = 'Obnova hesla';
+				$mail->Body = 'Obnovu vášho hesla dokončíte kliknutím na <a href="http://www.adhunter.eu/auth/password/'. $resetcode. '/">tento</a> odkaz.<br /><br />---<br />Tento email bol vygenerovaný automaticky, neodpovedajte naňho.';
+
+				if (!($mail->send()))
+				{
+					// echo $mail->ErrorInfo;
+				}
+
+				$vars['page_title'] = 'Email odoslaný';
+				$this->load->template('password_sent', $vars);
+			}
+			else
+			{
+				$this->load->template('password', $vars);
+			}
+		}
+
+		elseif ($code != null)
+		{
+			$this->load->model('user_model','model');
+
+			if (($_SERVER['REQUEST_METHOD'] == 'POST') and ($code == 'save'))
+			{
+				// handle password
+				if (!(check_password($_POST['password'])))
+				{
+					$vars['invalid_fields']['password'] = 'invform';
+				}
+
+				if (!($this->model->verify_resetcode($_POST['code'])) or !(check_resetcode($_POST['code'])))
+				{
+					$vars['invalid_fields']['resetcode'] = 'invalid';
+				}
+
+				// all fields are valid
+				if (empty($vars['invalid_fields']))
+				{
+					$salt = $this->generate_salt(32);
+					$h_password = $this->hash_password($_POST['password'], $salt);
+
+					$this->model->update_password($_POST['code'], $h_password, $salt);
+					
+					$vars['page_title'] = 'Registrácia úspešná';
+
+					$this->load->template('password_changed', $vars);
+				}
+
+				else
+				{
+					$vars['code'] = $_POST['code'];
+					$this->load->template('password_set', $vars);
+				}
+			}
+
+			else
+			{
+				// handle resetcode
+				if (!($this->model->verify_resetcode($code)) or !(check_resetcode($code)))
+				{
+					$vars['invalid_fields']['resetcode'] = 'invalid';
+				}
+
+				// resetcode is valid
+				if (empty($vars['invalid_fields']))
+				{
+					$vars['code'] = $code;
+					$this->load->template('password_set', $vars);
+				}
+
+				// invalid resetcode
+				else
+				{
+					$this->load->template('resetcode_invalid', $vars);
+				}
+			}
+		}
+
+		else
+		{
+			$this->load->template('password', $vars);
+		}
+	}
+
+	/**
 	 * Funkcia vyuziva standardnu hashovaciu funkciu md5 na hashovanie pouzivatelskeho hesla
 	 * pred vlozenim do databazy
 	 * @param string rawPasword heslo v cistom plain tvare vytiahnute z formulara
 	 * @param string salt 32 bitovy nahodne generovany retazec zvysujuci bezpecnost hesla
 	 * @return string hashedPassword zahesovane heslo
 	*/
-	public function hash_password($rawPassword, $salt)
+	private function hash_password($rawPassword, $salt)
 	{
 		$hashedPassword = md5($rawPassword. $salt);
 
@@ -219,7 +351,7 @@ class Auth extends MY_Controller
 	 * @param string max maximalna dlzka generovaneho retazca
 	 * @return string salt vygenerovany max znakovy retazec
 	*/
-	public function generate_salt($max)
+	private function generate_salt($max)
 	{
 		$charsList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*?";
 		$i         = 0;
@@ -238,7 +370,7 @@ class Auth extends MY_Controller
 	 * Funkcia parsuje udaje zadane pouzivatelom vo formulari zavola modelovu funkciu na ulozenie udajov do databazt
 	 * a na zaver zobrazi udaj o uspesnosti registracie
 	*/
-	public function add_user()
+	private function add_user()
 	{
 		$email    = $_POST['email'];
 		$password = $_POST['password'] ;

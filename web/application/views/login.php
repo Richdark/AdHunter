@@ -4,7 +4,8 @@
 		<form  method="post" action="">
 			<input type="text" name="email" placeholder="E-mail" value=""<?php if (array_search('email', $invalid_fields) !== false) { echo ' class = "invalid"'; } ?>><br>
 			<input type="password" name="password" placeholder="Heslo" value=""<?php if (array_search('password', $invalid_fields) !== false) { echo ' class = "invalid"'; } ?>><br>
-			<input type="submit" name="send" value="Prihlásiť" />
+			<input type="submit" name="send" value="Prihlásiť" /><br />
+			Zabudli ste heslo? <a href="<?php echo root_url(). 'auth/password/'; ?>">Tu</a> si ho môžete obnoviť.
 		</form>
 	</div>
 </div>

@@ -74,6 +74,38 @@ class User_model extends CI_Model
 		$this->db->where('id', $id);
 		$this->db->update('users', array('name' => $name, 'surname' => $surname));
 	}
+
+	function update_password($code, $password, $salt)
+	{
+		$this->db->where('resetcode', $code);
+		$this->db->update('users', array('password' => $password, 'salt' => $salt));
+	}
+
+	function set_resetcode($email)
+	{
+		$resetcode = md5(date('is'). strval(rand(0, 999999)));
+		
+		$this->db->where('email', $email);
+		$this->db->set('resetexpire', 'DATE_ADD(NOW(), INTERVAL 10 MINUTE)', false);
+		$this->db->update('users', array('resetcode' => $resetcode));
+
+		return $resetcode;
+	}
+
+	function verify_resetcode($code)
+	{
+		$code = addslashes($code);
+		$query = $this->db->query("SELECT id FROM users WHERE resetcode = '". $code. "' AND resetexpire >= NOW() LIMIT 1")->result();
+
+		if (count($query) > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 ?>

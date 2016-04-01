@@ -43,3 +43,18 @@ if ( ! function_exists('check_password'))
 		}
 	}
 }
+
+if (!(function_exists('check_resetcode')))
+{
+	function check_resetcode($code)
+	{
+		if (preg_match('/[a-f0-9]{32}/', $code))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+}
