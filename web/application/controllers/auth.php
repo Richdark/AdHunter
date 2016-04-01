@@ -242,8 +242,8 @@ class Auth extends MY_Controller
 				$mail->Port = 465;
 				$mail->isHTML(true);
 
-				$mail->Username = 'password@adhunter.eu';
-				$mail->Password = '6aqshE_XpqwB!68K';
+				$mail->Username = '';
+				$mail->Password = '';
 
 				$mail->setFrom('password@adhunter.eu', 'AdHunter.eu');
 				$mail->addAddress($email);
