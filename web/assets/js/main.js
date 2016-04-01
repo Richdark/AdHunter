@@ -138,7 +138,11 @@ function handleAdd(billboard_img)
 	
 	// pridaj ulovok
 	$("#add").click(function() {
-		$("#panel .right").toggle();
+		var visible = $("#panel .right:visible");
+		var hidden = $("#panel .right:hidden");
+		visible.hide();
+		hidden.css("display", "");
+		// $("#panel .right").toggle();
 		adding = true;
 		map.setOptions({ draggableCursor: "crosshair" });
 
@@ -494,7 +498,7 @@ function initSidebar() {
 
 // responsive menu
 function initMenu() {
-	$("header").on("click", "#toggle", function() {
+	$("header").on("click", "#toggle", function (e) {
 		$("header ul").toggle();
 		return false;
 	});

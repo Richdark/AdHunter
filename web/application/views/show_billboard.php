@@ -1,4 +1,5 @@
 <div id="panel">
+	<input id="search" type="text" placeholder="Zadajte objekt alebo adresu">
 	<a id="add" class="right" href="#">Pridať</a>
 	<?php
 	if ($_user->logged)
@@ -12,7 +13,6 @@
 	}
 	?>
 	<span class="right" style="display: none">Kliknite na mapu pre vyznačenie pozície nájdeného billboardu.</span>
-	<input id="search" type="text" placeholder="Zadajte objekt alebo adresu">
 </div>
 
 <div id="map"></div>

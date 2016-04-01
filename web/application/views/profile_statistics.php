@@ -46,3 +46,4 @@
 </div>
 
 <div class="clear"></div>
+<script src="<?php echo assets_url(); ?>js/main.js"></script>
